@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rolan Daniel | AI Automation Specialist (n8n and LLM workflows)</title>
+  <meta name="description" content="Rolan Daniel builds reliable n8n and LLM-powered workflows that automate invoicing, hiring, customer support, and job applications. Available for freelance projects.">
+  <meta name="author" content="Rolan Daniel">
+  <meta name="theme-color" content="#F7F8FA">
+  <!-- PLACEHOLDER: replace https://your-domain.com/ with the live site URL -->
+  <link rel="canonical" href="https://your-domain.com/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Rolan Daniel | AI Automation Specialist">
+  <meta property="og:description" content="Reliable n8n and LLM-powered workflows for invoicing, hiring, customer support, and job applications.">
+  <meta property="og:url" content="https://your-domain.com/"><!-- PLACEHOLDER -->
+  <meta property="og:image" content="https://your-domain.com/profile.jpg"><!-- PLACEHOLDER -->
+  <meta property="og:image:alt" content="Portrait of Rolan Daniel">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Rolan Daniel | AI Automation Specialist">
+  <meta name="twitter:description" content="Reliable n8n and LLM-powered workflows for invoicing, hiring, customer support, and job applications.">
+  <meta name="twitter:image" content="https://your-domain.com/profile.jpg"><!-- PLACEHOLDER -->
+
+  <link rel="icon" href="favicon.png?v=1" type="image/png" sizes="32x32">
+  <link rel="icon" href="favicon.svg?v=1" type="image/svg+xml">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <nav class="nav container" aria-label="Main">
+      <a class="nav-brand" href="#top">Rolan Daniel</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
+        <span class="nav-toggle-bar" aria-hidden="true"></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#process">How I work</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main">
+
+    <!-- 1. HERO -->
+    <section class="hero container" aria-labelledby="hero-title">
+      <div class="hero-text">
+        <h1 id="hero-title">AI Automation Specialist</h1>
+        <p class="hero-sub">I build reliable n8n and LLM-powered workflows that automate invoicing, hiring, customer support, and job applications, so teams spend less time on manual tasks.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="https://calendly.com/rolancdaniel/30min" target="_blank" rel="noopener">Book a call</a>
+          <a class="btn btn-secondary" href="#projects">View projects</a>
+        </div>
+      </div>
+      <figure class="hero-photo">
+        <span class="hero-badge hero-badge-ai">AI Automation</span>
+        <img src="profile-800.jpg" width="800" height="800" fetchpriority="high" onerror="this.onerror=null;this.src='profile.jpg'"
+             alt="Rolan Daniel, smiling, wearing glasses and a black t-shirt, in front of monitors showing code">
+      </figure>
+    </section>
+
+    <!-- 2. PROJECTS -->
+    <section class="section projects" id="projects" aria-labelledby="projects-title">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="projects-title">Projects</h2>
+          <p class="section-intro">Four production-style n8n workflows. Each screenshot is the real workflow; select it to view full size.</p>
+        </header>
+
+        <!-- Project 1 -->
+        <article class="project" aria-labelledby="p1-title">
+          <header class="project-head">
+            <h3 id="p1-title">Accounts Payable Invoice Processing</h3>
+            <span class="badge">Built with n8n</span>
+            <p class="project-tagline">Turns invoice emails into clean spreadsheet rows, with no manual data entry.</p>
+          </header>
+          <figure class="workflow">
+            <a class="workflow-link" href="images/invoice-processing.png" data-lightbox aria-label="Open full-size n8n workflow for Accounts Payable Invoice Processing">
+              <img src="images/invoice-processing.png" width="1360" height="676" loading="lazy" decoding="async"
+                   alt="n8n workflow for invoice processing: a Gmail trigger splits attachments, extracts PDF text, has an AI agent check and read each invoice, checks Google Sheets for the invoice number, and appends a row; failures are labeled in Gmail and logged to a sheet">
+            </a>
+            <figcaption>n8n workflow</figcaption>
+          </figure>
+          <div class="project-body">
+            <div class="project-block project-problem">
+              <h4>Problem</h4>
+              <p>Invoices arrive as PDF email attachments and someone has to type each one into a tracker. It is slow, and duplicates and typos are easy to miss.</p>
+            </div>
+            <div class="project-block project-tools">
+              <h4>Tools</h4>
+              <ul class="tools">
+                <li>n8n</li><li>Gmail</li><li>Google Sheets</li><li>OpenRouter (Gemini 2.5 Flash Lite)</li>
+              </ul>
+            </div>
+            <div class="project-block project-highlights">
+              <h4>Highlights</h4>
+              <ul class="highlights">
+                <li>Duplicate protection by invoice number</li>
+                <li>Strict don't-guess extraction</li>
+                <li>Failure path with labeling and error logging</li>
+                <li>Handles several attachments per email</li>
+              </ul>
+            </div>
+            <div class="project-block project-result">
+              <h4>Result</h4>
+              <p>Invoice details land in the tracker automatically, duplicates are blocked, and failed emails are labeled and logged for review.</p>
+            </div>
+          </div>
+          <a class="btn btn-video" href="https://youtu.be/O24KxA6U8BE" target="_blank" rel="noopener">
+            <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>
+            Watch video<span class="visually-hidden">: Accounts Payable Invoice Processing (opens YouTube)</span>
+          </a>
+        </article>
+
+        <!-- Project 2 -->
+        <article class="project" aria-labelledby="p2-title">
+          <header class="project-head">
+            <h3 id="p2-title">HR Evaluation and Job Posting Assistant with AI</h3>
+            <span class="badge">Built with n8n</span>
+            <p class="project-tagline">From application form to scheduled phone interview, with AI doing the screening.</p>
+          </header>
+          <figure class="workflow">
+            <a class="workflow-link" href="images/hr-evaluation.png" data-lightbox aria-label="Open full-size n8n workflow for HR Evaluation and Job Posting Assistant">
+              <img src="images/hr-evaluation.png" width="1986" height="665" loading="lazy" decoding="async"
+                   alt="n8n workflow for HR evaluation: form submission, CV upload to Google Drive, Airtable records, AI agents for scoring, questionnaire, personalized email, and Google Calendar booking">
+            </a>
+            <figcaption>n8n workflow</figcaption>
+          </figure>
+          <div class="project-body">
+            <div class="project-block project-problem">
+              <h4>Problem</h4>
+              <p>Recruiters spend hours reading CVs, comparing them with job descriptions, writing follow-ups, and arranging calls, and most applicants aren't a fit.</p>
+            </div>
+            <div class="project-block project-tools">
+              <h4>Tools</h4>
+              <ul class="tools">
+                <li>n8n</li><li>Airtable</li><li>Google Drive</li><li>Gmail</li><li>Google Calendar</li><li>OpenRouter</li>
+              </ul>
+            </div>
+            <div class="project-block project-highlights">
+              <h4>Highlights</h4>
+              <ul class="highlights">
+                <li>Several AI agents with different jobs: scorer, question writer, email writer, scheduler</li>
+                <li>A dynamic form built from AI-generated questions</li>
+                <li>Calendar booking by an AI agent</li>
+                <li>Every stage tracked in Airtable</li>
+              </ul>
+            </div>
+            <div class="project-block project-result">
+              <h4>Result</h4>
+              <p>Every applicant is scored against the open role, and strong candidates move on to tailored questions, a personalized email, and a booked phone interview without manual coordination.</p>
+            </div>
+          </div>
+          <a class="btn btn-video" href="https://www.youtube.com/watch?v=ymf0FUe1AFc" target="_blank" rel="noopener">
+            <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>
+            Watch video<span class="visually-hidden">: HR Evaluation and Job Posting Assistant (opens YouTube)</span>
+          </a>
+        </article>
+
+        <!-- Project 3 -->
+        <article class="project" aria-labelledby="p3-title">
+          <header class="project-head">
+            <h3 id="p3-title">AI Job Scraper and Application Assistant</h3>
+            <span class="badge">Built with n8n</span>
+            <p class="project-tagline">Type a job search in Slack and get tailored resumes, proposals, and email drafts back.</p>
+          </header>
+          <figure class="workflow">
+            <a class="workflow-link" href="images/job-scraper.png" data-lightbox aria-label="Open full-size n8n workflow for AI Job Scraper and Application Assistant">
+              <img src="images/job-scraper.png" width="1871" height="696" loading="lazy" decoding="async"
+                   alt="n8n workflow for the job scraper: a Slack trigger, an AI agent that validates the query, a JSearch API request, a loop over each job with a Google Drive check, an AI agent that writes the resume and proposal into Google Docs, a Gmail draft, and a Slack post with the job details">
+            </a>
+            <figcaption>n8n workflow</figcaption>
+          </figure>
+          <div class="project-body">
+            <div class="project-block project-problem">
+              <h4>Problem</h4>
+              <p>Applying for jobs means searching listings, tailoring a resume for each, and writing a cover email or proposal every time.</p>
+            </div>
+            <div class="project-block project-tools">
+              <h4>Tools</h4>
+              <ul class="tools">
+                <li>n8n</li><li>Slack</li><li>RapidAPI JSearch</li><li>OpenRouter</li><li>Google Docs</li><li>Google Drive</li><li>Gmail</li>
+              </ul>
+            </div>
+            <div class="project-block project-highlights">
+              <h4>Highlights</h4>
+              <ul class="highlights">
+                <li>Chat-style control from Slack</li>
+                <li>Input validation</li>
+                <li>Duplicate checking</li>
+                <li>Template-based document generation</li>
+                <li>Rules so the AI never fabricates experience</li>
+              </ul>
+            </div>
+            <div class="project-block project-result">
+              <h4>Result</h4>
+              <p>One Slack message returns, for each recent remote listing, the job link, a tailored resume, and an email draft or Upwork proposal.</p>
+            </div>
+          </div>
+          <a class="btn btn-video" href="https://youtu.be/-euc2zOeC6c" target="_blank" rel="noopener">
+            <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>
+            Watch video<span class="visually-hidden">: AI Job Scraper and Application Assistant (opens YouTube)</span>
+          </a>
+        </article>
+
+        <!-- Project 4 -->
+        <article class="project" aria-labelledby="p4-title">
+          <header class="project-head">
+            <h3 id="p4-title">Facebook Messenger AI Assistant for an Online Toy Store</h3>
+            <span class="badge">Built with n8n</span>
+            <p class="project-tagline">An AI assistant that answers customer messages with live stock and price information, 24/7.</p>
+          </header>
+          <figure class="workflow">
+            <a class="workflow-link" href="images/toy-store-assistant.png" data-lightbox aria-label="Open full-size n8n workflow for Facebook Messenger AI Assistant">
+              <img src="images/toy-store-assistant.png" width="984" height="593" loading="lazy" decoding="async"
+                   alt="n8n workflow for the Messenger assistant: a webhook receives messages, an AI agent using a Groq chat model, memory, a Google Sheets toy inventory, and a Google Docs knowledge base writes the reply, with a separate error warning message path">
+            </a>
+            <figcaption>n8n workflow</figcaption>
+          </figure>
+          <div class="project-body">
+            <div class="project-block project-problem">
+              <h4>Problem</h4>
+              <p>A small online toy shop gets the same questions all day (availability, price, condition, shipping), and answering each by hand slows down sales.</p>
+            </div>
+            <div class="project-block project-tools">
+              <h4>Tools</h4>
+              <ul class="tools">
+                <li>n8n</li><li>Facebook Graph API</li><li>Groq</li><li>Google Sheets</li><li>Google Docs</li>
+              </ul>
+            </div>
+            <div class="project-block project-highlights">
+              <h4>Highlights</h4>
+              <ul class="highlights">
+                <li>Answers come only from the store's own data</li>
+                <li>Asks which product when several match</li>
+                <li>Prices in Philippine pesos</li>
+                <li>Retries and a polite fallback so no customer is left without a reply</li>
+              </ul>
+            </div>
+            <div class="project-block project-result">
+              <h4>Result</h4>
+              <p>Customers get instant answers from live inventory, and anything the bot can't answer goes to the owner instead of being guessed.</p>
+            </div>
+          </div>
+          <a class="btn btn-video" href="https://youtu.be/RsKEWiVI02A" target="_blank" rel="noopener">
+            <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg>
+            Watch video<span class="visually-hidden">: Facebook Messenger AI Assistant (opens YouTube)</span>
+          </a>
+        </article>
+      </div>
+    </section>
+
+    <!-- 3. SERVICES -->
+    <section class="section services" id="services" aria-labelledby="services-title">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="services-title">Services</h2>
+        </header>
+        <ul class="service-grid">
+          <li class="service">
+            <h3>Invoice and accounts payable automation</h3>
+            <p>Invoice details pulled from email into your tracker, with duplicate checks and a review path for failures.</p>
+          </li>
+          <li class="service">
+            <h3>AI chatbots and customer-support assistants</h3>
+            <p>Assistants that answer from your own data and hand off anything they can't answer.</p>
+          </li>
+          <li class="service">
+            <h3>Hiring and HR screening workflows</h3>
+            <p>Applicant scoring, follow-up questions, emails, and interview booking, tracked in one place.</p>
+          </li>
+          <li class="service">
+            <h3>Job application and document-generation automation</h3>
+            <p>Tailored resumes, proposals, and email drafts generated from templates.</p>
+          </li>
+          <li class="service">
+            <h3>Custom n8n workflow builds</h3>
+            <p>A workflow designed around your process and the tools you already use.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 4. HOW I WORK -->
+    <section class="section process" id="process" aria-labelledby="process-title">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="process-title">How I work</h2>
+        </header>
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num" aria-hidden="true">1</span>
+            <h3>Discovery call</h3>
+            <p>Understand your process and goals.</p>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">2</span>
+            <h3>Workflow design</h3>
+            <p>A clear plan for what gets automated and how.</p>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">3</span>
+            <h3>Build and test</h3>
+            <p>Build, test, and handle failures and edge cases.</p>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">4</span>
+            <h3>Handover</h3>
+            <p>Documentation and support after delivery.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 5. EXPERIENCE -->
+    <section class="section experience" id="experience" aria-labelledby="experience-title">
+      <div class="container experience-grid">
+        <header class="section-head">
+          <h2 id="experience-title">Experience</h2>
+          <p class="section-intro">My AI automation work is backed by a Java and Node.js engineering and corporate RPA background (Blue Prism, OpenSpan, UiPath), which means reliable, maintainable integrations.</p>
+        </header>
+
+        <div class="experience-main">
+          <ol class="timeline">
+            <li>
+              <div class="tl-line">
+                <span class="tl-role">Senior Software Engineer</span>
+                <span class="tl-org">RCG / Myridius, for Disney</span>
+                <span class="tl-date">Aug 2024 – Sep 2026</span>
+              </div>
+              <p class="tl-desc">Developed features for CAPE (Change Automation Process Engine), a change process automation application; contributed to TechStatus / SID (Service Information Display) and Bridge Engagement using Node.js, Express, and Angular.</p>
+            </li>
+            <li>
+              <div class="tl-line">
+                <span class="tl-role">Senior Software Engineer</span>
+                <span class="tl-org">Umpisa, for Cox Communications</span>
+                <span class="tl-date">Nov 2023 – Aug 2024</span>
+              </div>
+              <p class="tl-desc">Built middleware relaying data between Comcast and SAIL systems through Syndication REST APIs, using Java 17, Spring Boot, and Swagger.</p>
+            </li>
+            <li>
+              <div class="tl-line">
+                <span class="tl-role">Senior Software Engineer</span>
+                <span class="tl-org">RCG, for Disney</span>
+                <span class="tl-date">Apr 2021 – Nov 2023</span>
+              </div>
+              <p class="tl-desc">Developed and maintained automation scripts as part of the SRE team; built and maintained the SID and BEN (Bridge Engagement) applications using Java 11, Spring Boot, Node.js, and Angular.</p>
+            </li>
+            <li>
+              <div class="tl-line">
+                <span class="tl-role">Software Engineer / RPA Developer / L1 Support</span>
+                <span class="tl-org">AIG Shared Services</span>
+                <span class="tl-date">Sep 2014 – Mar 2021</span>
+              </div>
+              <p class="tl-desc">Built robotic process automation with Blue Prism and OpenSpan, managed automation jobs in UiPath Orchestrator, and provided L1 support for automation operations.</p>
+            </li>
+            <li>
+              <details class="tl-earlier">
+                <summary class="tl-line">
+                  <span class="tl-role">Earlier Java development roles</span>
+                  <span class="tl-org">GHL Systems, Accenture Philippines, ON Semiconductor Philippines</span>
+                  <span class="tl-date">2010 – 2014</span>
+                </summary>
+                <p class="tl-desc">Java development at GHL Systems, Accenture Philippines, and ON Semiconductor Philippines.</p>
+              </details>
+            </li>
+          </ol>
+
+          <aside class="callout" aria-labelledby="sre-title">
+            <h3 id="sre-title">Site Reliability Engineering at Disney</h3>
+            <p>As a member of the SRE team, I developed and maintained automation scripts that connected ServiceNow with other business applications. Using Rundeck and Node.js scripting, the team automated operational workflows so engineers handled fewer repetitive tasks by hand.</p>
+            <p>This operational automation background is what I now bring to n8n and AI workflows.</p>
+          </aside>
+
+          <p class="education"><span>Education</span> BS Information Technology, Colegio de San Juan de Letran (2001)</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. ABOUT -->
+    <section class="section about" id="about" aria-labelledby="about-title">
+      <div class="container about-grid">
+        <h2 id="about-title">About</h2>
+        <p class="about-text">I'm an AI automation specialist who designs and deploys n8n workflows with LLM agents to automate document processing and business operations, with structured data extraction, validation, and duplicate prevention across connected business systems. My work is backed by a senior Java and Node.js engineering background. I'm based in Sta. Rosa, Laguna, Philippines, and available for freelance projects.</p>
+      </div>
+    </section>
+
+    <!-- 7. CONTACT -->
+    <section class="section contact" id="contact" aria-labelledby="contact-title">
+      <div class="container">
+        <div class="contact-panel">
+          <div class="contact-main">
+            <h2 id="contact-title">Have a process that should run itself?</h2>
+            <p>I'm available for freelance projects. Book a call to talk through your workflow and what it would take to automate it.</p>
+            <a class="btn btn-primary" href="https://calendly.com/rolancdaniel/30min" target="_blank" rel="noopener">Book a call</a>
+          </div>
+          <dl class="contact-details">
+            <div>
+              <dt>Email</dt>
+              <dd><a href="mailto:rolancdaniel@gmail.com">rolancdaniel@gmail.com</a></dd>
+            </div>
+            <div>
+              <dt>Availability</dt>
+              <dd>Open to freelance projects</dd>
+            </div>
+            <div>
+              <dt>Location</dt>
+              <dd>Sta. Rosa, Laguna, Philippines</dd>
+            </div>
+            <div>
+              <dt>Links</dt>
+              <dd>
+                <ul class="contact-links">
+                  <li><a href="https://www.linkedin.com/in/rolan-daniel-8a2ba964/" target="_blank" rel="noopener">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></li>
+                </ul>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© <span id="year">2026</span> Rolan Daniel</p>
+      <a href="#top">Back to top</a>
+    </div>
+  </footer>
+
+  <dialog class="lightbox" id="lightbox" aria-label="Full-size workflow screenshot">
+    <div class="lightbox-bar">
+      <p class="lightbox-title" id="lightbox-title"></p>
+      <a class="lightbox-open" id="lightbox-open" href="#" target="_blank" rel="noopener">Open original</a>
+      <button class="lightbox-close" type="button" id="lightbox-close">Close</button>
+    </div>
+    <div class="lightbox-body">
+      <img id="lightbox-img" src="" alt="">
+    </div>
+  </dialog>
+</body>
+</html>
