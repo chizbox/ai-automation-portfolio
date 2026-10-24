@@ -4,7 +4,7 @@
   const navLinks = document.getElementById('nav-links');
 
   // Header border once the page scrolls
-  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 10);
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
@@ -87,7 +87,7 @@
   // Gentle fade-and-slide-up as content enters the viewport
   if (motionOK && 'IntersectionObserver' in window) {
     const targets = document.querySelectorAll(
-      '.section-head, .project, .steps .step, .experience-main, .about h2, .about-text, .contact-panel'
+      '.section-head, .project, .steps .step, .experience-main, .about-head, .about-text, .contact-panel'
     );
     document.querySelectorAll('.steps .step').forEach((step, i) => {
       step.style.setProperty('--reveal-delay', `${i * 0.08}s`);

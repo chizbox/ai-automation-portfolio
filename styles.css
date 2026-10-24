@@ -51,7 +51,7 @@
   --s4: 2rem;
   --s5: 3rem;
   --s6: 4rem;
-  --s7: 6.5rem;
+  --s7: 6rem;
 
   --container: 1120px;
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
@@ -182,7 +182,6 @@ a:hover { color: var(--accent-hover); }
   backdrop-filter: saturate(1.6) blur(14px);
   -webkit-backdrop-filter: saturate(1.6) blur(14px);
   border-bottom-color: rgba(210, 215, 219, 0.7);
-  box-shadow: 0 6px 24px -16px rgba(18, 26, 31, 0.25);
 }
 
 .nav {
@@ -305,8 +304,9 @@ main { overflow-x: clip; }
   height: 22px;
   width: auto;
   max-width: none;
-  filter: grayscale(100%);
-  opacity: 0.6;
+  /* Dark grey silhouettes (the PNGs are transparent), so faint logos like OpenRouter stay visible */
+  filter: grayscale(100%) brightness(0);
+  opacity: 0.75;
   transition: filter .2s var(--ease), opacity .2s var(--ease), transform .2s var(--ease);
 }
 .hero-tools-row img:hover { filter: none; opacity: 1; transform: translateY(-2px); }
@@ -319,16 +319,18 @@ main { overflow-x: clip; }
   justify-self: end;
   width: min(100%, 340px);
 }
-/* Faint dot grid behind the photo, fading out at the edges */
+/* Faint dot grid behind the photo, fading out toward the left (and top and bottom) so it never sits behind the text */
 .hero-person::before {
   content: "";
   position: absolute;
-  inset: -22%;
+  inset: -14% -14% -14% -40%;
   z-index: -1;
-  background-image: radial-gradient(rgba(181, 83, 47, 0.28) 1.2px, transparent 1.6px);
+  background-image: radial-gradient(rgba(181, 83, 47, 0.26) 1.2px, transparent 1.6px);
   background-size: 18px 18px;
-  -webkit-mask-image: radial-gradient(closest-side, #000 35%, transparent 100%);
-  mask-image: radial-gradient(closest-side, #000 35%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to left, #000 30%, transparent 85%), linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image: linear-gradient(to left, #000 30%, transparent 85%), linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
+  mask-composite: intersect;
   pointer-events: none;
 }
 .hero-photo {
@@ -435,9 +437,19 @@ main { overflow-x: clip; }
   border: 1px solid var(--rule);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  transition: box-shadow .35s var(--ease), border-color .35s var(--ease), transform .35s var(--ease);
+  transition: box-shadow .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
 }
 .project:hover { box-shadow: var(--shadow-hover); border-color: var(--rule-strong); transform: translateY(-4px); }
+
+/* Large, faint decorative project number */
+.project-num {
+  grid-column: 1 / -1;
+  margin-bottom: 0.25rem;
+  font: 600 clamp(2.75rem, 5vw, 4rem)/1 var(--display);
+  letter-spacing: -0.03em;
+  color: rgba(217, 119, 87, 0.15);
+  user-select: none;
+}
 .project + .project { margin-top: var(--s4); }
 
 .project-head {
@@ -519,7 +531,7 @@ main { overflow-x: clip; }
 
 .project-result {
   padding: var(--s3);
-  background: var(--band);
+  background: rgba(217, 119, 87, 0.06);
   border-left: 3px solid var(--accent);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
@@ -538,9 +550,9 @@ main { overflow-x: clip; }
   gap: 0.6rem;
   margin-top: 0.85rem;
   padding-top: 0.85rem;
-  border-top: 1px solid var(--rule-strong);
-  color: var(--ink);
-  font: 600 1rem/1.5 var(--display);
+  border-top: 1px solid rgba(217, 119, 87, 0.25);
+  color: var(--accent-text);
+  font: 600 1.0625rem/1.5 var(--display);
   letter-spacing: -0.005em;
   max-width: none;
 }
@@ -554,14 +566,30 @@ main { overflow-x: clip; }
 }
 
 /* Click-to-play video: a thumbnail until clicked, then the nocookie player */
+/* Minimal browser window around each video */
+.media-frame {
+  margin-top: var(--s4);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface);
+  box-shadow: 0 1px 2px rgba(18, 26, 31, 0.06), 0 18px 36px -22px rgba(18, 26, 31, 0.4);
+}
+.media-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 30px;
+  padding-inline: 12px;
+  background: #F1F3F4;
+  border-bottom: 1px solid var(--rule);
+}
+.media-bar span { width: 9px; height: 9px; border-radius: 50%; background: #D2D7DB; }
 .video {
   position: relative;
-  margin-top: var(--s4);
   aspect-ratio: 16 / 9;
-  border-radius: var(--radius);
   overflow: hidden;
   background: var(--canvas);
-  box-shadow: 0 1px 2px rgba(18, 26, 31, 0.08), 0 16px 32px -20px rgba(18, 26, 31, 0.45);
 }
 .video-poster {
   position: absolute;
@@ -621,18 +649,29 @@ main { overflow-x: clip; }
    How I work: a true sequence, so it is numbered
    -------------------------------------------------------------------------- */
 .steps {
+  position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--s3);
+  gap: var(--s4);
+}
+/* Dashed connector through the icon row, visible in the gaps between cards (desktop only) */
+.steps::before {
+  content: "";
+  position: absolute;
+  left: var(--s3); right: var(--s3);
+  top: calc(var(--s3) + 1.375rem);
+  z-index: -1;
+  border-top: 1.5px dashed rgba(217, 119, 87, 0.55);
 }
 .step {
   padding: var(--s3);
   background: var(--band);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
-  transition: border-color .25s var(--ease), box-shadow .25s var(--ease);
+  transition: border-color .2s var(--ease), box-shadow .2s var(--ease), transform .2s var(--ease);
 }
-.step:hover { border-color: var(--rule-strong); box-shadow: var(--shadow-sm); }
+.step:hover { border-color: var(--rule-strong); box-shadow: var(--shadow-hover); transform: translateY(-4px); }
 .step-top { display: flex; align-items: center; justify-content: space-between; }
 .step-icon {
   display: grid;
@@ -706,6 +745,7 @@ main { overflow-x: clip; }
   line-height: 1.7;
   color: var(--ink-2);
 }
+.about-lead { display: block; margin-bottom: var(--s1); font-size: 1.25rem; font-weight: 500; line-height: 1.6; color: var(--ink); }
 
 /* --------------------------------------------------------------------------
    Contact: one dark, business-like panel to close the page
@@ -717,10 +757,35 @@ main { overflow-x: clip; }
   column-gap: var(--s4);
   row-gap: var(--s5);
   padding: clamp(1.75rem, 5vw, 4rem);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   background: var(--ink);
   color: #fff;
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
+}
+/* Soft terracotta glow in the top-right corner */
+.contact-panel::before {
+  content: "";
+  position: absolute;
+  top: -260px; right: -240px;
+  width: 620px; height: 620px;
+  z-index: -1;
+  background: radial-gradient(closest-side, rgba(217, 119, 87, 0.34), rgba(217, 119, 87, 0.12) 50%, rgba(217, 119, 87, 0) 100%);
+  pointer-events: none;
+}
+/* Very faint dot pattern, strongest near the glow */
+.contact-panel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1.4px);
+  background-size: 20px 20px;
+  -webkit-mask-image: radial-gradient(circle at 100% 0, #000, transparent 70%);
+  mask-image: radial-gradient(circle at 100% 0, #000, transparent 70%);
+  pointer-events: none;
 }
 .contact-main { grid-column: 1 / span 7; }
 .contact-details { grid-column: 9 / -1; margin: 0; }
@@ -760,13 +825,15 @@ main { overflow-x: clip; }
    Motion: scroll reveals and the typed tagline. Only active when script.js
    adds .motion to <html>, so content is never hidden without JavaScript.
    -------------------------------------------------------------------------- */
+/* Uses translate (not transform) so card hover lifts keep working after the reveal */
 .motion .reveal {
   opacity: 0;
-  transform: translateY(18px);
-  transition: opacity var(--dur) var(--ease), transform var(--dur) var(--ease);
-  transition-delay: var(--reveal-delay, 0s);
+  translate: 0 12px;
+  transition: opacity .4s var(--ease), translate .4s var(--ease),
+              transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease);
+  transition-delay: var(--reveal-delay, 0s), var(--reveal-delay, 0s), 0s, 0s, 0s;
 }
-.motion .reveal.is-visible { opacity: 1; transform: none; }
+.motion .reveal.is-visible { opacity: 1; translate: none; }
 
 .typed-caret {
   display: inline-block;
@@ -792,6 +859,8 @@ main { overflow-x: clip; }
   .hero-text { grid-column: 1 / span 7; }
   .hero-person { grid-column: 8 / -1; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .steps::before { display: none; }
+  .hero-person::before { inset: -14% -14% -14% -12%; }
   .section-head h2, .section-intro,
   .experience-grid .section-head, .experience-main,
   .about-head, .about-text,
@@ -830,6 +899,7 @@ main { overflow-x: clip; }
   .hero-actions, .hero-tools-row { justify-content: center; }
   .hero-person { order: -1; justify-self: center; width: 240px; }
   .hero-photo { padding: 10px; }
+  .hero-person::before { inset: -8% -30%; }
   .hero-badge { left: auto; right: -40px; bottom: 10%; font-size: 0.8125rem; padding: 0.45rem 0.75rem; }
 }
 
@@ -845,7 +915,7 @@ main { overflow-x: clip; }
 }
 
 @media (max-width: 560px) {
-  :root { --s7: 4.5rem; }
+  :root { --s7: 4rem; }
   .project-head { grid-template-columns: minmax(0, 1fr); }
   .steps { grid-template-columns: minmax(0, 1fr); }
   .hero-actions .btn { flex: 1 1 auto; }
@@ -855,7 +925,7 @@ main { overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
-  .btn:hover, .project:hover { transform: none; }
-  .motion .reveal { opacity: 1; transform: none; }
+  .btn:hover, .project:hover, .step:hover { transform: none; }
+  .motion .reveal { opacity: 1; translate: none; }
   .typed-caret { display: none; }
 }
