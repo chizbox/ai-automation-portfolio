@@ -91,6 +91,30 @@
     });
   });
 
+  // Click-to-play videos: swap the thumbnail for the youtube-nocookie player on demand
+  document.querySelectorAll('.video[data-video-id]').forEach((box) => {
+    const poster = box.querySelector('.video-poster');
+    const thumb = poster.querySelector('img');
+    const markNoThumb = () => box.classList.add('no-thumb');
+    // YouTube serves a 120px grey placeholder when a thumbnail is missing
+    thumb.addEventListener('error', markNoThumb);
+    thumb.addEventListener('load', () => { if (thumb.naturalWidth <= 120) markNoThumb(); });
+
+    poster.addEventListener('click', (e) => {
+      e.preventDefault();
+      const id = box.dataset.videoId;
+      const title = poster.getAttribute('aria-label').replace(/^Play video: /, '');
+      const frame = document.createElement('iframe');
+      frame.src = `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}?autoplay=1&rel=0&playsinline=1`;
+      frame.title = `${title} video`;
+      frame.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+      frame.allowFullscreen = true;
+      frame.referrerPolicy = 'strict-origin-when-cross-origin';
+      poster.replaceWith(frame);
+      frame.focus();
+    });
+  });
+
   const motionOK = document.documentElement.classList.contains('motion');
 
   // Gentle fade-and-slide-up as content enters the viewport
