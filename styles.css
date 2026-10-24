@@ -444,30 +444,52 @@ main { overflow-x: clip; }
 }
 .project:hover { box-shadow: var(--shadow-hover); border-color: var(--rule-strong); transform: translateY(-4px); }
 
-/* Large, faint decorative project number */
+/* Large, faint decorative project number beside the title */
 .project-num {
-  grid-column: 1 / -1;
-  margin-bottom: 0.25rem;
-  font: 600 clamp(2.75rem, 5vw, 4rem)/1 var(--display);
+  grid-area: num;
+  font: 600 clamp(2.75rem, 5vw, 4rem)/0.9 var(--display);
   letter-spacing: -0.03em;
-  color: rgba(217, 119, 87, 0.15);
+  color: rgba(217, 119, 87, 0.18);
   user-select: none;
 }
 .project + .project { margin-top: var(--s4); }
 
 .project-head {
+  grid-area: head;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-areas:
+    "num title   stat"
+    "num tagline stat";
   column-gap: var(--s3);
   align-items: start;
 }
 .project-head h3 {
+  grid-area: title;
   font-size: clamp(1.5rem, 2.5vw, 1.875rem);
   line-height: 1.18;
-  max-width: 26ch;
+  max-width: 40ch;
 }
+/* Key result pulled up beside the title (same figures as the Result box) */
+.project-stat {
+  grid-area: stat;
+  align-self: center;
+  max-width: 13rem;
+  padding: 0.85rem 1.1rem;
+  border-left: 3px solid var(--accent);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: var(--result-tint);
+}
+.project-stat-num {
+  display: block;
+  font: 600 1.625rem/1.1 var(--display);
+  letter-spacing: -0.02em;
+  color: var(--accent-hover);
+  white-space: nowrap;
+}
+.project-stat-label { display: block; margin-top: 0.3rem; font-size: var(--fs-xs); line-height: 1.4; color: var(--ink-2); }
 .project-tagline {
-  grid-column: 1 / -1;
+  grid-area: tagline;
   margin-top: 0.6rem;
   max-width: 40em;
   font-size: var(--fs-md);
@@ -478,20 +500,53 @@ main { overflow-x: clip; }
 
 .project-body {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  grid-template-areas:
-    "problem highlights"
-    "tools   highlights"
-    "result  result";
-  gap: var(--s4) var(--s5);
+  gap: var(--s4);
   margin-top: var(--s4);
   padding-top: var(--s4);
   border-top: 1px solid var(--rule);
 }
+.project-details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-areas:
+    "problem highlights"
+    "tools   highlights";
+  gap: var(--s4) var(--s5);
+}
 .project-problem { grid-area: problem; }
 .project-tools { grid-area: tools; }
 .project-highlights { grid-area: highlights; }
-.project-result { grid-area: result; }
+
+/* Desktop: video on one side, Problem/Tools/Highlights on the other, alternating per card */
+@media (min-width: 961px) {
+  .project {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    grid-template-areas:
+      "head  head"
+      "media details"
+      "result result";
+    column-gap: var(--s5);
+  }
+  .project:nth-of-type(even) {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
+    grid-template-areas:
+      "head    head"
+      "details media"
+      "result  result";
+  }
+  .project .media-frame { grid-area: media; align-self: start; }
+  .project-body { display: contents; }
+  .project-details {
+    grid-area: details;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "problem" "tools" "highlights";
+    gap: var(--s3);
+    margin-top: var(--s4);
+    align-self: start;
+  }
+  .project-result { grid-area: result; margin-top: var(--s4); }
+}
 
 .project-block h4 {
   margin-bottom: 0.6rem;
@@ -505,16 +560,13 @@ main { overflow-x: clip; }
 .tools li {
   display: inline-flex;
   align-items: center;
-  gap: 0.45rem;
-  padding: 0.25rem 0.65rem;
+  padding: 0.3rem 0.7rem;
   border: 1px solid var(--rule);
   border-radius: 6px;
   font-size: var(--fs-sm);
   color: var(--ink-2);
   background: var(--surface);
 }
-/* Tool logo before the name; fixed height, natural width */
-.tools img { flex: none; height: 24px; width: auto; max-width: none; }
 
 .highlights li {
   position: relative;
@@ -668,6 +720,9 @@ main { overflow-x: clip; }
   z-index: -1;
   border-top: 1.5px dashed rgba(217, 119, 87, 0.55);
 }
+/* With motion on, the line draws from step 1 to step 4 when the steps scroll into view */
+.motion .steps::before { clip-path: inset(0 100% 0 0); transition: clip-path 1.2s var(--ease) .2s; }
+.motion .steps.is-drawn::before { clip-path: inset(0 0 0 0); }
 .step {
   padding: var(--s3);
   background: var(--band);
@@ -911,16 +966,26 @@ main { overflow-x: clip; }
   .video-play { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
   .video-label { left: var(--s2); bottom: 0.75rem; font-size: 0.875rem; }
 
-  .project-body {
+  .project-body { gap: var(--s3); }
+  .project-details {
     grid-template-columns: minmax(0, 1fr);
-    grid-template-areas: "problem" "tools" "highlights" "result";
+    grid-template-areas: "problem" "tools" "highlights";
     gap: var(--s3);
   }
+  .project-head {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+      "num     title"
+      "tagline tagline"
+      "stat    stat";
+    column-gap: var(--s2);
+  }
+  .project-head h3 { align-self: center; }
+  .project-stat { justify-self: start; max-width: none; margin-top: var(--s2); }
 }
 
 @media (max-width: 560px) {
   :root { --s7: 4rem; }
-  .project-head { grid-template-columns: minmax(0, 1fr); }
   .steps { grid-template-columns: minmax(0, 1fr); }
   .hero-actions .btn { flex: 1 1 auto; }
   .footer-inner { flex-direction: column; }

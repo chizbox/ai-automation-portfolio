@@ -28,24 +28,30 @@
     }
   });
 
-  // Highlight the nav link for the section in view
+  // Highlight the nav link for the section in view: the last section whose top has
+  // passed a line a third of the way down the screen (or the last one at page bottom)
   const links = [...navLinks.querySelectorAll('a[href^="#"]')];
   const sections = links
     .map((a) => document.querySelector(a.getAttribute('href')))
     .filter(Boolean);
-  if ('IntersectionObserver' in window) {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        links.forEach((a) => {
-          const match = a.getAttribute('href') === `#${entry.target.id}`;
-          if (match) a.setAttribute('aria-current', 'true');
-          else a.removeAttribute('aria-current');
-        });
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
-    sections.forEach((s) => observer.observe(s));
-  }
+  let spyQueued = false;
+  const updateSpy = () => {
+    spyQueued = false;
+    const line = window.innerHeight / 3;
+    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
+    let current = null;
+    sections.forEach((s) => { if (s.getBoundingClientRect().top <= line) current = s; });
+    if (atBottom) current = sections[sections.length - 1];
+    links.forEach((a) => {
+      if (current && a.getAttribute('href') === `#${current.id}`) a.setAttribute('aria-current', 'true');
+      else a.removeAttribute('aria-current');
+    });
+  };
+  window.addEventListener('scroll', () => {
+    if (!spyQueued) { spyQueued = true; requestAnimationFrame(updateSpy); }
+  }, { passive: true });
+  window.addEventListener('resize', updateSpy);
+  updateSpy();
 
   // Back to top: scroll the window itself (a sticky header can't be a scroll target)
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -103,6 +109,16 @@
       el.classList.add('reveal');
       revealer.observe(el);
     });
+    // Draw the How I work connector once the steps are on screen
+    const steps = document.querySelector('.steps');
+    if (steps) {
+      const lineObserver = new IntersectionObserver((entries) => {
+        if (!entries[0].isIntersecting) return;
+        steps.classList.add('is-drawn');
+        lineObserver.disconnect();
+      }, { threshold: 0.5 });
+      lineObserver.observe(steps);
+    }
   } else {
     document.documentElement.classList.remove('motion');
   }
