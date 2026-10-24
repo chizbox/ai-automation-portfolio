@@ -21,8 +21,8 @@
   <meta name="twitter:description" content="Reliable n8n and LLM-powered workflows for invoicing, hiring, customer support, and job applications.">
   <meta name="twitter:image" content="https://your-domain.com/profile.jpg"><!-- PLACEHOLDER -->
 
-  <link rel="icon" href="favicon.png?v=1" type="image/png" sizes="32x32">
-  <link rel="icon" href="favicon.svg?v=1" type="image/svg+xml">
+  <link rel="icon" href="favicon.png?v=2" type="image/png" sizes="32x32">
+  <link rel="icon" href="favicon.svg?v=2" type="image/svg+xml">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,14 +35,13 @@
 
   <header class="site-header">
     <nav class="nav container" aria-label="Main">
-      <a class="nav-brand" href="#top">Rolan Daniel</a>
+      <span class="nav-slot" aria-hidden="true"></span><!-- Reserved: top-left corner left empty for now -->
       <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-links">
         <span class="nav-toggle-bar" aria-hidden="true"></span>
         <span class="visually-hidden">Menu</span>
       </button>
       <ul class="nav-links" id="nav-links">
         <li><a href="#projects">Projects</a></li>
-        <li><a href="#services">Services</a></li>
         <li><a href="#process">How I work</a></li>
         <li><a href="#experience">Experience</a></li>
         <li><a href="#about">About</a></li>
@@ -58,22 +57,21 @@
     <section class="hero container" aria-labelledby="hero-title">
       <div class="hero-text">
         <h1 id="hero-title">AI Automation Specialist</h1>
-        <p class="hero-sub">I build reliable n8n and LLM-powered workflows that automate invoicing, hiring, customer support, and job applications, so teams spend less time on manual tasks.</p>
+        <p class="hero-sub">I use AI-powered automation to build intelligent, reliable workflows that streamline your business.</p>
         <div class="hero-actions">
           <a class="btn btn-primary" href="https://calendly.com/rolancdaniel/30min" target="_blank" rel="noopener">Book a call</a>
           <a class="btn btn-secondary" href="#projects">View projects</a>
         </div>
       </div>
-      <figure class="hero-photo">
-        <span class="hero-badge hero-badge-ai">AI Automation</span>
-        <img src="profile-800.jpg" width="800" height="800" fetchpriority="high" onerror="this.onerror=null;this.src='profile.jpg'"
-             alt="Rolan Daniel, smiling, wearing glasses and a black t-shirt, in front of monitors showing code">
-      </figure>
-      <ul class="hero-facts" aria-label="Background">
-        <li><strong>Senior software engineer</strong><span>Disney and Cox Communications projects</span></li>
-        <li><strong>Corporate RPA background</strong><span>Blue Prism, OpenSpan, UiPath</span></li>
-        <li><strong>Based in the Philippines</strong><span>Sta. Rosa, Laguna, available for freelance projects</span></li>
-      </ul>
+      <div class="hero-person">
+        <figure class="hero-photo">
+          <span class="hero-badge hero-badge-ai">AI-Powered Workflows</span>
+          <img src="profile-800.jpg" width="800" height="800" fetchpriority="high" onerror="this.onerror=null;this.src='profile.jpg'"
+               alt="Rolan Daniel, smiling, wearing glasses and a black t-shirt, in front of monitors showing code">
+        </figure>
+        <p class="hero-name">Rolan Daniel</p>
+      </div>
+      <!-- Reserved: space for a future hero strip -->
     </section>
 
     <!-- 2. PROJECTS -->
@@ -81,7 +79,6 @@
       <div class="container">
         <header class="section-head">
           <h2 id="projects-title">Projects</h2>
-          <p class="section-intro">Four production-style n8n workflows. Each screenshot is the real workflow; select it to view full size.</p>
         </header>
 
         <!-- Project 1 -->
@@ -96,7 +93,6 @@
               <img src="images/invoice-processing.png" width="1360" height="676" loading="lazy" decoding="async"
                    alt="n8n workflow for invoice processing: a Gmail trigger splits attachments, extracts PDF text, has an AI agent check and read each invoice, checks Google Sheets for the invoice number, and appends a row; failures are labeled in Gmail and logged to a sheet">
             </a>
-            <figcaption>n8n workflow</figcaption>
           </figure>
           <div class="project-body">
             <div class="project-block project-problem">
@@ -141,7 +137,6 @@
               <img src="images/hr-evaluation.png" width="1986" height="665" loading="lazy" decoding="async"
                    alt="n8n workflow for HR evaluation: form submission, CV upload to Google Drive, Airtable records, AI agents for scoring, questionnaire, personalized email, and Google Calendar booking">
             </a>
-            <figcaption>n8n workflow</figcaption>
           </figure>
           <div class="project-body">
             <div class="project-block project-problem">
@@ -186,7 +181,6 @@
               <img src="images/job-scraper.png" width="1871" height="696" loading="lazy" decoding="async"
                    alt="n8n workflow for the job scraper: a Slack trigger, an AI agent that validates the query, a JSearch API request, a loop over each job with a Google Drive check, an AI agent that writes the resume and proposal into Google Docs, a Gmail draft, and a Slack post with the job details">
             </a>
-            <figcaption>n8n workflow</figcaption>
           </figure>
           <div class="project-body">
             <div class="project-block project-problem">
@@ -232,7 +226,6 @@
               <img src="images/toy-store-assistant.png" width="984" height="593" loading="lazy" decoding="async"
                    alt="n8n workflow for the Messenger assistant: a webhook receives messages, an AI agent using a Groq chat model, memory, a Google Sheets toy inventory, and a Google Docs knowledge base writes the reply, with a separate error warning message path">
             </a>
-            <figcaption>n8n workflow</figcaption>
           </figure>
           <div class="project-body">
             <div class="project-block project-problem">
@@ -267,38 +260,7 @@
       </div>
     </section>
 
-    <!-- 3. SERVICES -->
-    <section class="section services" id="services" aria-labelledby="services-title">
-      <div class="container">
-        <header class="section-head">
-          <h2 id="services-title">Services</h2>
-        </header>
-        <ul class="service-grid">
-          <li class="service">
-            <h3>Invoice and accounts payable automation</h3>
-            <p>Invoice details pulled from email into your tracker, with duplicate checks and a review path for failures.</p>
-          </li>
-          <li class="service">
-            <h3>AI chatbots and customer-support assistants</h3>
-            <p>Assistants that answer from your own data and hand off anything they can't answer.</p>
-          </li>
-          <li class="service">
-            <h3>Hiring and HR screening workflows</h3>
-            <p>Applicant scoring, follow-up questions, emails, and interview booking, tracked in one place.</p>
-          </li>
-          <li class="service">
-            <h3>Job application and document-generation automation</h3>
-            <p>Tailored resumes, proposals, and email drafts generated from templates.</p>
-          </li>
-          <li class="service">
-            <h3>Custom n8n workflow builds</h3>
-            <p>A workflow designed around your process and the tools you already use.</p>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 4. HOW I WORK -->
+    <!-- 3. HOW I WORK -->
     <section class="section process" id="process" aria-labelledby="process-title">
       <div class="container">
         <header class="section-head">
@@ -329,7 +291,7 @@
       </div>
     </section>
 
-    <!-- 5. EXPERIENCE -->
+    <!-- 4. EXPERIENCE -->
     <section class="section experience" id="experience" aria-labelledby="experience-title">
       <div class="container experience-grid">
         <header class="section-head">
@@ -338,50 +300,7 @@
         </header>
 
         <div class="experience-main">
-          <ol class="timeline">
-            <li>
-              <div class="tl-line">
-                <span class="tl-role">Senior Software Engineer</span>
-                <span class="tl-org">RCG / Myridius, for Disney</span>
-                <span class="tl-date">Aug 2024 – Sep 2026</span>
-              </div>
-              <p class="tl-desc">Developed features for CAPE (Change Automation Process Engine), a change process automation application; contributed to TechStatus / SID (Service Information Display) and Bridge Engagement using Node.js, Express, and Angular.</p>
-            </li>
-            <li>
-              <div class="tl-line">
-                <span class="tl-role">Senior Software Engineer</span>
-                <span class="tl-org">Umpisa, for Cox Communications</span>
-                <span class="tl-date">Nov 2023 – Aug 2024</span>
-              </div>
-              <p class="tl-desc">Built middleware relaying data between Comcast and SAIL systems through Syndication REST APIs, using Java 17, Spring Boot, and Swagger.</p>
-            </li>
-            <li>
-              <div class="tl-line">
-                <span class="tl-role">Senior Software Engineer</span>
-                <span class="tl-org">RCG, for Disney</span>
-                <span class="tl-date">Apr 2021 – Nov 2023</span>
-              </div>
-              <p class="tl-desc">Developed and maintained automation scripts as part of the SRE team; built and maintained the SID and BEN (Bridge Engagement) applications using Java 11, Spring Boot, Node.js, and Angular.</p>
-            </li>
-            <li>
-              <div class="tl-line">
-                <span class="tl-role">Software Engineer / RPA Developer / L1 Support</span>
-                <span class="tl-org">AIG Shared Services</span>
-                <span class="tl-date">Sep 2014 – Mar 2021</span>
-              </div>
-              <p class="tl-desc">Built robotic process automation with Blue Prism and OpenSpan, managed automation jobs in UiPath Orchestrator, and provided L1 support for automation operations.</p>
-            </li>
-            <li>
-              <details class="tl-earlier">
-                <summary class="tl-line">
-                  <span class="tl-role">Earlier Java development roles</span>
-                  <span class="tl-org">GHL Systems, Accenture Philippines, ON Semiconductor Philippines</span>
-                  <span class="tl-date">2010 – 2014</span>
-                </summary>
-                <p class="tl-desc">Java development at GHL Systems, Accenture Philippines, and ON Semiconductor Philippines.</p>
-              </details>
-            </li>
-          </ol>
+          <p class="experience-summary">I have worked as a software engineer and RPA developer across enterprise and client projects. At AIG Shared Services I built robotic process automation with Blue Prism and OpenSpan and managed automation jobs in UiPath Orchestrator. As a senior software engineer I built Java and Spring Boot middleware for Cox Communications through Umpisa, and change-automation, SRE and service-information tools for Disney through RCG / Myridius using Java, Node.js and Angular. Earlier, I held Java development roles at GHL Systems, Accenture Philippines, and ON Semiconductor Philippines.</p>
 
           <aside class="callout" aria-labelledby="sre-title">
             <h3 id="sre-title">Site Reliability Engineering at Disney</h3>
@@ -389,12 +308,12 @@
             <p>This operational automation background is what I now bring to n8n and AI workflows.</p>
           </aside>
 
-          <p class="education"><span>Education</span> BS Information Technology, Colegio de San Juan de Letran (2001)</p>
+          <p class="education"><span>Education</span> BS Information Technology, Colegio de San Juan de Letran</p>
         </div>
       </div>
     </section>
 
-    <!-- 6. ABOUT -->
+    <!-- 5. ABOUT -->
     <section class="section about" id="about" aria-labelledby="about-title">
       <div class="container about-grid">
         <h2 id="about-title">About</h2>
@@ -402,7 +321,7 @@
       </div>
     </section>
 
-    <!-- 7. CONTACT -->
+    <!-- 6. CONTACT -->
     <section class="section contact" id="contact" aria-labelledby="contact-title">
       <div class="container">
         <div class="contact-panel">

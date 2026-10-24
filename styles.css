@@ -1,7 +1,7 @@
 /* ==========================================================================
    Rolan Daniel portfolio
    Restrained and business-like: white page with soft grey bands, one
-   muted teal accent, hairline rules, a 12-column grid and a single
+   terracotta accent, hairline rules, a 12-column grid and a single
    heading-left / content-right rhythm for every section.
    Space Grotesk for headings and navigation, Inter for body text.
    The dark n8n canvases are the only dark surfaces besides the contact panel.
@@ -16,9 +16,13 @@
   --ink-3: #6B757B;
   --rule: #E3E6E9;
   --rule-strong: #D2D7DB;
-  --accent: #255C53;
-  --accent-hover: #1C4A42;
-  --accent-soft: #EAF1EF;
+  /* Terracotta accent. #D97757 for marks and lines; the darker shades
+     carry text, so white-on-button and link text stay readable. */
+  --accent: #D97757;
+  --accent-strong: #C15F3C;   /* button fill, white text on it */
+  --accent-hover: #A84B29;    /* button and link hover */
+  --accent-text: #B5532F;     /* links and small accent text on light backgrounds */
+  --accent-soft: #FBEEE8;
   --canvas: #1B1B1B;
 
   --shadow-sm: 0 1px 2px rgba(18, 26, 31, 0.04);
@@ -82,7 +86,7 @@ p { margin: 0; }
 ul, ol { margin: 0; padding: 0; list-style: none; }
 figure { margin: 0; }
 
-a { color: var(--accent); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
+a { color: var(--accent-text); text-underline-offset: 0.2em; text-decoration-thickness: 1px; }
 a:hover { color: var(--accent-hover); }
 
 :focus-visible {
@@ -136,7 +140,7 @@ a:hover { color: var(--accent-hover); }
   cursor: pointer;
   transition: background-color .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease);
 }
-.btn-primary { background: var(--accent); color: #fff; }
+.btn-primary { background: var(--accent-strong); color: #fff; font-weight: 600; }
 .btn-primary:hover { background: var(--accent-hover); color: #fff; }
 .btn-secondary { background: var(--surface); border-color: var(--rule-strong); color: var(--ink); }
 .btn-secondary:hover { border-color: var(--ink); color: var(--ink); }
@@ -166,13 +170,7 @@ a:hover { color: var(--accent-hover); }
   justify-content: space-between;
   height: var(--nav-h);
 }
-.nav-brand {
-  font: 600 1.125rem/1 var(--display);
-  letter-spacing: -0.02em;
-  color: var(--ink);
-  text-decoration: none;
-}
-.nav-brand:hover { color: var(--ink); }
+.nav-slot { flex: 1; }
 .nav-links { display: flex; align-items: center; gap: var(--s4); }
 .nav-links a:not(.btn) {
   position: relative;
@@ -255,13 +253,23 @@ a:hover { color: var(--accent-hover); }
   margin-top: var(--s4);
 }
 
-/* Photo: circle with a hairline ring and one quiet badge */
-.hero-photo {
+/* Photo: circle with a hairline ring and one quiet badge, name below */
+.hero-person {
   grid-column: 9 / span 4;
-  position: relative;
   justify-self: end;
   width: min(100%, 340px);
+}
+.hero-photo {
+  position: relative;
+  width: 100%;
   padding: 14px;
+}
+.hero-name {
+  margin-top: var(--s3);
+  text-align: center;
+  font: 700 2rem/1.1 var(--display);
+  letter-spacing: -0.035em;
+  color: var(--ink);
 }
 .hero-photo::before {
   content: "";
@@ -303,34 +311,11 @@ a:hover { color: var(--accent-hover); }
   background: var(--accent);
 }
 
-/* Three plain facts under the hero, drawn from the experience section */
-.hero-facts {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: var(--s4);
-  margin-top: var(--s6);
-  padding-top: var(--s4);
-  border-top: 1px solid var(--rule);
-}
-.hero-facts strong {
-  display: block;
-  font: 600 1rem/1.35 var(--display);
-  letter-spacing: -0.01em;
-  color: var(--ink);
-}
-.hero-facts span {
-  display: block;
-  margin-top: 0.3rem;
-  font-size: var(--fs-sm);
-  color: var(--ink-3);
-}
-
 /* --------------------------------------------------------------------------
    Sections: alternating white and grey bands, heading left / intro right
    -------------------------------------------------------------------------- */
 .section { padding-block: var(--s7); }
-.projects, .process, .about { background: var(--band); }
+.projects, .experience { background: var(--band); }
 
 .section-head {
   display: grid;
@@ -431,11 +416,6 @@ a:hover { color: var(--accent-hover); }
 }
 .workflow-link:hover::after,
 .workflow-link:focus-visible::after { opacity: 1; }
-.workflow figcaption {
-  margin-top: 0.6rem;
-  font-size: var(--fs-sm);
-  color: var(--ink-3);
-}
 
 .project-body {
   display: grid;
@@ -494,7 +474,7 @@ a:hover { color: var(--accent-hover); }
   border-left: 3px solid var(--accent);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
-.project-result h4 { color: var(--accent); }
+.project-result h4 { color: var(--accent-text); }
 .project-result p {
   color: var(--ink);
   font-size: 1.0625rem;
@@ -504,38 +484,6 @@ a:hover { color: var(--accent-hover); }
 }
 
 .project .btn-video { margin-top: var(--s4); }
-
-/* --------------------------------------------------------------------------
-   Services: a ruled grid rather than floating cards
-   -------------------------------------------------------------------------- */
-.service-grid {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 1px;
-  background: var(--rule);
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-.service {
-  grid-column: span 2;
-  padding: var(--s4);
-  background: var(--surface);
-  transition: background-color .25s var(--ease);
-}
-.service:nth-child(n+4) { grid-column: span 3; }
-.service:hover { background: var(--band); }
-.service h3 {
-  font-size: 1.125rem;
-  line-height: 1.3;
-  letter-spacing: -0.01em;
-}
-.service p {
-  margin-top: 0.6rem;
-  color: var(--ink-2);
-  font-size: 0.9375rem;
-  max-width: 34em;
-}
 
 /* --------------------------------------------------------------------------
    How I work: a true sequence, so it is numbered
@@ -555,7 +503,7 @@ a:hover { color: var(--accent-hover); }
   width: 2rem; height: 2rem;
   border: 1px solid var(--accent);
   border-radius: 50%;
-  color: var(--accent);
+  color: var(--accent-text);
   font: 600 0.9375rem/1 var(--display);
   background: var(--surface);
 }
@@ -579,52 +527,18 @@ a:hover { color: var(--accent-hover); }
 .experience-grid .section-intro { margin-top: var(--s2); color: var(--ink-2); font-size: 0.9375rem; }
 .experience-main { grid-column: 5 / -1; }
 
-.timeline li { border-top: 1px solid var(--rule); padding-block: var(--s3); }
-.timeline li:first-child { border-top: 0; padding-top: 0; }
-.timeline li:last-child { border-bottom: 1px solid var(--rule); }
-
-.tl-line {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  column-gap: var(--s3);
-  align-items: baseline;
+.experience-summary {
+  max-width: 44em;
+  font-size: var(--fs-md);
+  line-height: 1.7;
+  color: var(--ink-2);
 }
-.tl-role { font: 600 1.0625rem/1.4 var(--display); letter-spacing: -0.01em; }
-.tl-org { grid-column: 1; grid-row: 2; color: var(--ink-2); }
-.tl-date {
-  grid-column: 2; grid-row: 1;
-  color: var(--ink-3);
-  font-size: var(--fs-sm);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-.tl-desc {
-  margin-top: 0.4rem;
-  max-width: 46em;
-  color: var(--ink-3);
-  font-size: 0.9375rem;
-  line-height: 1.6;
-}
-
-.tl-earlier summary { cursor: pointer; list-style: none; }
-.tl-earlier summary::-webkit-details-marker { display: none; }
-.tl-earlier .tl-role::after {
-  content: "";
-  display: inline-block;
-  width: 6px; height: 6px;
-  margin-left: 0.6rem;
-  border-right: 1.5px solid var(--ink-3);
-  border-bottom: 1.5px solid var(--ink-3);
-  transform: translateY(-3px) rotate(45deg);
-  transition: transform .2s var(--ease);
-}
-.tl-earlier[open] .tl-role::after { transform: translateY(0) rotate(-135deg); }
 
 .callout {
   margin-top: var(--s4);
   padding: var(--s3);
   border-left: 3px solid var(--accent);
-  background: var(--band);
+  background: var(--surface);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
 .callout h3 { font-size: 1.0625rem; letter-spacing: -0.01em; }
@@ -680,8 +594,6 @@ a:hover { color: var(--accent-hover); }
   max-width: 32em;
   color: rgba(255, 255, 255, 0.72);
 }
-.contact-main .btn-primary { background: #fff; color: var(--ink); }
-.contact-main .btn-primary:hover { background: #E6ECEA; color: var(--ink); }
 .contact-details > div { padding-block: 0.9rem; border-top: 1px solid rgba(255, 255, 255, 0.14); }
 .contact-details > div:first-child { border-top: 0; padding-top: 0; }
 .contact-details dt { font-size: var(--fs-sm); color: rgba(255, 255, 255, 0.55); }
@@ -725,7 +637,7 @@ a:hover { color: var(--accent-hover); }
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .lightbox-title { flex: 1; font-size: 0.9375rem; color: rgba(255, 255, 255, 0.85); }
-.lightbox-open { color: #CFE3DC; font-size: 0.875rem; }
+.lightbox-open { color: #F2B9A3; font-size: 0.875rem; }
 .lightbox-open:hover { color: #fff; }
 .lightbox-close {
   min-height: 36px;
@@ -750,11 +662,8 @@ a:hover { color: var(--accent-hover); }
 
 @media (max-width: 960px) {
   .hero-text { grid-column: 1 / span 7; }
-  .hero-photo { grid-column: 8 / -1; }
+  .hero-person { grid-column: 8 / -1; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: var(--s5); }
-  .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .service, .service:nth-child(n+4) { grid-column: span 1; }
-  .service:last-child { grid-column: 1 / -1; }
   .section-head h2, .section-intro,
   .experience-grid .section-head, .experience-main,
   .about h2, .about-text,
@@ -786,10 +695,11 @@ a:hover { color: var(--accent-hover); }
 
 @media (max-width: 760px) {
   .hero { grid-template-columns: minmax(0, 1fr); padding-block: var(--s4) var(--s5); row-gap: var(--s4); }
-  .hero-text, .hero-photo { grid-column: 1 / -1; }
-  .hero-photo { order: -1; justify-self: start; width: 230px; padding: 10px; margin-left: 4px; }
+  .hero-text, .hero-person { grid-column: 1 / -1; }
+  .hero-person { order: -1; justify-self: center; width: 240px; }
+  .hero-photo { padding: 10px; }
+  .hero-name { margin-top: var(--s2); font-size: 1.75rem; }
   .hero-badge { left: auto; right: -40px; bottom: 10%; font-size: 0.8125rem; padding: 0.45rem 0.75rem; }
-  .hero-facts { grid-template-columns: minmax(0, 1fr); gap: var(--s3); margin-top: var(--s2); }
 
   .project-body {
     grid-template-columns: minmax(0, 1fr);
@@ -802,10 +712,7 @@ a:hover { color: var(--accent-hover); }
   :root { --s7: 4.5rem; }
   .project-head { grid-template-columns: minmax(0, 1fr); }
   .badge { grid-row: 1; justify-self: start; margin: 0 0 var(--s2); }
-  .steps, .service-grid { grid-template-columns: minmax(0, 1fr); }
-  .service, .service:nth-child(n+4), .service:last-child { grid-column: auto; }
-  .tl-line { grid-template-columns: minmax(0, 1fr); }
-  .tl-date { grid-column: 1; grid-row: auto; }
+  .steps { grid-template-columns: minmax(0, 1fr); }
   .hero-actions .btn { flex: 1 1 auto; }
   .footer-inner { flex-direction: column; }
 }
