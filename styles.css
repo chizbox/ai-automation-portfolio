@@ -9,13 +9,13 @@
 
 :root {
   --bg: #FFFFFF;
-  --band: #F6F7F8;
+  --band: #FAF7F2;
   --surface: #FFFFFF;
-  --ink: #121A1F;
-  --ink-2: #475259;
-  --ink-3: #6B757B;
-  --rule: #E3E6E9;
-  --rule-strong: #D2D7DB;
+  --ink: #1F1B16;
+  --ink-2: #57534E;
+  --ink-3: #6E6862;
+  --rule: #E7E1D8;
+  --rule-strong: #D6CEC3;
   /* Terracotta accent. #D97757 for marks and lines; the darker shades
      carry text, so white-on-button and link text stay readable. */
   --accent: #D97757;
@@ -23,13 +23,14 @@
   --accent-hover: #A84B29;    /* button and link hover */
   --accent-text: #B5532F;     /* links and small accent text on light backgrounds */
   --accent-soft: #FBEEE8;
+  --result-tint: #FBEDE6;
   --canvas: #1B1B1B;
 
   /* Layered shadows: a tight contact shadow plus a wide, soft ambient one */
-  --shadow-sm: 0 1px 2px rgba(18, 26, 31, 0.05), 0 2px 6px -2px rgba(18, 26, 31, 0.06);
-  --shadow: 0 1px 2px rgba(18, 26, 31, 0.04), 0 4px 10px -4px rgba(18, 26, 31, 0.06), 0 18px 40px -20px rgba(18, 26, 31, 0.16);
-  --shadow-hover: 0 2px 4px rgba(18, 26, 31, 0.05), 0 10px 20px -8px rgba(18, 26, 31, 0.08), 0 30px 56px -24px rgba(18, 26, 31, 0.22);
-  --shadow-btn: 0 1px 2px rgba(18, 26, 31, 0.08), 0 6px 14px -6px rgba(18, 26, 31, 0.18);
+  --shadow-sm: 0 1px 2px rgba(31, 27, 22, 0.05), 0 2px 6px -2px rgba(31, 27, 22, 0.06);
+  --shadow: 0 1px 2px rgba(31, 27, 22, 0.04), 0 4px 10px -4px rgba(31, 27, 22, 0.06), 0 18px 40px -20px rgba(31, 27, 22, 0.16);
+  --shadow-hover: 0 2px 4px rgba(31, 27, 22, 0.05), 0 10px 20px -8px rgba(31, 27, 22, 0.08), 0 30px 56px -24px rgba(31, 27, 22, 0.22);
+  --shadow-btn: 0 1px 2px rgba(31, 27, 22, 0.08), 0 6px 14px -6px rgba(31, 27, 22, 0.18);
   --shadow-btn-accent: 0 1px 2px rgba(168, 75, 41, 0.2), 0 8px 18px -8px rgba(193, 95, 60, 0.55);
 
   --display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
@@ -42,6 +43,7 @@
   --fs-md: 1.1875rem;
   --fs-lg: 1.5rem;
   --fs-xl: clamp(1.75rem, 2.6vw, 2.25rem);
+  --fs-section: clamp(2.45rem, 3.64vw, 3.15rem); /* section titles, 1.4x --fs-xl */
   --fs-hero: clamp(2.5rem, 5vw, 4rem);
 
   /* Spacing on an 8px base */
@@ -181,7 +183,7 @@ a:hover { color: var(--accent-hover); }
   background: rgba(255, 255, 255, 0.72);
   backdrop-filter: saturate(1.6) blur(14px);
   -webkit-backdrop-filter: saturate(1.6) blur(14px);
-  border-bottom-color: rgba(210, 215, 219, 0.7);
+  border-bottom-color: rgba(214, 206, 195, 0.7);
 }
 
 .nav {
@@ -364,7 +366,7 @@ main { overflow-x: clip; }
   object-fit: cover;
   border-radius: 50%;
   background: var(--band);
-  box-shadow: 0 2px 6px rgba(18, 26, 31, 0.06), 0 24px 48px -24px rgba(18, 26, 31, 0.4);
+  box-shadow: 0 2px 6px rgba(31, 27, 22, 0.06), 0 24px 48px -24px rgba(31, 27, 22, 0.4);
 }
 .hero-badge {
   position: absolute;
@@ -419,7 +421,8 @@ main { overflow-x: clip; }
 .contact-main .section-eyebrow { margin: 0 0 var(--s1); color: var(--accent); }
 .section-head h2 {
   grid-column: 1 / span 4;
-  font-size: var(--fs-xl);
+  font-size: var(--fs-section);
+  letter-spacing: -0.02em;
   line-height: 1.1;
 }
 .section-intro {
@@ -531,11 +534,12 @@ main { overflow-x: clip; }
 
 .project-result {
   padding: var(--s3);
-  background: rgba(217, 119, 87, 0.06);
+  background: var(--result-tint);
   border-left: 3px solid var(--accent);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
-.project-result h4 { color: var(--accent-text); }
+/* #A84B29 keeps text AA (4.96:1) on the tint; --accent-text is 4.3:1 there */
+.project-result h4 { color: var(--accent-hover); }
 .project-result p {
   color: var(--ink);
   font-size: 1.0625rem;
@@ -551,7 +555,7 @@ main { overflow-x: clip; }
   margin-top: 0.85rem;
   padding-top: 0.85rem;
   border-top: 1px solid rgba(217, 119, 87, 0.25);
-  color: var(--accent-text);
+  color: var(--accent-hover);
   font: 600 1.0625rem/1.5 var(--display);
   letter-spacing: -0.005em;
   max-width: none;
@@ -573,7 +577,7 @@ main { overflow-x: clip; }
   border-radius: 12px;
   overflow: hidden;
   background: var(--surface);
-  box-shadow: 0 1px 2px rgba(18, 26, 31, 0.06), 0 18px 36px -22px rgba(18, 26, 31, 0.4);
+  box-shadow: 0 1px 2px rgba(31, 27, 22, 0.06), 0 18px 36px -22px rgba(31, 27, 22, 0.4);
 }
 .media-bar {
   display: flex;
@@ -581,10 +585,10 @@ main { overflow-x: clip; }
   gap: 6px;
   height: 30px;
   padding-inline: 12px;
-  background: #F1F3F4;
+  background: #F3EEE7;
   border-bottom: 1px solid var(--rule);
 }
-.media-bar span { width: 9px; height: 9px; border-radius: 50%; background: #D2D7DB; }
+.media-bar span { width: 9px; height: 9px; border-radius: 50%; background: var(--rule-strong); }
 .video {
   position: relative;
   aspect-ratio: 16 / 9;
@@ -609,7 +613,7 @@ main { overflow-x: clip; }
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(18, 26, 31, 0) 45%, rgba(18, 26, 31, 0.55) 100%);
+  background: linear-gradient(180deg, rgba(31, 27, 22, 0) 45%, rgba(31, 27, 22, 0.55) 100%);
 }
 .video.no-thumb .video-poster img { display: none; }
 .video.no-thumb .video-poster { background: radial-gradient(circle at 50% 45%, #2A2F33, var(--canvas) 70%); }
@@ -737,7 +741,7 @@ main { overflow-x: clip; }
 }
 .about { padding-bottom: var(--s5); }
 .about-head { grid-column: 1 / span 4; }
-.about h2 { font-size: var(--fs-xl); line-height: 1.1; }
+.about h2 { font-size: var(--fs-section); line-height: 1.1; letter-spacing: -0.02em; }
 .about-text {
   grid-column: 5 / -1;
   max-width: 38em;
