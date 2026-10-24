@@ -215,6 +215,8 @@ a:hover { color: var(--accent-hover); }
 .nav-links a:not(.btn):hover::after,
 .nav-links a[aria-current="true"]::after { transform: scaleX(1); }
 .nav-cta { margin-left: var(--s1); }
+.nav-logo { display: block; flex: none; margin-right: auto; }
+.nav-logo img { display: block; height: 40px; width: auto; }
 
 .nav-toggle {
   display: none;
