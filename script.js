@@ -148,5 +148,28 @@
     setTimeout(step, 350);
   }
 
+  // Desktop only: the photo drifts a few pixels with the mouse
+  const hero = document.querySelector('.hero');
+  const person = document.querySelector('.hero-person');
+  const fineDesktop = window.matchMedia('(min-width: 961px) and (pointer: fine)');
+  if (motionOK && hero && person) {
+    let frame = 0;
+    const clamp = (v) => Math.max(-0.5, Math.min(0.5, v));
+    const setTilt = (x, y) => {
+      person.style.setProperty('--px', (x * 14).toFixed(2));
+      person.style.setProperty('--py', (y * 14).toFixed(2));
+    };
+    window.addEventListener('mousemove', (e) => {
+      if (!fineDesktop.matches || frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        const r = hero.getBoundingClientRect();
+        if (e.clientY > r.bottom) { setTilt(0, 0); return; }
+        setTilt(clamp((e.clientX - r.left) / r.width - 0.5), clamp((e.clientY - r.top) / r.height - 0.5));
+      });
+    }, { passive: true });
+    document.addEventListener('mouseleave', () => setTilt(0, 0));
+  }
+
   document.getElementById('year').textContent = new Date().getFullYear();
 })();

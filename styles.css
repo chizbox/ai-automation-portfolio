@@ -44,7 +44,7 @@
   --fs-lg: 1.5rem;
   --fs-xl: clamp(1.75rem, 2.6vw, 2.25rem);
   --fs-section: clamp(2.45rem, 3.64vw, 3.15rem); /* section titles, 1.4x --fs-xl */
-  --fs-hero: clamp(2.5rem, 5vw, 4rem);
+  --fs-hero: clamp(3rem, 7vw, 5.5rem);
 
   /* Spacing on an 8px base */
   --s1: 0.5rem;
@@ -253,12 +253,15 @@ a:hover { color: var(--accent-hover); }
 main { overflow-x: clip; }
 
 .hero {
+  position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   column-gap: var(--s4);
   align-items: center;
   padding-block: var(--s6) var(--s6);
 }
+
 .hero-text { grid-column: 1 / span 7; }
 .hero-eyebrow {
   margin-top: var(--s2);
@@ -269,9 +272,8 @@ main { overflow-x: clip; }
 }
 .hero h1 {
   font-size: var(--fs-hero);
-  line-height: 1.04;
-  letter-spacing: -0.035em;
-  max-width: 11ch;
+  line-height: 1;
+  letter-spacing: -0.045em;
 }
 .hero-sub {
   margin-top: var(--s3);
@@ -286,8 +288,23 @@ main { overflow-x: clip; }
   gap: 0.75rem;
   margin-top: var(--s4);
 }
+/* Book a call: light sweep across on hover */
+.btn-shine { position: relative; overflow: hidden; isolation: isolate; }
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, 0.38) 50%, rgba(255, 255, 255, 0) 70%);
+  transform: translateX(-120%);
+  pointer-events: none;
+}
+.btn-shine:hover::after { transform: translateX(120%); transition: transform .75s var(--ease); }
+.hero .btn-primary:hover { box-shadow: 0 2px 4px rgba(168, 75, 41, 0.2), 0 16px 30px -10px rgba(217, 119, 87, 0.65); }
+/* View projects: arrow nudges right on hover */
+.btn-arrow svg { flex: none; transition: transform .25s var(--ease); }
+.btn-arrow:hover svg, .btn-arrow:focus-visible svg { transform: translateX(4px); }
 
-/* Muted logo row under the hero buttons; logos colour up on hover */
+/* Logo row under the buttons: muted grey, brand colour and a name tag on hover */
 .hero-tools { margin-top: var(--s5); }
 .hero-tools-label {
   font: 600 var(--fs-sm)/1.2 var(--display);
@@ -301,17 +318,47 @@ main { overflow-x: clip; }
   align-items: center;
   gap: 20px;
   margin-top: var(--s2);
+  list-style: none;
+  padding: 0;
 }
-.hero-tools-row img {
+.tool {
+  position: relative;
+  display: inline-flex;
+  color: var(--ink-3);
+  border-radius: 6px;
+  outline-offset: 4px;
+}
+.tool svg, .tool img {
+  display: block;
   height: 22px;
   width: auto;
   max-width: none;
-  /* Dark grey silhouettes (the PNGs are transparent), so faint logos like OpenRouter stay visible */
-  filter: grayscale(100%) brightness(0);
-  opacity: 0.75;
-  transition: filter .2s var(--ease), opacity .2s var(--ease), transform .2s var(--ease);
+  fill: currentColor;
+  opacity: 0.6;
+  transition: opacity .2s var(--ease), transform .2s var(--ease);
 }
-.hero-tools-row img:hover { filter: none; opacity: 1; transform: translateY(-2px); }
+.tool img { filter: grayscale(100%); }
+.tool:hover, .tool:focus-visible { color: var(--brand, var(--ink)); }
+.tool:hover svg, .tool:hover img,
+.tool:focus-visible svg, .tool:focus-visible img { opacity: 1; transform: scale(1.1); filter: none; }
+.tool::after {
+  content: attr(data-name);
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  background: var(--ink);
+  color: #fff;
+  font: 500 0.75rem/1 var(--sans);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 4px);
+  transition: opacity .15s var(--ease), transform .15s var(--ease);
+  pointer-events: none;
+  z-index: 2;
+}
+.tool:hover::after, .tool:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
 
 /* Photo: circle with a hairline ring and one quiet badge */
 .hero-person {
@@ -321,18 +368,16 @@ main { overflow-x: clip; }
   justify-self: end;
   width: min(100%, 340px);
 }
-/* Faint dot grid behind the photo, fading out toward the left (and top and bottom) so it never sits behind the text */
+/* Faint dot grid behind the photo, faded out on every side */
 .hero-person::before {
   content: "";
   position: absolute;
-  inset: -14% -14% -14% -40%;
+  inset: -24%;
   z-index: -1;
   background-image: radial-gradient(rgba(181, 83, 47, 0.26) 1.2px, transparent 1.6px);
   background-size: 18px 18px;
-  -webkit-mask-image: linear-gradient(to left, #000 30%, transparent 85%), linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
-  -webkit-mask-composite: source-in;
-  mask-image: linear-gradient(to left, #000 30%, transparent 85%), linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
-  mask-composite: intersect;
+  -webkit-mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 30%, transparent 100%);
   pointer-events: none;
 }
 .hero-photo {
@@ -340,6 +385,8 @@ main { overflow-x: clip; }
   isolation: isolate;
   width: 100%;
   padding: 14px;
+  translate: calc(var(--px, 0) * 1px) calc(var(--py, 0) * 1px);
+  transition: translate .6s var(--ease);
 }
 /* Faint terracotta glow behind the photo */
 .hero-photo::after {
@@ -369,6 +416,7 @@ main { overflow-x: clip; }
   box-shadow: 0 2px 6px rgba(31, 27, 22, 0.06), 0 24px 48px -24px rgba(31, 27, 22, 0.4);
 }
 .hero-badge {
+  --badge-pad: 0.9rem;
   position: absolute;
   left: -20px;
   bottom: 14%;
@@ -376,7 +424,7 @@ main { overflow-x: clip; }
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  padding: 0.55rem 0.9rem;
+  padding: 0.55rem var(--badge-pad);
   border: 1px solid var(--rule);
   border-radius: var(--radius-sm);
   background: var(--surface);
@@ -395,6 +443,37 @@ main { overflow-x: clip; }
   width: 7px; height: 7px;
   border-radius: 50%;
   background: var(--accent);
+}
+/* Soft ring pulsing out of the badge dot */
+.hero-badge::after {
+  content: "";
+  position: absolute;
+  left: var(--badge-pad);
+  top: 50%;
+  width: 7px; height: 7px;
+  margin-top: -3.5px;
+  border-radius: 50%;
+  background: var(--accent);
+  opacity: 0;
+}
+.motion .hero-badge::after { animation: badge-pulse 2s ease-out infinite; }
+@keyframes badge-pulse {
+  from { transform: scale(1); opacity: 0.55; }
+  to { transform: scale(3.4); opacity: 0; }
+}
+
+/* Load-in: name, title, tagline, buttons and tools rise in one after another */
+.motion .hero-in {
+  animation: hero-rise .6s cubic-bezier(.2, .7, .2, 1) both;
+  animation-delay: calc(var(--i, 0) * 70ms + 80ms);
+}
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(14px); }
+}
+
+/* Desktop: the hero fills roughly one screen */
+@media (min-width: 768px) {
+  .hero { min-height: min(calc(100svh - var(--nav-h)), 900px); padding-bottom: var(--s6); }
 }
 
 /* --------------------------------------------------------------------------
@@ -919,7 +998,6 @@ main { overflow-x: clip; }
   .hero-person { grid-column: 8 / -1; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .steps::before { display: none; }
-  .hero-person::before { inset: -14% -14% -14% -12%; }
   .section-head h2, .section-intro,
   .experience-grid .section-head, .experience-main,
   .about-head, .about-text,
@@ -955,11 +1033,11 @@ main { overflow-x: clip; }
   .hero-text, .hero-person { grid-column: 1 / -1; }
   .hero-text { text-align: center; }
   .hero h1, .hero-sub { margin-inline: auto; }
-  .hero-actions, .hero-tools-row { justify-content: center; }
+  .hero-actions { justify-content: center; }
   .hero-person { order: -1; justify-self: center; width: 240px; }
   .hero-photo { padding: 10px; }
-  .hero-person::before { inset: -8% -30%; }
-  .hero-badge { left: auto; right: -40px; bottom: 10%; font-size: 0.8125rem; padding: 0.45rem 0.75rem; }
+  .hero-badge { --badge-pad: 0.75rem; left: auto; right: -40px; bottom: 10%; font-size: 0.8125rem; padding: 0.45rem var(--badge-pad); }
+  .hero-tools-row { justify-content: center; }
 }
 
 @media (max-width: 760px) {
@@ -997,4 +1075,5 @@ main { overflow-x: clip; }
   .btn:hover, .project:hover, .step:hover { transform: none; }
   .motion .reveal { opacity: 1; translate: none; }
   .typed-caret { display: none; }
+  .hero-photo { translate: none; }
 }
