@@ -488,6 +488,9 @@ main { overflow-x: clip; }
 
 .tools { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .tools li {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
   padding: 0.25rem 0.65rem;
   border: 1px solid var(--rule);
   border-radius: 6px;
@@ -495,6 +498,8 @@ main { overflow-x: clip; }
   color: var(--ink-2);
   background: var(--surface);
 }
+/* Tool logo before the name; fixed height, natural width */
+.tools img { flex: none; height: 24px; width: auto; max-width: none; }
 
 .highlights li {
   position: relative;
