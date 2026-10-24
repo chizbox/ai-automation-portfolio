@@ -248,6 +248,9 @@ a:hover { color: var(--accent-hover); }
 /* --------------------------------------------------------------------------
    Hero
    -------------------------------------------------------------------------- */
+/* The photo glow and badge reach past the page edge; clip them so phones never scroll sideways */
+main { overflow-x: clip; }
+
 .hero {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
@@ -256,6 +259,13 @@ a:hover { color: var(--accent-hover); }
   padding-block: var(--s6) var(--s6);
 }
 .hero-text { grid-column: 1 / span 7; }
+.hero-eyebrow {
+  margin-top: var(--s2);
+  font: 600 var(--fs-sm)/1.2 var(--display);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
 .hero h1 {
   font-size: var(--fs-hero);
   line-height: 1.04;
@@ -276,7 +286,7 @@ a:hover { color: var(--accent-hover); }
   margin-top: var(--s4);
 }
 
-/* Photo: circle with a hairline ring and one quiet badge, name below */
+/* Photo: circle with a hairline ring and one quiet badge */
 .hero-person {
   grid-column: 9 / span 4;
   justify-self: end;
@@ -298,13 +308,6 @@ a:hover { color: var(--accent-hover); }
   background: radial-gradient(closest-side, rgba(217, 119, 87, 0.34), rgba(217, 119, 87, 0.12) 60%, rgba(217, 119, 87, 0) 100%);
   filter: blur(8px);
   pointer-events: none;
-}
-.hero-name {
-  margin-top: var(--s3);
-  text-align: center;
-  font: 700 2rem/1.1 var(--display);
-  letter-spacing: -0.035em;
-  color: var(--ink);
 }
 .hero-photo::before {
   content: "";
@@ -842,6 +845,18 @@ a:hover { color: var(--accent-hover); }
   .nav-cta .btn { width: 100%; min-height: 46px; }
 }
 
+/* Hero stacks below 768px: photo on top, centered text below */
+@media (max-width: 767px) {
+  .hero { grid-template-columns: minmax(0, 1fr); padding-block: var(--s4) var(--s5); row-gap: var(--s4); }
+  .hero-text, .hero-person { grid-column: 1 / -1; }
+  .hero-text { text-align: center; }
+  .hero h1, .hero-sub { margin-inline: auto; }
+  .hero-actions { justify-content: center; }
+  .hero-person { order: -1; justify-self: center; width: 240px; }
+  .hero-photo { padding: 10px; }
+  .hero-badge { left: auto; right: -40px; bottom: 10%; font-size: 0.8125rem; padding: 0.45rem 0.75rem; }
+}
+
 @media (max-width: 760px) {
   /* Screenshots are too small to read at phone width: label them, and open
      them full size in a pannable viewer on tap */
@@ -852,13 +867,6 @@ a:hover { color: var(--accent-hover); }
   .lightbox-title { font-size: 0.875rem; }
   .video-play { width: 56px; height: 56px; margin: -28px 0 0 -28px; }
   .video-label { left: var(--s2); bottom: 0.75rem; font-size: 0.875rem; }
-
-  .hero { grid-template-columns: minmax(0, 1fr); padding-block: var(--s4) var(--s5); row-gap: var(--s4); }
-  .hero-text, .hero-person { grid-column: 1 / -1; }
-  .hero-person { order: -1; justify-self: center; width: 240px; }
-  .hero-photo { padding: 10px; }
-  .hero-name { margin-top: var(--s2); font-size: 1.75rem; }
-  .hero-badge { left: auto; right: -40px; bottom: 10%; font-size: 0.8125rem; padding: 0.45rem 0.75rem; }
 
   .project-body {
     grid-template-columns: minmax(0, 1fr);
