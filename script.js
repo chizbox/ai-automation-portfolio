@@ -47,39 +47,6 @@
     sections.forEach((s) => observer.observe(s));
   }
 
-  // Workflow lightbox. Links still open the image directly if JS or <dialog> is unavailable.
-  const dialog = document.getElementById('lightbox');
-  if (dialog && typeof dialog.showModal === 'function') {
-    const img = document.getElementById('lightbox-img');
-    const title = document.getElementById('lightbox-title');
-    const openLink = document.getElementById('lightbox-open');
-    let opener = null;
-
-    document.querySelectorAll('[data-lightbox]').forEach((link) => {
-      link.addEventListener('click', (e) => {
-        e.preventDefault();
-        opener = link;
-        const thumb = link.querySelector('img');
-        const project = link.closest('.project').querySelector('h3').textContent;
-        img.src = link.href;
-        img.alt = thumb.alt;
-        title.textContent = `${project}: n8n workflow`;
-        openLink.href = link.href;
-        dialog.showModal();
-      });
-    });
-
-    document.getElementById('lightbox-close').addEventListener('click', () => dialog.close());
-    // Click on the backdrop closes
-    dialog.addEventListener('click', (e) => {
-      if (e.target === dialog) dialog.close();
-    });
-    dialog.addEventListener('close', () => {
-      img.removeAttribute('src');
-      if (opener) opener.focus();
-    });
-  }
-
   // Back to top: scroll the window itself (a sticky header can't be a scroll target)
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   document.querySelectorAll('a[href="#top"]').forEach((link) => {
