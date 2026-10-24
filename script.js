@@ -91,5 +91,55 @@
     });
   });
 
+  const motionOK = document.documentElement.classList.contains('motion');
+
+  // Gentle fade-and-slide-up as content enters the viewport
+  if (motionOK && 'IntersectionObserver' in window) {
+    const targets = document.querySelectorAll(
+      '.section-head, .project, .steps .step, .experience-main, .about h2, .about-text, .contact-panel'
+    );
+    document.querySelectorAll('.steps .step').forEach((step, i) => {
+      step.style.setProperty('--reveal-delay', `${i * 0.08}s`);
+    });
+    const revealer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        revealer.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    targets.forEach((el) => {
+      el.classList.add('reveal');
+      revealer.observe(el);
+    });
+  } else {
+    document.documentElement.classList.remove('motion');
+  }
+
+  // Type the hero tagline once on load. Screen readers get the full sentence straight away.
+  const tagline = document.querySelector('.hero-sub');
+  if (motionOK && tagline) {
+    const text = tagline.textContent.trim();
+    tagline.style.minHeight = `${tagline.offsetHeight}px`;
+    tagline.textContent = '';
+    const full = document.createElement('span');
+    full.className = 'visually-hidden';
+    full.textContent = text;
+    const typed = document.createElement('span');
+    typed.setAttribute('aria-hidden', 'true');
+    const caret = document.createElement('span');
+    caret.className = 'typed-caret';
+    caret.setAttribute('aria-hidden', 'true');
+    tagline.append(full, typed, caret);
+
+    let i = 0;
+    const step = () => {
+      typed.textContent = text.slice(0, ++i);
+      if (i < text.length) setTimeout(step, 22);
+      else caret.classList.add('is-done');
+    };
+    setTimeout(step, 350);
+  }
+
   document.getElementById('year').textContent = new Date().getFullYear();
 })();
