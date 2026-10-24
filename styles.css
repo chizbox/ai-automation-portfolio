@@ -432,6 +432,9 @@ main { overflow-x: clip; }
   border-radius: 50%;
   background: var(--accent);
 }
+/* A logo in the badge replaces the accent dot */
+.badge:has(img)::before { display: none; }
+.badge img { flex: none; height: 18px; width: auto; max-width: none; }
 
 .workflow { margin-top: var(--s4); }
 .workflow-link {
