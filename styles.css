@@ -26,6 +26,14 @@
   --result-tint: #FBEDE6;
   --canvas: #1B1B1B;
 
+  /* Role names used by the components below */
+  --bg-cream: var(--band);
+  --text: var(--ink);
+  --text-muted: var(--ink-2);
+  --border: var(--rule);
+  --card-bg: var(--surface);
+  --accent-hover-soft: var(--accent-strong); /* hover shade for accent marks */
+
   /* Layered shadows: a tight contact shadow plus a wide, soft ambient one */
   --shadow-sm: 0 1px 2px rgba(31, 27, 22, 0.05), 0 2px 6px -2px rgba(31, 27, 22, 0.06);
   --shadow: 0 1px 2px rgba(31, 27, 22, 0.04), 0 4px 10px -4px rgba(31, 27, 22, 0.06), 0 18px 40px -20px rgba(31, 27, 22, 0.16);
@@ -56,9 +64,9 @@
   --s7: 6rem;
 
   --container: 1120px;
-  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+  --gutter: clamp(1rem, 4vw, 2.5rem);
   --nav-h: 68px;
-  --radius-lg: 18px;
+  --radius-lg: 16px;
   --radius: 12px;
   --radius-sm: 10px;
   --dur: .5s;
@@ -169,8 +177,10 @@ a:hover { color: var(--accent-hover); }
   transition: opacity .2s var(--ease);
   pointer-events: none;
 }
-.btn:hover { transform: translateY(-4px); }
-.btn:hover::before { opacity: 1; }
+@media (hover: hover) {
+  .btn:hover { transform: translateY(-4px); }
+  .btn:hover::before { opacity: 1; }
+}
 .btn:active { transform: translateY(-1px); }
 .btn-primary { --btn-lift-shadow: 0 2px 4px rgba(168, 75, 41, 0.2), 0 16px 28px -10px rgba(193, 95, 60, 0.6); background: var(--accent-strong); color: #fff; font-weight: 600; box-shadow: var(--shadow-btn-accent); }
 .btn-primary:hover { background: var(--accent-hover); color: #fff; }
@@ -192,7 +202,7 @@ a:hover { color: var(--accent-hover); }
   z-index: 50;
   isolation: isolate;
 }
-/* Frosted bar behind the nav: it fades in once the page has scrolled 10px */
+/* Frosted bar behind the nav: it fades in once the page has scrolled 20px */
 .site-header::before {
   content: "";
   position: absolute;
@@ -239,6 +249,19 @@ a:hover { color: var(--accent-hover); }
 .nav-links a[aria-current="true"] { color: var(--ink); }
 .nav-links a:not(.btn):hover::after,
 .nav-links a[aria-current="true"]::after { transform: scaleX(1); }
+/* One underline that slides to the active section's link (script.js positions it) */
+.nav-links { position: relative; }
+.nav-indicator {
+  position: absolute;
+  left: 0; top: 0;
+  width: 100px; height: 1px;
+  background: var(--ink);
+  transform-origin: left center;
+  opacity: 0;
+  pointer-events: none;
+}
+.nav-indicator.is-ready { transition: transform .35s var(--ease), opacity .25s var(--ease); }
+.nav-links.has-indicator a[aria-current="true"]::after { transform: scaleX(0); }
 .nav-cta { margin-left: var(--s1); }
 .nav-logo { display: block; flex: none; margin-right: auto; }
 .nav-logo img { display: block; height: 40px; width: auto; }
@@ -390,6 +413,17 @@ body::before {
 }
 .tool:hover svg, .tool:hover img, .tool:hover .tool-mono,
 .tool:focus-visible svg, .tool:focus-visible img, .tool:focus-visible .tool-mono { transform: scale(1.1); }
+/* Hero row: neutral grey at rest; on hover or focus it turns terracotta and lifts 2px */
+.hero-tools-row .tool { color: var(--ink-3); transition: color .25s var(--ease), transform .25s var(--ease); }
+.hero-tools-row .tool img { filter: grayscale(1); opacity: .75; transition: filter .25s var(--ease), opacity .25s var(--ease); }
+.hero-tools-row .tool:focus-visible { color: var(--accent); transform: translateY(-2px); }
+.hero-tools-row .tool:focus-visible img { filter: none; opacity: 1; }
+.hero-tools-row .tool:hover svg, .hero-tools-row .tool:hover img,
+.hero-tools-row .tool:focus-visible svg, .hero-tools-row .tool:focus-visible img { transform: none; }
+@media (hover: hover) {
+  .hero-tools-row .tool:hover { color: var(--accent); transform: translateY(-2px); }
+  .hero-tools-row .tool:hover img { filter: none; opacity: 1; }
+}
 .tool::after {
   content: attr(data-name);
   position: absolute;
@@ -470,7 +504,7 @@ body::before {
   gap: 0.55rem;
   padding: 0.55rem var(--badge-pad);
   border: 1px solid var(--rule);
-  border-radius: var(--radius-sm);
+  border-radius: 999px;
   background: var(--surface);
   box-shadow: var(--shadow);
   font: 500 0.875rem/1 var(--sans);
@@ -559,21 +593,23 @@ body::before {
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
   position: relative;
-  transition: transform .2s var(--ease);
+  transition: transform .25s var(--ease);
 }
 /* Cards lift 4px on hover; the deeper shadow fades in on its own layer */
-.project::after, .step::after {
+.project::after, .step::after, .callout::after {
   content: "";
   position: absolute;
   inset: -1px;
   border-radius: inherit;
   box-shadow: var(--shadow-hover);
   opacity: 0;
-  transition: opacity .2s var(--ease);
+  transition: opacity .25s var(--ease);
   pointer-events: none;
 }
-.project:hover, .step:hover { transform: translateY(-4px); border-color: var(--rule-strong); }
-.project:hover::after, .step:hover::after { opacity: 1; }
+@media (hover: hover) {
+  .project:hover, .step:hover, .callout:hover { transform: translateY(-4px); border-color: var(--rule-strong); }
+  .project:hover::after, .step:hover::after, .callout:hover::after { opacity: 1; }
+}
 
 /* Large, faint decorative project number beside the title */
 .project-num {
@@ -773,11 +809,12 @@ body::before {
 
 .project-result {
   padding: var(--s3);
-  background: var(--result-tint);
+  background: var(--card-bg);
+  border: 1px solid var(--border);
   border-left: 3px solid var(--accent);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
-/* #A84B29 keeps text AA (4.96:1) on the tint; --accent-text is 4.3:1 there */
+/* #A84B29 keeps the label AA on white (5.7:1) */
 .project-result h4 { color: var(--accent-hover); }
 .project-result p {
   color: var(--ink);
@@ -857,9 +894,28 @@ body::before {
   font: 500 0.9375rem/1.2 var(--sans);
   color: #fff;
 }
-.video-poster:hover img { transform: scale(1.02); }
-.video-poster:hover .video-play,
+/* Soft ring around the play button; it pulses while the thumbnail is hovered */
+.video-play::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  opacity: 0;
+  pointer-events: none;
+}
 .video-poster:focus-visible .video-play { transform: scale(1.06); background: var(--accent-hover); }
+@media (hover: hover) {
+  .video-poster:hover img { transform: scale(1.03); }
+  .video-poster:hover .video-play { transform: scale(1.06); background: var(--accent-hover); }
+  .motion .video-poster:hover .video-play::before { animation: play-ring 1.2s var(--ease) infinite; }
+}
+/* 600ms ripple, then a 600ms rest */
+@keyframes play-ring {
+  0%   { opacity: .7; transform: scale(1); }
+  50%  { opacity: 0;  transform: scale(1.45); }
+  100% { opacity: 0;  transform: scale(1.45); }
+}
 .video iframe {
   position: absolute;
   inset: 0;
@@ -887,15 +943,16 @@ body::before {
   border-top: 1.5px dashed rgba(217, 119, 87, 0.55);
 }
 /* With motion on, the line draws from step 1 to step 4 when the steps scroll into view */
-.motion .steps::before { clip-path: inset(0 100% 0 0); transition: clip-path 1.2s var(--ease) .2s; }
-.motion .steps.is-drawn::before { clip-path: inset(0 0 0 0); }
+.motion .steps::before { transform: scaleX(0); transform-origin: left center; transition: transform .6s var(--ease) .35s; }
+.motion .steps.is-drawn::before { transform: none; }
 .step {
   padding: var(--s3);
   background: var(--band);
   border: 1px solid var(--rule);
-  border-radius: var(--radius);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
   position: relative;
-  transition: transform .2s var(--ease);
+  transition: transform .25s var(--ease);
 }
 .step-top { display: flex; align-items: center; justify-content: space-between; }
 .step-icon {
@@ -939,8 +996,10 @@ body::before {
   padding: var(--s2) var(--s3);
   border-left: 3px solid var(--accent);
   background: var(--surface);
-  border-radius: 0 var(--radius) var(--radius) 0;
-  box-shadow: var(--shadow-sm);
+  border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
+  box-shadow: var(--shadow);
+  position: relative;
+  transition: transform .25s var(--ease);
 }
 .callout h3 { font-size: 1.0625rem; letter-spacing: -0.01em; }
 .callout p { margin-top: 0.5rem; color: var(--ink-2); font-size: 0.9375rem; max-width: 46em; }
@@ -1000,6 +1059,12 @@ body::before {
   background: radial-gradient(closest-side, rgba(217, 119, 87, 0.34), rgba(217, 119, 87, 0.12) 50%, rgba(217, 119, 87, 0) 100%);
   pointer-events: none;
 }
+/* Desktop with a mouse: the glow is centred on --gx/--gy, which script.js moves with the cursor */
+.contact-panel.glow-follow::before {
+  top: 0; left: 0; right: auto;
+  transform: translate(calc(var(--gx, 0px) - 310px), calc(var(--gy, 0px) - 310px));
+  transition: transform .5s var(--ease);
+}
 /* Very faint dot pattern, strongest near the glow */
 .contact-panel::after {
   content: "";
@@ -1039,12 +1104,15 @@ body::before {
 .site-footer { padding-block: var(--s4); border-top: 1px solid var(--rule); }
 .footer-inner {
   display: flex;
+  align-items: center;
   justify-content: space-between;
   gap: var(--s2);
   font-size: var(--fs-sm);
   color: var(--ink-3);
 }
 .footer-inner a { color: var(--ink-2); }
+.footer-brand { display: flex; align-items: center; gap: 0.75rem; }
+.footer-brand img { display: block; height: 22px; width: auto; }
 
 /* --------------------------------------------------------------------------
    Motion: scroll reveals and the typed tagline. Only active when script.js
@@ -1094,6 +1162,7 @@ body::before {
 }
 
 @media (max-width: 880px) {
+  .nav-indicator { display: none; }
   .nav-toggle { display: block; }
   .nav-links {
     position: absolute;
@@ -1159,7 +1228,8 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
-  .btn:hover, .project:hover, .step:hover { transform: none; }
+  .btn:hover, .project:hover, .step:hover, .callout:hover, .hero-tools-row .tool { transform: none !important; }
+  .video-poster:hover img { transform: none; }
   .motion .reveal { opacity: 1; translate: none; }
   .typed-caret { display: none; }
   .hero-photo { translate: none; }

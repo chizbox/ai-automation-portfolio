@@ -3,8 +3,8 @@
   const toggle = document.querySelector('.nav-toggle');
   const navLinks = document.getElementById('nav-links');
 
-  // Header border once the page scrolls
-  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 10);
+  // Frosted header with a bottom border once the page has scrolled 20px
+  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 20);
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
 
@@ -46,12 +46,31 @@
       if (current && a.getAttribute('href') === `#${current.id}`) a.setAttribute('aria-current', 'true');
       else a.removeAttribute('aria-current');
     });
+    moveIndicator();
   };
+
+  // One underline that slides between links instead of each link drawing its own
+  const indicator = document.createElement('span');
+  indicator.className = 'nav-indicator';
+  indicator.setAttribute('aria-hidden', 'true');
+  navLinks.append(indicator);
+  navLinks.classList.add('has-indicator');
+  function moveIndicator() {
+    const active = links.find((a) => a.hasAttribute('aria-current'));
+    if (!active) { indicator.style.opacity = '0'; return; }
+    const x = active.offsetLeft;
+    const y = active.offsetTop + active.offsetHeight - 1;
+    indicator.style.transform = `translate(${x}px, ${y}px) scaleX(${active.offsetWidth / 100})`;
+    indicator.style.opacity = '1';
+  }
   window.addEventListener('scroll', () => {
     if (!spyQueued) { spyQueued = true; requestAnimationFrame(updateSpy); }
   }, { passive: true });
   window.addEventListener('resize', updateSpy);
   updateSpy();
+  // Start sliding only after the first placement, and re-measure once fonts load
+  requestAnimationFrame(() => indicator.classList.add('is-ready'));
+  if (document.fonts) document.fonts.ready.then(moveIndicator);
 
   // Back to top: scroll the window itself (a sticky header can't be a scroll target)
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -92,6 +111,7 @@
 
   // Gentle fade-and-slide-up as content enters the viewport
   if (motionOK && 'IntersectionObserver' in window) {
+    const stepCards = [...document.querySelectorAll('.steps .step')];
     const targets = document.querySelectorAll(
       '.section-head, .project, .steps .step, .experience-main, .about-head, .about-text, .contact-panel'
     );
@@ -101,7 +121,9 @@
         .filter((entry) => entry.isIntersecting)
         .sort((a, b) => (a.boundingClientRect.top - b.boundingClientRect.top) || (a.boundingClientRect.left - b.boundingClientRect.left))
         .forEach((entry, i) => {
-          entry.target.style.setProperty('--reveal-delay', `${i * 0.08}s`);
+          // The four steps always rise in order, 90ms apart
+          const step = stepCards.indexOf(entry.target);
+          entry.target.style.setProperty('--reveal-delay', `${(step >= 0 ? step * 0.09 : i * 0.08)}s`);
           entry.target.classList.add('is-visible');
           revealer.unobserve(entry.target);
         });
@@ -122,6 +144,62 @@
     }
   } else {
     document.documentElement.classList.remove('motion');
+  }
+
+  // Key figures count up once when they come into view; only the number changes,
+  // and the text ends exactly as written.
+  if (motionOK && 'IntersectionObserver' in window) {
+    const counter = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        counter.unobserve(entry.target);
+        const el = entry.target;
+        const text = el.textContent;
+        const match = text.match(/\d+(\.\d+)?/);
+        if (!match) return;
+        const target = parseFloat(match[0]);
+        const before = text.slice(0, match.index);
+        const after = text.slice(match.index + match[0].length);
+        const start = performance.now();
+        const tick = (now) => {
+          const t = Math.min((now - start) / 600, 1);
+          const eased = 1 - Math.pow(1 - t, 3);
+          el.textContent = t < 1 ? before + Math.round(target * eased) + after : text;
+          if (t < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.6 });
+    document.querySelectorAll('.project-stat-num').forEach((el) => counter.observe(el));
+  }
+
+  // Desktop only: the contact glow follows the cursor
+  const panel = document.querySelector('.contact-panel');
+  if (motionOK && panel) {
+    const pointerDesktop = window.matchMedia('(min-width: 961px) and (hover: hover) and (pointer: fine)');
+    let glowFrame = 0;
+    const rest = () => {
+      // Resting spot: the top-right corner, where the glow sits without a mouse
+      panel.style.setProperty('--gx', `${panel.offsetWidth - 70}px`);
+      panel.style.setProperty('--gy', '50px');
+    };
+    const setup = () => {
+      panel.classList.toggle('glow-follow', pointerDesktop.matches);
+      if (pointerDesktop.matches) rest();
+    };
+    setup();
+    pointerDesktop.addEventListener('change', setup);
+    window.addEventListener('resize', () => { if (pointerDesktop.matches) rest(); });
+    panel.addEventListener('pointermove', (e) => {
+      if (!pointerDesktop.matches || glowFrame) return;
+      glowFrame = requestAnimationFrame(() => {
+        glowFrame = 0;
+        const r = panel.getBoundingClientRect();
+        panel.style.setProperty('--gx', `${e.clientX - r.left}px`);
+        panel.style.setProperty('--gy', `${e.clientY - r.top}px`);
+      });
+    });
+    panel.addEventListener('pointerleave', () => { if (pointerDesktop.matches) rest(); });
   }
 
   // Type the hero tagline once on load. Screen readers get the full sentence straight away.
