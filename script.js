@@ -95,15 +95,16 @@
     const targets = document.querySelectorAll(
       '.section-head, .project, .steps .step, .experience-main, .about-head, .about-text, .contact-panel'
     );
-    document.querySelectorAll('.steps .step').forEach((step, i) => {
-      step.style.setProperty('--reveal-delay', `${i * 0.08}s`);
-    });
+    // Items that come into view together rise one after another, 80ms apart, in reading order
     const revealer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        revealer.unobserve(entry.target);
-      });
+      entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => (a.boundingClientRect.top - b.boundingClientRect.top) || (a.boundingClientRect.left - b.boundingClientRect.left))
+        .forEach((entry, i) => {
+          entry.target.style.setProperty('--reveal-delay', `${i * 0.08}s`);
+          entry.target.classList.add('is-visible');
+          revealer.unobserve(entry.target);
+        });
     }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
     targets.forEach((el) => {
       el.classList.add('reveal');

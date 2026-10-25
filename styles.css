@@ -150,19 +150,34 @@ a:hover { color: var(--accent-hover); }
   letter-spacing: -0.005em;
   text-decoration: none;
   cursor: pointer;
+  position: relative;
+  isolation: isolate;
   transition: background-color .2s var(--ease), border-color .2s var(--ease), color .2s var(--ease),
-              box-shadow .25s var(--ease), transform .25s var(--ease);
+              transform .2s var(--ease);
 }
-.btn:hover { transform: translateY(-2px); }
-.btn:active { transform: translateY(0); }
-.btn-primary { background: var(--accent-strong); color: #fff; font-weight: 600; box-shadow: var(--shadow-btn-accent); }
-.btn-primary:hover { background: var(--accent-hover); color: #fff; box-shadow: 0 2px 4px rgba(168, 75, 41, 0.2), 0 14px 26px -10px rgba(193, 95, 60, 0.6); }
+/* Hover lift: the deeper shadow lives on a layer that fades in, so only transform and opacity animate */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  box-shadow: var(--btn-lift-shadow, var(--shadow-btn));
+  opacity: 0;
+  transition: opacity .2s var(--ease);
+  pointer-events: none;
+}
+.btn:hover { transform: translateY(-4px); }
+.btn:hover::before { opacity: 1; }
+.btn:active { transform: translateY(-1px); }
+.btn-primary { --btn-lift-shadow: 0 2px 4px rgba(168, 75, 41, 0.2), 0 16px 28px -10px rgba(193, 95, 60, 0.6); background: var(--accent-strong); color: #fff; font-weight: 600; box-shadow: var(--shadow-btn-accent); }
+.btn-primary:hover { background: var(--accent-hover); color: #fff; }
 .btn-secondary { background: var(--surface); border-color: var(--rule-strong); color: var(--ink); box-shadow: var(--shadow-sm); }
-.btn-secondary:hover { border-color: var(--ink); color: var(--ink); box-shadow: var(--shadow-btn); }
+.btn-secondary:hover { border-color: var(--ink); color: var(--ink); }
 .btn-video { background: var(--surface); border-color: var(--rule-strong); color: var(--ink); box-shadow: var(--shadow-sm); }
 .btn-video svg { color: var(--accent); }
-.btn-video:hover { border-color: var(--ink); color: var(--ink); box-shadow: var(--shadow-btn); }
-.btn-outline { background: transparent; border-color: var(--accent-strong); color: var(--accent-text); }
+.btn-video:hover { border-color: var(--ink); color: var(--ink); }
+.btn-outline { --btn-lift-shadow: 0 10px 20px -10px rgba(193, 95, 60, 0.5); background: transparent; border-color: var(--accent-strong); color: var(--accent-text); }
 .btn-outline:hover { background: var(--accent-strong); border-color: var(--accent-strong); color: #fff; }
 .btn-sm { min-height: 38px; padding: 0.5rem 1rem; font-size: 0.875rem; }
 
@@ -173,20 +188,25 @@ a:hover { color: var(--accent-hover); }
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(255, 255, 255, 0);
-  border-bottom: 1px solid transparent;
-  transition: background-color .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease),
-              backdrop-filter .3s var(--ease), -webkit-backdrop-filter .3s var(--ease);
+  isolation: isolate;
 }
-/* Solid while the mobile menu is open so the menu reads cleanly */
-.site-header:has(.nav-links.is-open) { background: rgba(255, 255, 255, 0.96); }
-/* Frosted glass once the page scrolls */
-.site-header.is-scrolled {
+/* Frosted bar behind the nav: it fades in once the page has scrolled 10px */
+.site-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
   background: rgba(255, 255, 255, 0.72);
   backdrop-filter: saturate(1.6) blur(14px);
   -webkit-backdrop-filter: saturate(1.6) blur(14px);
-  border-bottom-color: rgba(214, 206, 195, 0.7);
+  border-bottom: 1px solid rgba(214, 206, 195, 0.7);
+  opacity: 0;
+  transition: opacity .3s var(--ease);
+  pointer-events: none;
 }
+.site-header.is-scrolled::before { opacity: 1; }
+/* Solid while the mobile menu is open so the menu reads cleanly */
+.site-header:has(.nav-links.is-open) { background: rgba(255, 255, 255, 0.96); }
 
 .nav {
   display: flex;
@@ -302,8 +322,14 @@ main { overflow-x: clip; }
   margin-top: var(--s4);
 }
 /* Book a call: light sweep across on hover */
-.btn-shine { position: relative; overflow: hidden; isolation: isolate; }
-.btn-shine::after {
+.btn-sweep {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  pointer-events: none;
+}
+.btn-sweep::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -311,8 +337,7 @@ main { overflow-x: clip; }
   transform: translateX(-120%);
   pointer-events: none;
 }
-.btn-shine:hover::after { transform: translateX(120%); transition: transform .75s var(--ease); }
-.hero .btn-primary:hover { box-shadow: 0 2px 4px rgba(168, 75, 41, 0.2), 0 16px 30px -10px rgba(217, 119, 87, 0.65); }
+.btn-shine:hover .btn-sweep::after { transform: translateX(120%); transition: transform .75s var(--ease); }
 /* View projects: arrow nudges right on hover */
 .btn-arrow svg { flex: none; transition: transform .25s var(--ease); }
 .btn-arrow:hover svg, .btn-arrow:focus-visible svg { transform: translateX(4px); }
@@ -404,6 +429,12 @@ main { overflow-x: clip; }
   border-radius: 50%;
   background: radial-gradient(closest-side, rgba(217, 119, 87, 0.08), rgba(217, 119, 87, 0.04) 55%, rgba(217, 119, 87, 0) 100%);
   pointer-events: none;
+}
+/* The glow drifts slowly so the hero feels alive without drawing the eye */
+.motion .hero-photo::after { animation: glow-drift 22s ease-in-out infinite alternate; }
+@keyframes glow-drift {
+  from { transform: translate3d(-4%, -3%, 0) scale(1); }
+  to { transform: translate3d(5%, 4%, 0) scale(1.08); }
 }
 /* Single thin terracotta ring */
 .hero-photo::before {
@@ -521,9 +552,22 @@ main { overflow-x: clip; }
   border: 1px solid var(--rule);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow);
-  transition: box-shadow .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
+  position: relative;
+  transition: transform .2s var(--ease);
 }
-.project:hover { box-shadow: var(--shadow-hover); border-color: var(--rule-strong); transform: translateY(-4px); }
+/* Cards lift 4px on hover; the deeper shadow fades in on its own layer */
+.project::after, .step::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  box-shadow: var(--shadow-hover);
+  opacity: 0;
+  transition: opacity .2s var(--ease);
+  pointer-events: none;
+}
+.project:hover, .step:hover { transform: translateY(-4px); border-color: var(--rule-strong); }
+.project:hover::after, .step:hover::after { opacity: 1; }
 
 /* Large, faint decorative project number beside the title */
 .project-num {
@@ -809,9 +853,9 @@ main { overflow-x: clip; }
   background: var(--band);
   border: 1px solid var(--rule);
   border-radius: var(--radius);
-  transition: border-color .2s var(--ease), box-shadow .2s var(--ease), transform .2s var(--ease);
+  position: relative;
+  transition: transform .2s var(--ease);
 }
-.step:hover { border-color: var(--rule-strong); box-shadow: var(--shadow-hover); transform: translateY(-4px); }
 .step-top { display: flex; align-items: center; justify-content: space-between; }
 .step-icon {
   display: grid;
@@ -969,9 +1013,8 @@ main { overflow-x: clip; }
 .motion .reveal {
   opacity: 0;
   translate: 0 12px;
-  transition: opacity .4s var(--ease), translate .4s var(--ease),
-              transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease);
-  transition-delay: var(--reveal-delay, 0s), var(--reveal-delay, 0s), 0s, 0s, 0s;
+  transition: opacity .4s var(--ease), translate .4s var(--ease), transform .2s var(--ease);
+  transition-delay: var(--reveal-delay, 0s), var(--reveal-delay, 0s), 0s;
 }
 .motion .reveal.is-visible { opacity: 1; translate: none; }
 
