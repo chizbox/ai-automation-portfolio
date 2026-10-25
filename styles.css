@@ -354,7 +354,7 @@ body::before {
 .btn-arrow svg { flex: none; transition: transform .25s var(--ease); }
 .btn-arrow:hover svg, .btn-arrow:focus-visible svg { transform: translateX(4px); }
 
-/* Full-width "Works with" strip along the bottom of the hero */
+/* Full-width tool strip along the bottom of the hero */
 .hero-tools {
   grid-column: 1 / -1;
   display: flex;
@@ -364,10 +364,6 @@ body::before {
   margin-top: var(--s5);
   padding-top: var(--s3);
   border-top: 1px solid var(--rule);
-}
-.hero-tools-label {
-  font: 400 var(--fs-sm)/1.2 var(--sans);
-  color: var(--ink-3);
 }
 .hero-tools-row {
   display: flex;
@@ -380,7 +376,7 @@ body::before {
 .tool {
   position: relative;
   display: inline-flex;
-  color: var(--ink-3);
+  color: var(--brand, var(--ink-2));
   border-radius: 6px;
   outline-offset: 4px;
 }
@@ -390,13 +386,10 @@ body::before {
   width: auto;
   max-width: none;
   fill: currentColor;
-  opacity: 0.6;
-  transition: opacity .2s var(--ease), transform .2s var(--ease);
+  transition: transform .2s var(--ease);
 }
-.tool img { filter: grayscale(100%); }
-.tool:hover, .tool:focus-visible { color: var(--brand, var(--ink)); }
-.tool:hover svg, .tool:hover img,
-.tool:focus-visible svg, .tool:focus-visible img { opacity: 1; transform: scale(1.1); filter: none; }
+.tool:hover svg, .tool:hover img, .tool:hover .tool-mono,
+.tool:focus-visible svg, .tool:focus-visible img, .tool:focus-visible .tool-mono { transform: scale(1.1); }
 .tool::after {
   content: attr(data-name);
   position: absolute;
@@ -414,7 +407,8 @@ body::before {
   pointer-events: none;
   z-index: 2;
 }
-.tool:hover::after, .tool:focus-visible::after { opacity: 1; transform: translate(-50%, 0); }
+/* :focus as well, so a tap on a touch screen shows the name too */
+.tool:hover::after, .tool:focus::after { opacity: 1; transform: translate(-50%, 0); }
 
 /* Photo: circle with a thin terracotta ring and one quiet badge */
 .hero-person {
@@ -730,16 +724,35 @@ body::before {
 }
 .project-block p { color: var(--ink-2); max-width: 38em; }
 
-.tools { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-.tools li {
-  display: inline-flex;
-  align-items: center;
-  padding: 0.3rem 0.7rem;
-  border: 1px solid var(--rule);
+.icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
+
+/* Project tools: brand icons, name in a tooltip; padding keeps each tap target 36px */
+.tools { display: flex; flex-wrap: wrap; gap: 4px; margin-left: -6px; }
+.tools .tool { padding: 6px; }
+.tools .tool svg { height: 24px; width: 24px; }
+.tools .tool::after {
+  bottom: calc(100% + 4px);
+  width: max-content;
+  max-width: 11rem;
+  white-space: normal;
+  line-height: 1.3;
+  text-align: center;
+}
+/* Edge tooltips align to their icon so they stay inside narrow cards */
+.tools .tool:first-child::after { left: 0; transform: translateY(4px); }
+.tools .tool:last-child::after { left: auto; right: 0; transform: translateY(4px); }
+.tools .tool:first-child:is(:hover, :focus)::after,
+.tools .tool:last-child:is(:hover, :focus)::after { transform: none; }
+/* Monogram tile for tools without an icon */
+.tool-mono {
+  display: grid;
+  place-items: center;
+  width: 24px; height: 24px;
+  border: 1.5px solid var(--ink-3);
   border-radius: 6px;
-  font-size: var(--fs-sm);
+  font: 600 0.8125rem/1 var(--display);
   color: var(--ink-2);
-  background: var(--surface);
+  transition: transform .2s var(--ease);
 }
 
 .highlights li {
