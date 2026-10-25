@@ -654,35 +654,72 @@ body::before {
 .project-tools { grid-area: tools; }
 .project-highlights { grid-area: highlights; }
 
-/* Desktop: video on one side, Problem/Tools/Highlights on the other, alternating per card */
-@media (min-width: 961px) {
+/* Tablet and up: video on one side, Result with "How it's built" below it on the other, alternating per card */
+@media (min-width: 761px) {
   .project {
     display: grid;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
     grid-template-areas:
       "head  head"
-      "media details"
-      "result result";
-    column-gap: var(--s5);
+      "media result"
+      "media more";
+    column-gap: var(--s4);
   }
   .project:nth-of-type(even) {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
     grid-template-areas:
-      "head    head"
-      "details media"
-      "result  result";
+      "head   head"
+      "result media"
+      "more   media";
   }
   .project .media-frame { grid-area: media; align-self: start; }
   .project-body { display: contents; }
-  .project-details {
-    grid-area: details;
+  .project-result { grid-area: result; margin-top: var(--s4); }
+  .project-more { grid-area: more; align-self: start; margin-top: var(--s2); }
+  .project-more .project-details {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas: "problem" "tools" "highlights";
     gap: var(--s3);
-    margin-top: var(--s4);
-    align-self: start;
   }
-  .project-result { grid-area: result; margin-top: var(--s4); }
+}
+@media (min-width: 961px) {
+  .project { column-gap: var(--s5); }
+}
+
+/* "How it's built": Problem, Tools and Highlights stay folded until asked for */
+.project-more { border-top: 1px solid var(--rule); }
+.project-more > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s2);
+  min-height: 48px;
+  padding-top: var(--s2);
+  font: 600 1rem/1.3 var(--display);
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+}
+.project-more > summary::-webkit-details-marker { display: none; }
+.project-more > summary::after {
+  content: "";
+  flex: none;
+  width: 8px; height: 8px;
+  margin-right: 0.35rem;
+  border-right: 1.5px solid var(--accent-strong);
+  border-bottom: 1.5px solid var(--accent-strong);
+  transform: translateY(-2px) rotate(45deg);
+  transition: transform .2s var(--ease);
+}
+.project-more[open] > summary::after { transform: translateY(2px) rotate(-135deg); }
+.project-more > summary:hover { color: var(--accent-text); }
+.project-more .project-details { margin-top: var(--s3); }
+.motion .project-more[open] > .project-details { animation: more-in .3s var(--ease) both; }
+@keyframes more-in {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
 }
 
 .project-block h4 {
@@ -735,27 +772,6 @@ body::before {
   font-weight: 500;
   line-height: 1.6;
   max-width: 50em;
-}
-
-.project-result .result-metric {
-  display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  margin-top: 0.85rem;
-  padding-top: 0.85rem;
-  border-top: 1px solid rgba(217, 119, 87, 0.25);
-  color: var(--accent-hover);
-  font: 600 1.0625rem/1.5 var(--display);
-  letter-spacing: -0.005em;
-  max-width: none;
-}
-.project-result .result-metric::before {
-  content: "";
-  flex: none;
-  width: 8px; height: 8px;
-  border-radius: 2px;
-  background: var(--accent);
-  transform: translateY(-1px);
 }
 
 /* Click-to-play video: a thumbnail until clicked, then the nocookie player */

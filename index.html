@@ -122,32 +122,34 @@
             </div>
           </div>
           <div class="project-body">
-            <div class="project-details">
-              <div class="project-block project-problem">
-                <h4>Problem</h4>
-                <p>Invoices arrive as PDF email attachments and someone has to type each one into a tracker. It is slow, and duplicates and typos are easy to miss.</p>
-              </div>
-              <div class="project-block project-tools">
-                <h4>Tools</h4>
-                <ul class="tools">
-                  <li>n8n</li><li>Gmail</li><li>Google Sheets</li><li>OpenRouter (Gemini 2.5 Flash Lite)</li>
-                </ul>
-              </div>
-              <div class="project-block project-highlights">
-                <h4>Highlights</h4>
-                <ul class="highlights">
-                  <li>Duplicate protection by invoice number</li>
-                  <li>Strict don't-guess extraction</li>
-                  <li>Failure path with labeling and error logging</li>
-                  <li>Handles several attachments per email</li>
-                </ul>
-              </div>
-            </div>
             <div class="project-block project-result">
               <h4>Result</h4>
               <p>Invoice details land in the tracker automatically, duplicates are blocked, and failed emails are labeled and logged for review.</p>
-              <p class="result-metric">Typically cuts manual entry from about 3 to 5 minutes per invoice to about 30 seconds of review.</p>
             </div>
+            <details class="project-more">
+              <summary>How it's built</summary>
+              <div class="project-details">
+                <div class="project-block project-problem">
+                  <h4>Problem</h4>
+                  <p>Invoices arrive as PDF email attachments and someone has to type each one into a tracker. It is slow, and duplicates and typos are easy to miss.</p>
+                </div>
+                <div class="project-block project-tools">
+                  <h4>Tools</h4>
+                  <ul class="tools">
+                    <li>n8n</li><li>Gmail</li><li>Google Sheets</li><li>OpenRouter (Gemini 2.5 Flash Lite)</li>
+                  </ul>
+                </div>
+                <div class="project-block project-highlights">
+                  <h4>Highlights</h4>
+                  <ul class="highlights">
+                    <li>Duplicate protection by invoice number</li>
+                    <li>Strict don't-guess extraction</li>
+                    <li>Failure path with labeling and error logging</li>
+                    <li>Handles several attachments per email</li>
+                  </ul>
+                </div>
+              </div>
+            </details>
           </div>
         </article>
 
@@ -170,32 +172,34 @@
             </div>
           </div>
           <div class="project-body">
-            <div class="project-details">
-              <div class="project-block project-problem">
-                <h4>Problem</h4>
-                <p>Recruiters spend hours reading CVs, comparing them with job descriptions, writing follow-ups, and arranging calls, and most applicants aren't a fit.</p>
-              </div>
-              <div class="project-block project-tools">
-                <h4>Tools</h4>
-                <ul class="tools">
-                  <li>n8n</li><li>Airtable</li><li>Google Drive</li><li>Gmail</li><li>Google Calendar</li><li>OpenRouter</li>
-                </ul>
-              </div>
-              <div class="project-block project-highlights">
-                <h4>Highlights</h4>
-                <ul class="highlights">
-                  <li>Several AI agents with different jobs: scorer, question writer, email writer, scheduler</li>
-                  <li>A dynamic form built from AI-generated questions</li>
-                  <li>Calendar booking by an AI agent</li>
-                  <li>Every stage tracked in Airtable</li>
-                </ul>
-              </div>
-            </div>
             <div class="project-block project-result">
               <h4>Result</h4>
               <p>Every applicant is scored against the open role, and strong candidates move on to tailored questions, a personalized email, and a booked phone interview without manual coordination.</p>
-              <p class="result-metric">Typically screens a batch of 50 CVs in about 10 minutes instead of a few hours by hand.</p>
             </div>
+            <details class="project-more">
+              <summary>How it's built</summary>
+              <div class="project-details">
+                <div class="project-block project-problem">
+                  <h4>Problem</h4>
+                  <p>Recruiters spend hours reading CVs, comparing them with job descriptions, writing follow-ups, and arranging calls, and most applicants aren't a fit.</p>
+                </div>
+                <div class="project-block project-tools">
+                  <h4>Tools</h4>
+                  <ul class="tools">
+                    <li>n8n</li><li>Airtable</li><li>Google Drive</li><li>Gmail</li><li>Google Calendar</li><li>OpenRouter</li>
+                  </ul>
+                </div>
+                <div class="project-block project-highlights">
+                  <h4>Highlights</h4>
+                  <ul class="highlights">
+                    <li>Several AI agents with different jobs: scorer, question writer, email writer, scheduler</li>
+                    <li>A dynamic form built from AI-generated questions</li>
+                    <li>Calendar booking by an AI agent</li>
+                    <li>Every stage tracked in Airtable</li>
+                  </ul>
+                </div>
+              </div>
+            </details>
           </div>
         </article>
 
@@ -218,33 +222,35 @@
             </div>
           </div>
           <div class="project-body">
-            <div class="project-details">
-              <div class="project-block project-problem">
-                <h4>Problem</h4>
-                <p>Applying for jobs means searching listings, tailoring a resume for each, and writing a cover email or proposal every time.</p>
-              </div>
-              <div class="project-block project-tools">
-                <h4>Tools</h4>
-                <ul class="tools">
-                  <li>n8n</li><li>Slack</li><li>RapidAPI JSearch</li><li>OpenRouter</li><li>Google Docs</li><li>Google Drive</li><li>Gmail</li>
-                </ul>
-              </div>
-              <div class="project-block project-highlights">
-                <h4>Highlights</h4>
-                <ul class="highlights">
-                  <li>Chat-style control from Slack</li>
-                  <li>Input validation</li>
-                  <li>Duplicate checking</li>
-                  <li>Template-based document generation</li>
-                  <li>Rules so the AI never fabricates experience</li>
-                </ul>
-              </div>
-            </div>
             <div class="project-block project-result">
               <h4>Result</h4>
               <p>One Slack message returns, for each recent remote listing, the job link, a tailored resume, and an email draft or Upwork proposal.</p>
-              <p class="result-metric">Saves up to about 5 hours a week of manual searching and copying.</p>
             </div>
+            <details class="project-more">
+              <summary>How it's built</summary>
+              <div class="project-details">
+                <div class="project-block project-problem">
+                  <h4>Problem</h4>
+                  <p>Applying for jobs means searching listings, tailoring a resume for each, and writing a cover email or proposal every time.</p>
+                </div>
+                <div class="project-block project-tools">
+                  <h4>Tools</h4>
+                  <ul class="tools">
+                    <li>n8n</li><li>Slack</li><li>RapidAPI JSearch</li><li>OpenRouter</li><li>Google Docs</li><li>Google Drive</li><li>Gmail</li>
+                  </ul>
+                </div>
+                <div class="project-block project-highlights">
+                  <h4>Highlights</h4>
+                  <ul class="highlights">
+                    <li>Chat-style control from Slack</li>
+                    <li>Input validation</li>
+                    <li>Duplicate checking</li>
+                    <li>Template-based document generation</li>
+                    <li>Rules so the AI never fabricates experience</li>
+                  </ul>
+                </div>
+              </div>
+            </details>
           </div>
         </article>
 
@@ -267,32 +273,34 @@
             </div>
           </div>
           <div class="project-body">
-            <div class="project-details">
-              <div class="project-block project-problem">
-                <h4>Problem</h4>
-                <p>A small online toy shop gets the same questions all day (availability, price, condition, shipping), and answering each by hand slows down sales.</p>
-              </div>
-              <div class="project-block project-tools">
-                <h4>Tools</h4>
-                <ul class="tools">
-                  <li>n8n</li><li>Facebook Graph API</li><li>Groq</li><li>Google Sheets</li><li>Google Docs</li>
-                </ul>
-              </div>
-              <div class="project-block project-highlights">
-                <h4>Highlights</h4>
-                <ul class="highlights">
-                  <li>Answers come only from the store's own data</li>
-                  <li>Asks which product when several match</li>
-                  <li>Prices in Philippine pesos</li>
-                  <li>Retries and a polite fallback so no customer is left without a reply</li>
-                </ul>
-              </div>
-            </div>
             <div class="project-block project-result">
               <h4>Result</h4>
               <p>Customers get instant answers from live inventory, and anything the bot can't answer goes to the owner instead of being guessed.</p>
-              <p class="result-metric">Typically replies within seconds, at any hour, instead of waiting for me to be online.</p>
             </div>
+            <details class="project-more">
+              <summary>How it's built</summary>
+              <div class="project-details">
+                <div class="project-block project-problem">
+                  <h4>Problem</h4>
+                  <p>A small online toy shop gets the same questions all day (availability, price, condition, shipping), and answering each by hand slows down sales.</p>
+                </div>
+                <div class="project-block project-tools">
+                  <h4>Tools</h4>
+                  <ul class="tools">
+                    <li>n8n</li><li>Facebook Graph API</li><li>Groq</li><li>Google Sheets</li><li>Google Docs</li>
+                  </ul>
+                </div>
+                <div class="project-block project-highlights">
+                  <h4>Highlights</h4>
+                  <ul class="highlights">
+                    <li>Answers come only from the store's own data</li>
+                    <li>Asks which product when several match</li>
+                    <li>Prices in Philippine pesos</li>
+                    <li>Retries and a polite fallback so no customer is left without a reply</li>
+                  </ul>
+                </div>
+              </div>
+            </details>
           </div>
         </article>
       </div>
