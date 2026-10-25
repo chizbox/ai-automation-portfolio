@@ -330,7 +330,7 @@ body::before {
   background: var(--grain), var(--band);
 }
 
-.hero-text { grid-column: 1 / span 7; }
+.hero-text { grid-column: 1 / span 7; grid-row: 1 / span 2; }
 .hero-eyebrow {
   margin-top: var(--s2);
   font: 600 var(--fs-sm)/1.2 var(--display);
@@ -377,25 +377,6 @@ body::before {
 .btn-arrow svg { flex: none; transition: transform .25s var(--ease); }
 .btn-arrow:hover svg, .btn-arrow:focus-visible svg { transform: translateX(4px); }
 
-/* Full-width tool strip along the bottom of the hero */
-.hero-tools {
-  grid-column: 1 / -1;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s2) var(--s4);
-  margin-top: var(--s5);
-  padding-top: var(--s3);
-  border-top: 1px solid var(--rule);
-}
-.hero-tools-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 24px;
-  list-style: none;
-  padding: 0;
-}
 .tool {
   position: relative;
   display: inline-flex;
@@ -413,17 +394,6 @@ body::before {
 }
 .tool:hover svg, .tool:hover img, .tool:hover .tool-mono,
 .tool:focus-visible svg, .tool:focus-visible img, .tool:focus-visible .tool-mono { transform: scale(1.1); }
-/* Hero row: neutral grey at rest; on hover or focus it turns terracotta and lifts 2px */
-.hero-tools-row .tool { color: var(--ink-3); transition: color .25s var(--ease), transform .25s var(--ease); }
-.hero-tools-row .tool img { filter: grayscale(1); opacity: .75; transition: filter .25s var(--ease), opacity .25s var(--ease); }
-.hero-tools-row .tool:focus-visible { color: var(--accent); transform: translateY(-2px); }
-.hero-tools-row .tool:focus-visible img { filter: none; opacity: 1; }
-.hero-tools-row .tool:hover svg, .hero-tools-row .tool:hover img,
-.hero-tools-row .tool:focus-visible svg, .hero-tools-row .tool:focus-visible img { transform: none; }
-@media (hover: hover) {
-  .hero-tools-row .tool:hover { color: var(--accent); transform: translateY(-2px); }
-  .hero-tools-row .tool:hover img { filter: none; opacity: 1; }
-}
 .tool::after {
   content: attr(data-name);
   position: absolute;
@@ -627,7 +597,8 @@ body::before {
   grid-template-columns: auto minmax(0, 1fr) auto;
   grid-template-areas:
     "num title   stat"
-    "num tagline stat";
+    "num tagline stat"
+    "num flow    stat";
   column-gap: var(--s3);
   align-items: start;
 }
@@ -696,6 +667,15 @@ body::before {
       "media more";
     column-gap: var(--s4);
   }
+  .project:has(.project-demo) {
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-areas:
+      "head  head"
+      "media result"
+      "media more"
+      "demo  demo";
+  }
+  .project-demo { grid-area: demo; }
   .project:nth-of-type(even) {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.15fr);
     grid-template-areas:
@@ -1141,6 +1121,291 @@ body::before {
 @keyframes caret-fade { to { opacity: 0; } }
 
 /* --------------------------------------------------------------------------
+   Automation in action
+   -------------------------------------------------------------------------- */
+
+/* Feature 1: small, straight, semi-transparent workflows. One under the hero photo
+   (Gmail, Claude, Sheets) and one in each project card showing that project's steps.
+   Without .is-live (no JS, or reduced motion) each shows its finished state: every node ticked. */
+.hero-person { grid-row: 1; }
+.hero-flow {
+  grid-column: 9 / span 4;
+  grid-row: 2;
+  justify-self: end;
+  display: flex;
+  justify-content: center;
+  width: min(100%, 340px);
+  margin-top: var(--s1);
+}
+.project-flow { grid-area: flow; margin-top: 0.85rem; }
+.mini-flow-svg { display: block; max-width: 100%; height: auto; overflow: visible; opacity: 0.6; }
+.mini-flow-wire { fill: none; stroke: var(--rule-strong); stroke-width: 1.25; }
+.mini-flow-body { transform-box: fill-box; transform-origin: center; }
+.mini-flow-body rect {
+  fill: var(--surface);
+  stroke: rgba(217, 119, 87, 0.6);
+  stroke-width: 1;
+  transition: stroke .3s var(--ease);
+}
+.mini-flow-body use { fill: var(--ink-3); }
+.mini-flow-body text { font: 600 11px var(--display); fill: var(--ink-3); }
+.mini-flow-tick { transform-box: fill-box; transform-origin: center; transition: opacity .3s var(--ease), transform .3s var(--ease); }
+.mini-flow-tick circle { fill: var(--accent); }
+.mini-flow-tick use { fill: #fff; }
+.mini-flow-dot { fill: var(--accent); opacity: 0; transition: opacity .3s var(--ease); }
+.mini-flow-glow { opacity: 0.25; }
+@media (prefers-reduced-motion: no-preference) {
+  .motion .mini-flow.is-live .mini-flow-node:not(.is-done) .mini-flow-body rect { stroke: var(--rule-strong); }
+  .motion .mini-flow.is-live .mini-flow-node:not(.is-done) .mini-flow-tick { opacity: 0; transform: scale(0.4); }
+  .motion .mini-flow.is-live .mini-flow-dot.is-on { opacity: 1; }
+  .motion .mini-flow.is-live .mini-flow-node.is-done .mini-flow-body { animation: flow-pulse .6s cubic-bezier(.2, .7, .2, 1); }
+}
+@keyframes flow-pulse {
+  40% { transform: scale(1.08); }
+}
+
+/* Feature 2: "Watch it run" demo inside Project 01. Plays once in view, then offers Replay.
+   Without .is-armed (no JS, or reduced motion) it shows its finished state. */
+.project-demo {
+  margin-top: var(--s4);
+  padding: var(--s3);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius);
+  background: var(--grain), var(--band);
+}
+.demo-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+  margin-bottom: var(--s3);
+}
+.demo-head h4 { font: 600 var(--fs-sm)/1.3 var(--display); color: var(--ink); }
+.demo-note {
+  padding: 0.2rem 0.55rem;
+  border: 1px dashed var(--rule-strong);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  line-height: 1.3;
+  color: var(--ink-3);
+}
+.demo-replay {
+  margin-left: auto;
+  padding: 0.35rem 0.85rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  font: 500 var(--fs-xs)/1.2 var(--sans);
+  color: var(--ink);
+  cursor: pointer;
+  box-shadow: var(--shadow-sm);
+  transition: border-color .2s var(--ease), color .2s var(--ease);
+}
+.demo-replay[aria-disabled="true"] { opacity: 0.55; cursor: default; }
+.demo-replay:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (hover: hover) {
+  .demo-replay:not([aria-disabled="true"]):hover { border-color: var(--accent); color: var(--accent-hover); }
+}
+.demo-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
+  grid-template-areas:
+    "email flow"
+    "timer sheet";
+  gap: var(--s3);
+  align-items: center;
+}
+.demo-email {
+  grid-area: email;
+  display: flex;
+  gap: 0.7rem;
+  align-items: flex-start;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  font-size: var(--fs-xs);
+  line-height: 1.35;
+}
+.demo-email svg { flex: none; margin-top: 1px; fill: var(--accent); }
+.demo-email-from { color: var(--ink-3); }
+.demo-email-subject { font-weight: 600; color: var(--ink); }
+.demo-email-meta { color: var(--ink-3); }
+
+/* Five nodes in a row, joined by a 1.5px wire that lights up node by node */
+.demo-flow { grid-area: flow; display: flex; list-style: none; padding: 0; margin: 0; }
+.demo-node {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  text-align: center;
+}
+.demo-node + .demo-node::before,
+.demo-node + .demo-node::after {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: calc(-50% + 24px);
+  right: calc(50% + 24px);
+  height: 1.5px;
+  background: var(--rule-strong);
+}
+.demo-node + .demo-node::after {
+  background: var(--accent);
+  transform-origin: left center;
+  transition: transform .35s var(--ease);
+}
+.demo-node-box {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1.25px solid rgba(217, 119, 87, 0.55);
+  border-radius: 10px;
+  background: var(--surface);
+  color: var(--ink-3);
+  transition: border-color .3s var(--ease);
+}
+.demo-node-box > svg:first-child { fill: currentColor; }
+.demo-tick {
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  padding: 2px;
+  border-radius: 50%;
+  background: var(--accent);
+  fill: #fff;
+  transition: opacity .3s var(--ease), transform .3s var(--ease);
+}
+.demo-node-label { font-size: 0.75rem; line-height: 1.25; color: var(--ink-2); }
+
+.demo-sheet {
+  grid-area: sheet;
+  overflow: hidden;
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+}
+.demo-sheet table { width: 100%; border-collapse: collapse; font-size: var(--fs-xs); font-variant-numeric: tabular-nums; }
+.demo-sheet th, .demo-sheet td { padding: 0.45rem 0.7rem; text-align: left; white-space: nowrap; }
+.demo-sheet th { font-weight: 600; font-size: 0.75rem; color: var(--ink-3); background: var(--band); }
+.demo-sheet td { border-top: 1px solid var(--rule); color: var(--ink-2); }
+.demo-sheet th:last-child, .demo-sheet td:last-child { text-align: right; }
+.demo-row-new td { background: var(--result-tint); color: var(--ink); transition: opacity .4s var(--ease), transform .4s var(--ease); }
+
+.demo-timer { grid-area: timer; }
+.demo-time { display: flex; flex-direction: column; gap: 0.2rem; }
+.demo-time-label { font: 600 0.75rem/1.2 var(--display); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent-text); }
+.demo-time-value {
+  font: 600 1.625rem/1.1 var(--display);
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent-hover);
+}
+.demo-manual { margin-top: 0.4rem; font-size: var(--fs-xs); color: var(--ink-3); }
+
+/* Before-states, only while a play is armed */
+@media (prefers-reduced-motion: no-preference) {
+  .motion .project-demo.is-armed .demo-email {
+    transition: opacity .45s var(--ease), transform .45s var(--ease);
+  }
+  .motion .project-demo.is-armed .demo-email:not(.is-in) { opacity: 0; transform: translateX(-16px); }
+  .motion .project-demo.is-armed .demo-node:not(.is-on)::after { transform: scaleX(0); }
+  .motion .project-demo.is-armed .demo-node:not(.is-on) .demo-node-box { border-color: var(--rule-strong); }
+  .motion .project-demo.is-armed .demo-node:not(.is-on) .demo-tick { opacity: 0; transform: scale(0.4); }
+  .motion .project-demo.is-armed .demo-node.is-on .demo-node-box { animation: flow-pulse .6s cubic-bezier(.2, .7, .2, 1); }
+  .motion .project-demo.is-armed .demo-row-new:not(.is-in) td { opacity: 0; transform: translateY(-6px); }
+}
+
+/* Feature 3: the page as a workflow. A fixed line in the left gutter with one node per
+   section; desktop only (1024px and up). Built by script.js. */
+.flowline { display: none; }
+@media (min-width: 1024px) {
+  .flowline {
+    display: block;
+    position: fixed;
+    z-index: 40;
+    top: 50%;
+    left: max(20px, calc(50vw - var(--container) / 2));
+    width: 22px;
+    height: 280px;
+    margin: -140px 0 0 -11px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .4s var(--ease);
+  }
+  .flowline.is-shown { opacity: 1; pointer-events: auto; }
+}
+.flowline::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  bottom: 20px;
+  left: 50%;
+  width: 1px;
+  background: var(--rule);
+}
+.flowline-node {
+  position: absolute;
+  left: 0;
+  width: 22px;
+  height: 22px;
+  margin-top: -11px;
+  border-radius: 50%;
+  outline-offset: 2px;
+}
+.flowline-node::before,
+.flowline-node::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+}
+.flowline-node::before { border: 1.5px solid var(--rule-strong); background: var(--bg); }
+.flowline-node::after {
+  background: var(--accent);
+  transform: scale(0);
+  transition: transform .3s var(--ease);
+}
+.flowline-node.is-current::after { transform: scale(1); }
+.flowline-tip {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 8px);
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  background: var(--ink);
+  color: #fff;
+  font: 500 0.75rem/1 var(--sans);
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-4px, -50%);
+  transition: opacity .15s var(--ease), transform .15s var(--ease);
+  pointer-events: none;
+}
+.flowline-node:hover .flowline-tip,
+.flowline-node:focus-visible .flowline-tip { opacity: 1; transform: translate(0, -50%); }
+.flowline-dot {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 3px rgba(217, 119, 87, 0.18), 0 0 10px 2px rgba(217, 119, 87, 0.45);
+  pointer-events: none;
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
    Responsive
    -------------------------------------------------------------------------- */
 @media (max-width: 1000px) {
@@ -1149,7 +1414,7 @@ body::before {
 
 @media (max-width: 960px) {
   .hero-text { grid-column: 1 / span 7; }
-  .hero-person { grid-column: 8 / -1; }
+  .hero-person, .hero-flow { grid-column: 8 / -1; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .steps::before { display: none; }
   .section-head h2, .section-intro,
@@ -1185,15 +1450,14 @@ body::before {
 /* Hero stacks below 768px: photo on top, centered text below */
 @media (max-width: 767px) {
   .hero { grid-template-columns: minmax(0, 1fr); padding-block: var(--s4); row-gap: var(--s4); }
-  .hero-text, .hero-person { grid-column: 1 / -1; }
+  .hero-text, .hero-person, .hero-flow { grid-column: 1 / -1; grid-row: auto; }
+  .hero-flow { justify-self: center; margin-top: 0; }
   .hero-text { text-align: center; }
   .hero h1, .hero-sub { margin-inline: auto; }
   .hero-actions { justify-content: center; }
   .hero-person { order: -1; justify-self: center; width: 240px; }
   .hero-photo { padding: 10px; }
   .hero-badge { --badge-pad: 0.75rem; left: auto; right: -40px; bottom: 10%; font-size: 0.8125rem; padding: 0.45rem var(--badge-pad); }
-  .hero-tools { flex-direction: column; gap: var(--s2); margin-top: var(--s3); }
-  .hero-tools-row { justify-content: center; gap: 20px; }
 }
 
 @media (max-width: 760px) {
@@ -1211,11 +1475,24 @@ body::before {
     grid-template-areas:
       "num     title"
       "tagline tagline"
+      "flow    flow"
       "stat    stat";
     column-gap: var(--s2);
   }
   .project-head h3 { align-self: center; }
   .project-stat { justify-self: start; max-width: none; margin-top: var(--s2); }
+
+  .project-demo { padding: var(--s2); }
+  .demo-stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "email" "flow" "sheet" "timer";
+    gap: var(--s2);
+  }
+  .demo-sheet table { font-size: 0.75rem; }
+  .demo-sheet th, .demo-sheet td { padding: 0.4rem 0.35rem; }
+  .demo-sheet th:first-child, .demo-sheet td:first-child { padding-left: 0.6rem; }
+  .demo-sheet th:last-child, .demo-sheet td:last-child { padding-right: 0.6rem; }
+  .demo-node-label { font-size: 0.6875rem; }
 }
 
 @media (max-width: 560px) {
@@ -1228,7 +1505,7 @@ body::before {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
-  .btn:hover, .project:hover, .step:hover, .callout:hover, .hero-tools-row .tool { transform: none !important; }
+  .btn:hover, .project:hover, .step:hover, .callout:hover { transform: none !important; }
   .video-poster:hover img { transform: none; }
   .motion .reveal { opacity: 1; translate: none; }
   .typed-caret { display: none; }
