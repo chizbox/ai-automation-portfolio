@@ -29,7 +29,10 @@
   });
 
   // Highlight the nav link for the section in view: the last section whose top has
-  // passed a line a third of the way down the screen (or the last one at page bottom)
+  // passed a line 40% of the way down the visible area under the header (or the last one
+  // at page bottom), so a section counts once it fills most of the screen, and a short one
+  // reached from the nav still highlights.
+  const readingLine = () => header.offsetHeight + (window.innerHeight - header.offsetHeight) * 0.4;
   const links = [...navLinks.querySelectorAll('a[href^="#"]')];
   const sections = links
     .map((a) => document.querySelector(a.getAttribute('href')))
@@ -37,7 +40,7 @@
   let spyQueued = false;
   const updateSpy = () => {
     spyQueued = false;
-    const line = window.innerHeight / 3;
+    const line = readingLine();
     const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
     let current = null;
     sections.forEach((s) => { if (s.getBoundingClientRect().top <= line) current = s; });
@@ -409,7 +412,7 @@
     let railQueued = false;
     const measure = () => {
       if (!wideScreen.matches) return;
-      const offset = window.innerHeight / 3;
+      const offset = readingLine();
       // The reading line can go no lower than this, so later sections count as reached there
       lastLine = document.documentElement.scrollHeight - window.innerHeight + offset;
       marks = sections.map((s) => Math.min(s.getBoundingClientRect().top + window.scrollY, lastLine - 1));
@@ -419,7 +422,7 @@
     function updateRail() {
       railQueued = false;
       if (!wideScreen.matches || !marks.length) return;
-      const y = window.scrollY + window.innerHeight / 3;
+      const y = window.scrollY + readingLine();
       let current = -1;
       marks.forEach((m, i) => { if (y >= m) current = i; });
       if (y >= lastLine - 2) current = marks.length - 1;
@@ -431,7 +434,7 @@
       }
       railDot.style.transform = `translateY(${pos.toFixed(1)}px)`;
       railNodes.forEach((n, i) => n.classList.toggle('is-current', i === current));
-      rail.classList.toggle('is-shown', y >= marks[0] - 120); // appears as Projects nears the reading line
+      rail.classList.toggle('is-shown', y >= marks[0]); // appears once the first section reaches the reading line
     }
     window.addEventListener('scroll', () => {
       if (!railQueued) { railQueued = true; requestAnimationFrame(updateRail); }
