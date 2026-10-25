@@ -789,12 +789,12 @@ body::before {
 
 .project-result {
   padding: var(--s3);
-  background: var(--card-bg);
+  background: var(--result-tint);
   border: 1px solid var(--border);
   border-left: 3px solid var(--accent);
   border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
 }
-/* #A84B29 keeps the label AA on white (5.7:1) */
+/* #A84B29 keeps the label AA on the tint (4.96:1) */
 .project-result h4 { color: var(--accent-hover); }
 .project-result p {
   color: var(--ink);
