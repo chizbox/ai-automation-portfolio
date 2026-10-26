@@ -14,7 +14,7 @@
   --coral-hover: #DB7A5C;
   --coral-light: #E48A68;
   --text: #F5F2EC;
-  --muted: #A2A29C;
+  --muted: #B4B3AC;
   --border: #41423D;
   --border-strong: #55564F;
   --green: #A7B99A;
@@ -83,8 +83,6 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
   border-radius: 6px;
 }
 .skip-link:focus { top: 0.5rem; color: var(--on-coral); }
-
-.icon-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 
 .container {
   width: 100%;
@@ -222,15 +220,17 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 .section-head { margin-bottom: 48px; }
 
 /* --------------------------------------------------------------------------
-   Hero: headline and photo, then the proof numbers, then the workflow
+   Hero: headline, photo and the two calls to action
    -------------------------------------------------------------------------- */
-.hero { padding: 104px 0 var(--section-y); }
+.hero { padding: 96px 0 0; }
+/* Text takes ~58% of the row; the cutout photo sits right beside it, on the hero's bottom edge */
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
-  gap: 64px;
-  align-items: center;
+  grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
+  gap: 24px;
+  align-items: end;
 }
+.hero-text { align-self: center; padding-bottom: 104px; }
 .hero h1 {
   max-width: 15ch;
   font-size: 58px;
@@ -245,92 +245,21 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
   color: var(--muted);
 }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 2.25rem; }
-.hero-photo { justify-self: end; width: 280px; aspect-ratio: 4 / 5; }
-.hero-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
+/* The photo is a transparent cutout: no frame, never cropped */
+.hero-photo { justify-self: start; width: 320px; }
+/* The cutout ends ~2% above the image's bottom edge; pull it down so it meets the hero's edge */
+.hero-img { width: 100%; height: auto; aspect-ratio: 1; object-fit: contain; margin-bottom: -1.9%; }
+/* On load only: the photo wipes in from the bottom up while it fades in */
+@media (prefers-reduced-motion: no-preference) {
+  .js .hero-img { animation: photo-reveal 1.2s ease-out .1s both; }
 }
-
-.proof {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 24px;
-  margin-top: 64px;
-  padding-top: 40px;
-  border-top: 1px solid var(--border);
-}
-.proof li { display: flex; flex-direction: column; gap: 0.5rem; }
-.proof-num {
-  font: 700 52px/1 var(--display);
-  letter-spacing: -0.03em;
-  color: var(--coral);
-}
-.proof-label { max-width: 22em; font-size: 14px; line-height: 1.5; color: var(--muted); }
-
-/* Static invoice workflow: five steps joined by small arrows */
-.flow-card {
-  margin-top: 48px;
-  padding: 24px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--card);
-}
-.flow-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 0.25rem 1rem;
-  margin-bottom: 20px;
-}
-.flow-title { font: 600 0.9375rem/1.3 var(--display); color: var(--text); }
-.flow-note { font-size: 0.8125rem; color: var(--muted); }
-.flow-steps {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 12px;
-}
-.flow-steps li {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg-2);
-  font-size: 0.875rem;
-  line-height: 1.4;
-  color: var(--text);
-}
-.flow-num {
-  display: grid;
-  place-items: center;
-  width: 24px; height: 24px;
-  border: 1px solid var(--border-strong);
-  border-radius: 50%;
-  font: 600 0.75rem/1 var(--display);
-  color: var(--muted);
-}
-.flow-done .flow-num { border-color: var(--green); color: var(--green); }
-.flow-done { border-color: rgba(167, 185, 154, .45) !important; }
-.flow-arrow {
-  position: absolute;
-  top: 50%;
-  left: -12px;
-  width: 12px;
-  margin-top: -0.6em;
-  text-align: center;
-  font-size: 0.8125rem;
-  line-height: 1.2;
-  color: var(--coral-light);
+@keyframes photo-reveal {
+  from { opacity: 0; clip-path: inset(100% 0 0 0); }
+  to   { opacity: 1; clip-path: inset(0 0 0 0); }
 }
 
 /* --------------------------------------------------------------------------
-   Projects: 2x2 cards, then the "Watch it run" demo full width
+   Projects: 2x2 cards
    -------------------------------------------------------------------------- */
 .projects { background: var(--bg-2); }
 .project-grid {
@@ -349,53 +278,18 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
   background: var(--card);
   transition: transform .25s var(--ease), border-color .25s var(--ease);
 }
-.project h3 { margin-top: 1.25rem; font-size: 21px; line-height: 1.3; }
-.metric {
-  display: inline-flex;
-  align-self: flex-start;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: 0.2rem 0.5rem;
-  margin-top: 0.85rem;
-}
-.metric-num { font: 700 24px/1.2 var(--display); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: var(--coral); }
-.metric-label { font-size: 0.875rem; color: var(--muted); }
-.project-desc { margin-top: 0.75rem; color: var(--muted); }
-
-.project-result {
-  margin-top: 1.25rem;
-  padding: 14px 16px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg-2);
-}
-.project-result h4 { margin-bottom: 0.35rem; font: 600 0.875rem/1.3 var(--display); letter-spacing: 0; color: var(--text); }
-.project-result p { font-size: 0.9375rem; color: var(--muted); }
-.ok { color: var(--green); }
-
+/* Card, top to bottom: video, category label, one metric, one sentence, then the link pinned to the bottom */
+.project .video { border-radius: var(--radius-sm); }
+.project-label { margin-top: 20px; font: 600 0.875rem/1.3 var(--display); letter-spacing: 0; color: var(--coral-light); }
+.project-metric { margin-top: 6px; font: 700 30px/1.15 var(--display); letter-spacing: -0.025em; font-variant-numeric: tabular-nums; color: var(--coral); }
+.project-desc { margin-top: 10px; margin-bottom: 20px; color: var(--muted); }
 .project-foot {
   display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.25rem 1rem;
   margin-top: auto;
-  padding-top: 1rem;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
 }
-.project-result + .project-foot { margin-top: auto; }
-.project-result { margin-bottom: 1.25rem; }
-.project-foot { border-top: 1px solid var(--border); }
-.project-name { font-size: 0.875rem; color: var(--muted); }
-.walkthrough-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3em;
-  min-height: 44px;
-  font: 600 0.9375rem/1.2 var(--display);
-  color: var(--coral-light);
-  text-decoration: none;
-}
-.walkthrough-link:hover { color: var(--text); text-decoration: underline; }
 
 /* "How it's built": Problem, Tools and Highlights stay folded until asked for */
 .project-more > summary {
@@ -424,6 +318,92 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 @media (prefers-reduced-motion: no-preference) {
   .js .project-more[open] > .project-details { animation: more-in .3s var(--ease) both; }
 }
+/* With JavaScript, "How it's built" opens a panel over the page instead of
+   unfolding in the card, so nothing on the page moves (script.js builds it) */
+.project-more-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  align-self: flex-start;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: 600 0.9375rem/1.2 var(--display);
+  color: var(--coral-light);
+  cursor: pointer;
+}
+.project-more-btn > span { display: inline-block; transition: transform .2s var(--ease); }
+.project-more-btn:hover { color: var(--text); text-decoration: underline; text-decoration-thickness: 1.5px; text-underline-offset: 0.25em; }
+@media (hover: hover) {
+  .project-more-btn:hover > span { transform: translateX(3px); }
+}
+
+.project-dialog {
+  width: min(640px, calc(100vw - 48px));
+  max-height: min(84vh, 760px);
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--card);
+  color: var(--text);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .8);
+  overflow: hidden;
+}
+.project-dialog[open] { display: flex; flex-direction: column; }
+.project-dialog::backdrop { background: rgba(12, 12, 11, .72); }
+html:has(.project-dialog[open]) { overflow: hidden; }
+.dialog-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 22px 26px 18px;
+  border-bottom: 1px solid var(--border);
+}
+.dialog-kicker { font: 600 0.875rem/1.2 var(--display); color: var(--coral-light); }
+.dialog-head h2 { margin-top: 0.35rem; font-size: 21px; line-height: 1.3; }
+.dialog-close {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 44px; height: 44px;
+  margin: -6px -10px 0 auto;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color .2s var(--ease);
+}
+.dialog-close:hover { border-color: var(--coral); }
+.dialog-body { overflow-y: auto; overscroll-behavior: contain; padding: 22px 26px 26px; }
+.dialog-body .project-details { gap: 1.25rem; padding: 0; }
+@media (prefers-reduced-motion: no-preference) {
+  .project-dialog[open] { animation: dialog-in .25s var(--ease) both; }
+  .project-dialog[open]::backdrop { animation: backdrop-in .25s var(--ease) both; }
+}
+@keyframes dialog-in {
+  from { opacity: 0; transform: translateY(12px) scale(.98); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes backdrop-in { from { opacity: 0; } }
+/* Phones: the panel fills the screen */
+@media (max-width: 767px) {
+  .project-dialog {
+    width: 100vw;
+    max-width: 100vw;
+    height: 100dvh;
+    max-height: 100dvh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+  .dialog-head { padding: 16px 20px 14px; }
+  .dialog-body { padding: 20px 20px 32px; }
+}
+
 @keyframes more-in {
   from { opacity: 0; transform: translateY(-6px); }
   to   { opacity: 1; transform: none; }
@@ -454,37 +434,7 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
   color: var(--green);
 }
 
-/* Window-framed thumbnail with a click-to-play video */
-.media-frame {
-  overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg);
-}
-.media-bar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  height: 26px;
-  padding-inline: 10px;
-  background: var(--bg-2);
-  border-bottom: 1px solid var(--border);
-}
-.media-dots { display: flex; gap: 5px; }
-.media-dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--border-strong); }
-.media-tag {
-  position: relative;
-  margin-left: auto;
-  padding: 0.15rem 0.6rem;
-  border-radius: 999px;
-  background: var(--coral);
-  color: var(--on-coral);
-  font: 600 11px/1.3 var(--display);
-  text-decoration: none;
-}
-/* Bigger invisible hit area than the 26px bar allows */
-.media-tag::before { content: ""; position: absolute; inset: -13px -6px; }
-.media-tag:hover { background: var(--coral-light); color: var(--on-coral); }
+/* Click-to-play video thumbnail, 16:9 */
 .video {
   position: relative;
   aspect-ratio: 16 / 9;
@@ -510,218 +460,79 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
   width: 52px; height: 52px;
   margin: -26px 0 0 -26px;
   border-radius: 50%;
-  background: var(--coral);
-  color: var(--on-coral);
+  background: rgba(255, 255, 255, .8);
+  color: var(--bg);
   box-shadow: 0 10px 24px -8px rgba(0, 0, 0, 0.6);
   transition: transform .25s var(--ease), background-color .2s var(--ease);
 }
 .video-play svg { margin-left: 3px; }
 .video-poster:focus-visible { outline-offset: -4px; outline-color: var(--text); }
-.video-poster:focus-visible .video-play { transform: scale(1.08); background: var(--coral-light); }
+.video-poster:focus-visible .video-play { transform: scale(1.08); background: #fff; }
 @media (hover: hover) {
   .video-poster:hover img { transform: scale(1.03); }
-  .video-poster:hover .video-play { transform: scale(1.08); background: var(--coral-light); }
+  .video-poster:hover .video-play { transform: scale(1.08); background: #fff; }
 }
 .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
-
-/* "Watch it run": plays once in view, then offers Replay.
-   Without .is-armed (no JS, or reduced motion) it shows its finished state. */
-.project-demo {
-  margin-top: 24px;
-  padding: 24px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--card);
-}
-.demo-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.4rem 0.75rem;
-  margin-bottom: 24px;
-}
-.demo-head h3 { font: 600 1.0625rem/1.3 var(--display); }
-.demo-note {
-  padding: 0.2rem 0.6rem;
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  font-size: 0.75rem;
-  line-height: 1.3;
-  color: var(--muted);
-}
-.demo-replay {
-  margin-left: auto;
-  min-height: 36px;
-  padding: 0.35rem 0.95rem;
-  border: 1px solid var(--border-strong);
-  border-radius: 999px;
-  background: transparent;
-  font: 500 0.8125rem/1.2 var(--sans);
-  color: var(--text);
-  cursor: pointer;
-  transition: border-color .2s var(--ease), color .2s var(--ease);
-}
-.demo-replay[aria-disabled="true"] { opacity: 0.55; cursor: default; }
-/* Keep Replay's space while the demo plays, so nothing below jumps when it appears */
-.project-demo.is-armed .demo-replay[hidden] { display: block; visibility: hidden; }
-@media (hover: hover) {
-  .demo-replay:not([aria-disabled="true"]):hover { border-color: var(--coral); color: var(--coral-light); }
-}
-.demo-stage {
-  display: grid;
-  grid-template-columns: minmax(0, 15rem) minmax(0, 1fr);
-  grid-template-areas:
-    "email flow"
-    "timer sheet";
-  gap: 24px;
-  align-items: center;
-}
-.demo-email {
-  grid-area: email;
-  display: flex;
-  gap: 0.7rem;
-  align-items: flex-start;
-  padding: 0.75rem 0.85rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg-2);
-  font-size: 0.8125rem;
-  line-height: 1.35;
-}
-.demo-email svg { flex: none; margin-top: 1px; fill: var(--coral-light); }
-.demo-email-from, .demo-email-meta { color: var(--muted); }
-.demo-email-subject { font-weight: 600; color: var(--text); }
-
-/* Five nodes in a row, joined by a 1.5px wire that lights up node by node */
-.demo-flow { grid-area: flow; display: flex; }
-.demo-node {
-  position: relative;
-  flex: 1 1 0;
-  min-width: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.45rem;
-  text-align: center;
-}
-.demo-node + .demo-node::before,
-.demo-node + .demo-node::after {
-  content: "";
-  position: absolute;
-  top: 20px;
-  left: calc(-50% + 24px);
-  right: calc(50% + 24px);
-  height: 1.5px;
-  background: var(--border-strong);
-}
-.demo-node + .demo-node::after {
-  background: var(--coral);
-  transform-origin: left center;
-  transition: transform .35s var(--ease);
-}
-.demo-node-box {
-  position: relative;
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border: 1.25px solid rgba(210, 105, 74, 0.7);
-  border-radius: 10px;
-  background: var(--bg-2);
-  color: var(--muted);
-  transition: border-color .3s var(--ease);
-}
-.demo-node-box > svg:first-child { fill: currentColor; }
-.demo-tick {
-  position: absolute;
-  top: -7px;
-  right: -7px;
-  padding: 2px;
-  border-radius: 50%;
-  background: var(--green);
-  fill: var(--on-coral);
-  transition: opacity .3s var(--ease), transform .3s var(--ease);
-}
-.demo-node-label { font-size: 0.75rem; line-height: 1.25; color: var(--muted); }
-
-.demo-sheet {
-  grid-area: sheet;
-  overflow-x: auto;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  background: var(--bg-2);
-}
-.demo-sheet table { width: 100%; border-collapse: collapse; font-size: 0.8125rem; font-variant-numeric: tabular-nums; }
-.demo-sheet th, .demo-sheet td { padding: 0.45rem 0.7rem; text-align: left; white-space: nowrap; }
-.demo-sheet th { font-weight: 600; font-size: 0.75rem; color: var(--muted); background: var(--bg); }
-.demo-sheet td { border-top: 1px solid var(--border); color: var(--muted); }
-.demo-sheet th:last-child, .demo-sheet td:last-child { text-align: right; }
-.demo-row-new td { background: rgba(167, 185, 154, .12); color: var(--text); transition: opacity .4s var(--ease), transform .4s var(--ease); }
-
-.demo-timer { grid-area: timer; }
-.demo-time { display: flex; flex-direction: column; gap: 0.2rem; }
-.demo-time-label { font: 600 0.8125rem/1.2 var(--display); color: var(--green); }
-.demo-time-value {
-  font: 700 1.75rem/1.1 var(--display);
-  letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
-  color: var(--coral);
-}
-.demo-manual { margin-top: 0.4rem; font-size: 0.8125rem; color: var(--muted); }
-
-/* Before-states, only while a play is armed */
-@media (prefers-reduced-motion: no-preference) {
-  .js .project-demo.is-armed .demo-email { transition: opacity .45s var(--ease), transform .45s var(--ease); }
-  .js .project-demo.is-armed .demo-email:not(.is-in) { opacity: 0; transform: translateX(-16px); }
-  .js .project-demo.is-armed .demo-node:not(.is-on)::after { transform: scaleX(0); }
-  .js .project-demo.is-armed .demo-node:not(.is-on) .demo-node-box { border-color: var(--border-strong); }
-  .js .project-demo.is-armed .demo-node:not(.is-on) .demo-tick { opacity: 0; transform: scale(0.4); }
-  .js .project-demo.is-armed .demo-node.is-on .demo-node-box { animation: flow-pulse .6s var(--ease); }
-  .js .project-demo.is-armed .demo-row-new:not(.is-in) td { opacity: 0; transform: translateY(-6px); }
-}
-@keyframes flow-pulse {
-  40% { transform: scale(1.08); }
-}
 
 /* --------------------------------------------------------------------------
    Services: 2x2, no icons or labels
    -------------------------------------------------------------------------- */
-.service-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
-.service-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 26px;
+.service-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 48px; }
+.service { display: flex; gap: 16px; align-items: flex-start; }
+.service-icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 36px; height: 36px;
+  border-radius: 10px;
+  background: #2D2E2B;
+  color: var(--coral);
+}
+.service-title { font-size: 1.1875rem; line-height: 1.3; letter-spacing: -0.015em; }
+.service-line { max-width: 46ch; margin-top: 6px; font-size: 15px; line-height: 1.6; color: var(--muted); }
+
+/* --------------------------------------------------------------------------
+   Why automation: heading left, three reasons as ruled rows in one panel
+   -------------------------------------------------------------------------- */
+.why { background: var(--bg-2); }
+.why-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  gap: 24px 64px;
+  align-items: start;
+}
+.why-list {
+  margin: 0;
+  padding: 0 26px;
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--card);
-  color: var(--text);
-  text-decoration: none;
-  transition: transform .25s var(--ease), border-color .25s var(--ease);
 }
-a.service-card:hover { color: var(--text); }
-.service-title { font: 700 1.1875rem/1.3 var(--display); letter-spacing: -0.015em; }
-.service-line { max-width: 52ch; margin-top: 0.5rem; font-size: 15px; line-height: 1.6; color: var(--muted); }
-.service-more { margin-top: auto; padding-top: 1rem; font: 600 0.875rem/1.2 var(--display); color: var(--coral-light); }
-.service-more > span[aria-hidden="true"], .step-link > span[aria-hidden="true"] { display: inline-block; margin-left: 0.3em; transition: transform .2s var(--ease); }
-a.service-card:hover .service-more { text-decoration: underline; text-underline-offset: 0.25em; }
+.why-item {
+  display: grid;
+  grid-template-columns: minmax(0, 13rem) minmax(0, 1fr);
+  gap: 8px 24px;
+  align-items: baseline;
+  padding: 26px 0;
+}
+.why-item + .why-item { border-top: 1px solid var(--border); }
+.why-item dt { font: 700 21px/1.3 var(--display); letter-spacing: -0.02em; color: var(--text); }
+.why-item dd { margin: 0; font-size: 1.0625rem; color: var(--muted); }
 
 /* --------------------------------------------------------------------------
    How I work: four columns, a rule on top of each step
    -------------------------------------------------------------------------- */
-.process { background: var(--bg-2); }
+.process { background: var(--bg); }
 .steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; }
 .step { position: relative; padding-top: 24px; border-top: 1px solid var(--border); }
 .step-num { display: block; font: 700 28px/1 var(--display); letter-spacing: -0.02em; color: var(--coral); }
 .step h3 { margin-top: 1rem; font-size: 18px; line-height: 1.3; }
 .step p { margin-top: 0.4rem; max-width: 30ch; font-size: 15px; color: var(--muted); }
-.step-link { color: var(--coral-light); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
-.step-link:hover { color: var(--text); text-decoration-thickness: 2px; }
 
 /* --------------------------------------------------------------------------
    About: text left, strengths card right
    -------------------------------------------------------------------------- */
+.about { background: var(--bg-2); }
 .about-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
@@ -768,7 +579,7 @@ a.service-card:hover .service-more { text-decoration: underline; text-underline-
   background: var(--bg-2);
   text-align: center;
 }
-.contact h2 { max-width: 20ch; font-size: 38px; line-height: 1.15; letter-spacing: -0.025em; }
+.contact h2 { max-width: 900px; font-size: 38px; line-height: 1.15; letter-spacing: -0.025em; }
 .contact-line { max-width: 52ch; margin-top: 1rem; font-size: 1.0625rem; color: var(--muted); }
 .contact .btn { margin-top: 2rem; }
 .contact-alt { margin-top: 1.25rem; font-size: 0.9375rem; color: var(--muted); }
@@ -788,48 +599,14 @@ a.service-card:hover .service-more { text-decoration: underline; text-underline-
 .site-footer a { display: inline-flex; align-items: center; min-height: 44px; color: var(--text); }
 .site-footer a:hover { color: var(--coral-light); }
 
-/* --------------------------------------------------------------------------
-   Floating booking button: only once the hero has scrolled away
-   -------------------------------------------------------------------------- */
-.float-cta {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  z-index: 40;
-  display: inline-flex;
-  align-items: center;
-  min-height: 48px;
-  padding: 12px 22px;
-  border-radius: 999px;
-  background: var(--coral);
-  color: var(--on-coral);
-  font: 600 0.9375rem/1.2 var(--display);
-  text-decoration: none;
-  box-shadow: 0 12px 28px -10px rgba(0, 0, 0, .7);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(16px);
-  transition: opacity .25s var(--ease), transform .25s var(--ease), visibility 0s linear .25s, background-color .2s var(--ease);
-}
-.float-cta.is-shown {
-  opacity: 1;
-  visibility: visible;
-  transform: none;
-  transition: opacity .25s var(--ease), transform .25s var(--ease), visibility 0s, background-color .2s var(--ease);
-}
-.float-cta:hover { background: var(--coral-hover); color: var(--on-coral); }
 
 /* --------------------------------------------------------------------------
    Hover lifts and reveals
    -------------------------------------------------------------------------- */
 @media (hover: hover) {
-  .project:hover, a.service-card:hover, .service-card:hover { transform: translateY(-2px); border-color: rgba(210, 105, 74, .7); }
+  .project:hover { transform: translateY(-2px); border-color: rgba(210, 105, 74, .7); }
   .btn:hover > span[aria-hidden="true"],
-  .walkthrough-link:hover > span[aria-hidden="true"],
-  a.service-card:hover .service-more > span[aria-hidden="true"],
-  .step-link:hover > span[aria-hidden="true"] { transform: translateX(3px); }
 }
-.walkthrough-link > span[aria-hidden="true"] { display: inline-block; transition: transform .2s var(--ease); }
 
 @media (prefers-reduced-motion: no-preference) {
   /* Hero text rises in once on load */
@@ -856,14 +633,11 @@ a.service-card:hover .service-more { text-decoration: underline; text-underline-
    -------------------------------------------------------------------------- */
 @media (max-width: 1023px) {
   :root { --section-y: 96px; }
-  .hero-grid { grid-template-columns: minmax(0, 1fr) 220px; gap: 40px; }
-  .hero-photo { width: 220px; }
+  .hero-photo { width: 270px; }
   .hero h1 { font-size: 50px; }
   .steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 40px; }
-  .flow-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .flow-steps li:nth-child(4) .flow-arrow { display: none; }
-  .demo-stage { grid-template-columns: minmax(0, 1fr); grid-template-areas: "email" "flow" "sheet" "timer"; }
   .about-grid { gap: 40px; }
+  .why-grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* Below 900px the links fold into a menu under the header */
@@ -894,45 +668,36 @@ a.service-card:hover .service-more { text-decoration: underline; text-underline-
 
 @media (max-width: 767px) {
   :root { --section-y: 72px; }
-  .hero { padding: 40px 0 var(--section-y); }
-  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-  .hero-photo { order: -1; justify-self: start; width: 88px; aspect-ratio: 1; }
-  .hero-img { border-radius: 50%; }
+  .hero { padding: 24px 0 0; }
+  .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .hero-text { padding-bottom: var(--section-y); }
+  .hero-photo { order: -1; justify-self: center; width: min(260px, 70vw); }
   .hero h1 { font-size: 40px; }
   .hero-lead { margin-top: 1rem; font-size: 17px; }
   .hero-actions { margin-top: 1.5rem; }
-  .proof { grid-template-columns: minmax(0, 1fr); gap: 28px; margin-top: 48px; padding-top: 32px; }
-  .proof-num { font-size: 44px; }
-  .flow-card { margin-top: 40px; padding: 18px; }
-  .flow-steps { grid-template-columns: minmax(0, 1fr); gap: 8px; }
-  .flow-steps li { flex-direction: row; align-items: center; gap: 0.75rem; padding: 12px; }
-  .flow-num { flex: none; }
-  .flow-arrow { display: none; }
   .section h2, .contact h2 { font-size: 30px; }
   .section-head { margin-bottom: 32px; }
   .project-grid, .service-list, .steps, .about-grid { grid-template-columns: minmax(0, 1fr); }
-  .project, .project-demo { padding: 18px; }
-  .service-card, .strengths { padding: 22px; }
+  .why-list { padding: 0 22px; }
+  .why-item { grid-template-columns: minmax(0, 1fr); padding: 22px 0; }
+  .project { padding: 18px; }
+  .project-metric { font-size: 26px; }
+  .strengths { padding: 22px; }
   .steps { row-gap: 32px; }
   .contact-panel { padding: 56px 20px; }
-  .float-cta { right: 16px; bottom: 16px; }
 }
 
 @media (max-width: 479px) {
   .hero-actions .btn { flex: 1 1 100%; }
   .nav-cta { align-self: stretch; }
-  .demo-sheet th, .demo-sheet td { padding-inline: 0.35rem; }
-  .demo-sheet th:first-child, .demo-sheet td:first-child { padding-left: 0.55rem; }
-  .demo-sheet th:last-child, .demo-sheet td:last-child { padding-right: 0.55rem; }
-  .demo-node-label { font-size: 0.6875rem; }
   .footer-inner { flex-direction: column; align-items: flex-start; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
-  .btn:hover, .project:hover, .service-card:hover, .float-cta,
-  .btn:hover > span, .walkthrough-link:hover > span, .video-poster:hover .video-play,
-  .service-card:hover .service-more > span, .step-link:hover > span, .video-poster:focus-visible .video-play { transform: none !important; }
+  .btn:hover, .project:hover,
+  .btn:hover > span, .video-poster:hover .video-play,
+  .video-poster:focus-visible .video-play { transform: none !important; }
   .video-poster:hover img { transform: none; }
 }

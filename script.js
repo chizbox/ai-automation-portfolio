@@ -20,27 +20,8 @@
   });
   window.matchMedia('(min-width: 900px)').addEventListener('change', () => setMenu(false));
 
-  // Floating booking button: shown once the hero has scrolled out of view, and
-  // tucked away again while the contact section (with its own button) is on screen
-  const floatCta = document.querySelector('.float-cta');
-  const hero = document.getElementById('hero');
-  const contact = document.getElementById('contact');
-  if (floatCta && hero && 'IntersectionObserver' in window) {
-    let heroVisible = true;
-    let contactVisible = false;
-    const update = () => {
-      const show = !heroVisible && !contactVisible;
-      floatCta.classList.toggle('is-shown', show);
-      floatCta.setAttribute('aria-hidden', String(!show));
-      if (show) floatCta.removeAttribute('tabindex');
-      else floatCta.setAttribute('tabindex', '-1');
-    };
-    new IntersectionObserver(([entry]) => { heroVisible = entry.isIntersecting; update(); }).observe(hero);
-    if (contact) new IntersectionObserver(([entry]) => { contactVisible = entry.isIntersecting; update(); }).observe(contact);
-  }
-
   // Highlight a nav link only while its own section crosses a band 40-50% down the
-  // viewport. Sections without a link (Services, Contact) clear the highlight.
+  // viewport. Sections without a link (Why automation, Contact) clear the highlight.
   if ('IntersectionObserver' in window) {
     const inBand = new Set();
     const spy = new IntersectionObserver((entries) => {
@@ -66,6 +47,56 @@
       history.replaceState(null, '', location.pathname + location.search);
     });
   });
+
+  // "How it's built": with JavaScript and <dialog> support, each card's folded
+  // details open in one shared panel instead, so the card and its neighbours
+  // never resize. Without either, the <details> fold stays as it is.
+  const folds = document.querySelectorAll('.project-more');
+  if (folds.length && typeof HTMLDialogElement === 'function') {
+    const dialog = document.createElement('dialog');
+    dialog.className = 'project-dialog';
+    dialog.setAttribute('aria-labelledby', 'project-dialog-title');
+    dialog.innerHTML = `
+      <div class="dialog-head">
+        <div>
+          <p class="dialog-kicker">How it's built</p>
+          <h2 id="project-dialog-title"></h2>
+        </div>
+        <button class="dialog-close" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="dialog-body"></div>`;
+    document.body.append(dialog);
+    const title = dialog.querySelector('#project-dialog-title');
+    const body = dialog.querySelector('.dialog-body');
+    let opener = null;
+
+    dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
+    // The panel's content fills the dialog box, so a click that lands on the
+    // dialog itself is on the dimmed backdrop: close then too
+    dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => {
+      body.replaceChildren();
+      if (opener) opener.focus();
+    });
+
+    folds.forEach((fold) => {
+      const card = fold.closest('.project');
+      const name = fold.dataset.title || card.querySelector('.project-label').textContent;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'project-more-btn';
+      button.setAttribute('aria-haspopup', 'dialog');
+      button.innerHTML = 'How it\'s built<span aria-hidden="true"> →</span>';
+      button.addEventListener('click', () => {
+        opener = button;
+        title.textContent = name;
+        body.replaceChildren(fold.querySelector('.project-details').cloneNode(true));
+        dialog.showModal();
+        body.scrollTop = 0;
+      });
+      fold.replaceWith(button);
+    });
+  }
 
   // Click-to-play videos: swap the thumbnail for the youtube-nocookie player on demand
   document.querySelectorAll('.video[data-video-id]').forEach((box) => {
@@ -98,8 +129,8 @@
   if (motionOK) {
     // Scroll reveals, once each. Headings rise on their own; cards that enter view
     // together rise in reading order, 80ms apart.
-    const heads = '.section-head, .about-main, .contact-panel, .project-demo';
-    const cards = '.project, .service-list > li, .steps .step, .strengths';
+    const heads = '.section-head, .why-head, .about-main, .contact-panel';
+    const cards = '.project, .service-list > li, .why-item, .steps .step, .strengths';
     const revealer = new IntersectionObserver((entries) => {
       entries
         .filter((entry) => entry.isIntersecting)
@@ -164,71 +195,6 @@
     }, { rootMargin: '0px 0px 20% 0px' });
     (document.fonts ? document.fonts.ready : Promise.resolve())
       .then(() => document.querySelectorAll('.metric-num').forEach((el) => armer.observe(el)));
-  }
-
-  /* ------------------------------------------------------------------------
-     "Watch it run" demo under the project cards.
-     Plays once when it scrolls into view: the email slides in, the five nodes
-     light up in turn, the new row lands in the sheet and the timer counts to
-     ~30 sec. Replay runs it again. Without motion it shows the finished state.
-     ------------------------------------------------------------------------ */
-  const demo = document.querySelector('.project-demo');
-  if (motionOK && demo) {
-    const replay = demo.querySelector('.demo-replay');
-    const email = demo.querySelector('[data-demo="email"]');
-    const demoNodes = [...demo.querySelectorAll('.demo-node')];
-    const row = demo.querySelector('[data-demo="row"]');
-    const timer = demo.querySelector('[data-demo="timer"]');
-    const finalTime = timer.textContent;
-    let pending = [];
-    let countFrame = 0;
-
-    const clear = () => {
-      pending.forEach(clearTimeout);
-      pending = [];
-      cancelAnimationFrame(countFrame);
-      email.classList.remove('is-in');
-      demoNodes.forEach((n) => n.classList.remove('is-on'));
-      row.classList.remove('is-in');
-      timer.textContent = '0 sec';
-    };
-    const play = (delay) => {
-      const at = (ms, fn) => pending.push(setTimeout(fn, delay + ms));
-      const ROW_AT = 3050;
-      clear();
-      // Replay stays in place (and keeps focus) while a replay runs
-      replay.setAttribute('aria-disabled', 'true');
-      demo.classList.add('is-armed');
-      at(0, () => email.classList.add('is-in'));
-      demoNodes.forEach((n, i) => at(700 + i * 450, () => n.classList.add('is-on')));
-      at(ROW_AT, () => row.classList.add('is-in'));
-      at(0, () => {
-        const start = performance.now();
-        const count = (now) => {
-          const t = Math.min((now - start) / ROW_AT, 1);
-          timer.textContent = t < 1 ? `${Math.round(30 * t)} sec` : finalTime;
-          if (t < 1) countFrame = requestAnimationFrame(count);
-        };
-        countFrame = requestAnimationFrame(count);
-      });
-      at(ROW_AT + 500, () => {
-        replay.hidden = false;
-        replay.removeAttribute('aria-disabled');
-      });
-    };
-
-    demo.classList.add('is-armed');
-    clear();
-    const demoObserver = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      demoObserver.disconnect();
-      play(150);
-    }, { threshold: 0.4 });
-    demoObserver.observe(demo);
-    // Give the earlier state time to fade out before replaying
-    replay.addEventListener('click', () => {
-      if (replay.getAttribute('aria-disabled') !== 'true') play(500);
-    });
   }
 
 })();
