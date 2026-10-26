@@ -2,38 +2,41 @@
   const header = document.querySelector('.site-header');
   const navLinks = document.getElementById('nav-links');
 
-  // Highlight the nav link for the section in view: the last section whose top has
-  // passed the line just under the sticky header (header height + 24px, the same
-  // offset anchors land on), or the last one at page bottom.
-  const readingLine = () => header.offsetHeight + 24 + 2; // 2px slack for sub-pixel layout
   const links = [...navLinks.querySelectorAll('a[href^="#"]')];
   const sections = links
     .map((a) => document.querySelector(a.getAttribute('href')))
     .filter(Boolean);
-  // Soft shadow under the sticky nav once the page has scrolled more than 8px
-  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  let spyQueued = false;
-  const updateSpy = () => {
-    spyQueued = false;
-    const line = readingLine();
-    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
-    let current = null;
-    sections.forEach((s) => { if (s.getBoundingClientRect().top <= line) current = s; });
-    if (atBottom) current = sections[sections.length - 1];
-    links.forEach((a) => {
-      if (current && a.getAttribute('href') === `#${current.id}`) a.setAttribute('aria-current', 'true');
-      else a.removeAttribute('aria-current');
-    });
+  // Phones and tablets: the links fold into a menu behind the toggle
+  const toggle = header.querySelector('.nav-toggle');
+  const menu = document.getElementById('nav-menu');
+  const setMenu = (open) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    menu.classList.toggle('is-open', open);
   };
+  toggle.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+  menu.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { setMenu(false); toggle.focus(); }
+  });
+  window.matchMedia('(min-width: 900px)').addEventListener('change', () => setMenu(false));
 
-  window.addEventListener('scroll', () => {
-    if (!spyQueued) { spyQueued = true; requestAnimationFrame(updateSpy); }
-  }, { passive: true });
-  window.addEventListener('resize', updateSpy);
-  updateSpy();
+  // Highlight a nav link only while its own section crosses a band 40-50% down the
+  // viewport. Sections without a link (Why automation, Contact) clear the highlight.
+  if ('IntersectionObserver' in window) {
+    const inBand = new Set();
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) inBand.add(entry.target);
+        else inBand.delete(entry.target);
+      });
+      const current = sections.find((s) => inBand.has(s));
+      links.forEach((a) => {
+        if (current && a.getAttribute('href') === `#${current.id}`) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    sections.forEach((s) => spy.observe(s));
+  }
 
   // Back to top: scroll the window itself (a sticky header can't be a scroll target)
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -44,6 +47,56 @@
       history.replaceState(null, '', location.pathname + location.search);
     });
   });
+
+  // "How it's built": with JavaScript and <dialog> support, each card's folded
+  // details open in one shared panel instead, so the card and its neighbours
+  // never resize. Without either, the <details> fold stays as it is.
+  const folds = document.querySelectorAll('.project-more');
+  if (folds.length && typeof HTMLDialogElement === 'function') {
+    const dialog = document.createElement('dialog');
+    dialog.className = 'project-dialog';
+    dialog.setAttribute('aria-labelledby', 'project-dialog-title');
+    dialog.innerHTML = `
+      <div class="dialog-head">
+        <div>
+          <p class="dialog-kicker">How it's built</p>
+          <h2 id="project-dialog-title"></h2>
+        </div>
+        <button class="dialog-close" type="button" aria-label="Close">×</button>
+      </div>
+      <div class="dialog-body"></div>`;
+    document.body.append(dialog);
+    const title = dialog.querySelector('#project-dialog-title');
+    const body = dialog.querySelector('.dialog-body');
+    let opener = null;
+
+    dialog.querySelector('.dialog-close').addEventListener('click', () => dialog.close());
+    // The panel's content fills the dialog box, so a click that lands on the
+    // dialog itself is on the dimmed backdrop: close then too
+    dialog.addEventListener('click', (e) => { if (e.target === dialog) dialog.close(); });
+    dialog.addEventListener('close', () => {
+      body.replaceChildren();
+      if (opener) opener.focus();
+    });
+
+    folds.forEach((fold) => {
+      const card = fold.closest('.project');
+      const name = fold.dataset.title || card.querySelector('.project-label').textContent;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'project-more-btn';
+      button.setAttribute('aria-haspopup', 'dialog');
+      button.innerHTML = 'How it\'s built<span aria-hidden="true"> →</span>';
+      button.addEventListener('click', () => {
+        opener = button;
+        title.textContent = name;
+        body.replaceChildren(fold.querySelector('.project-details').cloneNode(true));
+        dialog.showModal();
+        body.scrollTop = 0;
+      });
+      fold.replaceWith(button);
+    });
+  }
 
   // Click-to-play videos: swap the thumbnail for the youtube-nocookie player on demand
   document.querySelectorAll('.video[data-video-id]').forEach((box) => {
@@ -75,9 +128,9 @@
 
   if (motionOK) {
     // Scroll reveals, once each. Headings rise on their own; cards that enter view
-    // together rise in reading order, 80ms apart (the three strip pillars 100ms apart).
-    const heads = '.section-head, .services-intro, .experience-main, .contact-inner';
-    const cards = '.strip-item, .project, .service-list > li, .steps .step, .experience-card';
+    // together rise in reading order, 80ms apart.
+    const heads = '.section-head, .why-head, .about-main, .contact-panel';
+    const cards = '.project, .service-list > li, .why-item, .steps .step, .strengths';
     const revealer = new IntersectionObserver((entries) => {
       entries
         .filter((entry) => entry.isIntersecting)
@@ -85,12 +138,12 @@
         .forEach((entry, i) => {
           const el = entry.target;
           revealer.unobserve(el);
-          const gap = el.classList.contains('strip-item') ? 100 : 80;
+          const gap = 80;
           const delay = el.matches(cards) ? i * gap : 0;
           el.style.setProperty('--reveal-delay', `${delay}ms`);
           el.classList.add('is-visible');
           // Once settled, drop the reveal styles so hover lifts respond without the delay
-          const settle = el.classList.contains('strip-item') ? 900 : 550;
+          const settle = 550;
           setTimeout(() => {
             el.classList.remove('reveal', 'is-visible');
             el.style.removeProperty('--reveal-delay');
@@ -102,18 +155,8 @@
       revealer.observe(el);
     });
 
-    // How I work: the connecting line draws once, then the step numbers fade in
-    const steps = document.querySelector('.steps');
-    if (steps) {
-      const lineObserver = new IntersectionObserver((entries) => {
-        if (!entries[0].isIntersecting) return;
-        steps.classList.add('is-drawn');
-        lineObserver.disconnect();
-      }, { threshold: 0.15 });
-      lineObserver.observe(steps);
-    }
-
-    // Metric numbers count up once as their card comes into view. Only the digits
+    // Metric numbers count up once as their card comes into view. The HTML keeps the
+    // final values, so without JS (or for a crawler) nothing reads "0". Only the digits
     // change ("~", "sec", "Up to" stay put), the width is held so nothing shifts,
     // and the text ends exactly as written. "Seconds" has no digits and is left alone.
     const counter = new IntersectionObserver((entries) => {
@@ -132,93 +175,26 @@
         requestAnimationFrame(tick);
       });
     }, { threshold: 0.6 });
-    // Measure once the web fonts are in, so the held width is the real one
-    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => document.querySelectorAll('.metric-num').forEach((el) => {
-      const text = el.textContent;
-      const match = text.match(/\d+(\.\d+)?/);
-      if (!match) return;
-      const before = text.slice(0, match.index);
-      const after = text.slice(match.index + match[0].length);
-      // Hold the final width, then start from zero (the cards are still hidden below the fold)
-      el.style.minWidth = `${el.getBoundingClientRect().width}px`;
-      el.textContent = `${before}0${after}`;
-      el.countUp = { el, text, before, after, target: parseFloat(match[0]) };
-      counter.observe(el);
-    }));
-
-    // Thumbnail workflow nodes: the 6s loop only runs while its card is on screen
-    const flows = new IntersectionObserver((entries) => {
+    // Zero a number only just before it scrolls into view (and once the web fonts are
+    // in, so the held width is the real one); everything further down keeps its value.
+    const armer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        const flow = entry.target.querySelector('.media-flow');
-        if (flow) flow.classList.toggle('is-live', entry.isIntersecting);
+        if (!entry.isIntersecting) return;
+        armer.unobserve(entry.target);
+        const el = entry.target;
+        const text = el.textContent;
+        const match = text.match(/\d+(\.\d+)?/);
+        if (!match) return;
+        const before = text.slice(0, match.index);
+        const after = text.slice(match.index + match[0].length);
+        el.style.minWidth = `${el.getBoundingClientRect().width}px`;
+        el.textContent = `${before}0${after}`;
+        el.countUp = { el, text, before, after, target: parseFloat(match[0]) };
+        counter.observe(el);
       });
-    });
-    document.querySelectorAll('.project').forEach((card) => flows.observe(card));
-  }
-
-  /* ------------------------------------------------------------------------
-     Automation in action, feature 2: "Watch it run" demo in Project 01.
-     Plays once when it scrolls into view: the email slides in, the five nodes
-     light up in turn, the new row lands in the sheet and the timer counts to
-     ~30 sec. Replay runs it again. Without motion it shows the finished state.
-     ------------------------------------------------------------------------ */
-  const demo = document.querySelector('.project-demo');
-  if (motionOK && demo) {
-    const replay = demo.querySelector('.demo-replay');
-    const email = demo.querySelector('[data-demo="email"]');
-    const demoNodes = [...demo.querySelectorAll('.demo-node')];
-    const row = demo.querySelector('[data-demo="row"]');
-    const timer = demo.querySelector('[data-demo="timer"]');
-    const finalTime = timer.textContent;
-    let pending = [];
-    let countFrame = 0;
-
-    const clear = () => {
-      pending.forEach(clearTimeout);
-      pending = [];
-      cancelAnimationFrame(countFrame);
-      email.classList.remove('is-in');
-      demoNodes.forEach((n) => n.classList.remove('is-on'));
-      row.classList.remove('is-in');
-      timer.textContent = '0 sec';
-    };
-    const play = (delay) => {
-      const at = (ms, fn) => pending.push(setTimeout(fn, delay + ms));
-      const ROW_AT = 3050;
-      clear();
-      // Replay stays in place (and keeps focus) while a replay runs
-      replay.setAttribute('aria-disabled', 'true');
-      demo.classList.add('is-armed');
-      at(0, () => email.classList.add('is-in'));
-      demoNodes.forEach((n, i) => at(700 + i * 450, () => n.classList.add('is-on')));
-      at(ROW_AT, () => row.classList.add('is-in'));
-      at(0, () => {
-        const start = performance.now();
-        const count = (now) => {
-          const t = Math.min((now - start) / ROW_AT, 1);
-          timer.textContent = t < 1 ? `${Math.round(30 * t)} sec` : finalTime;
-          if (t < 1) countFrame = requestAnimationFrame(count);
-        };
-        countFrame = requestAnimationFrame(count);
-      });
-      at(ROW_AT + 500, () => {
-        replay.hidden = false;
-        replay.removeAttribute('aria-disabled');
-      });
-    };
-
-    demo.classList.add('is-armed');
-    clear();
-    const demoObserver = new IntersectionObserver(([entry]) => {
-      if (!entry.isIntersecting) return;
-      demoObserver.disconnect();
-      play(150);
-    }, { threshold: 0.4 });
-    demoObserver.observe(demo);
-    // Give the earlier state time to fade out before replaying
-    replay.addEventListener('click', () => {
-      if (replay.getAttribute('aria-disabled') !== 'true') play(500);
-    });
+    }, { rootMargin: '0px 0px 20% 0px' });
+    (document.fonts ? document.fonts.ready : Promise.resolve())
+      .then(() => document.querySelectorAll('.metric-num').forEach((el) => armer.observe(el)));
   }
 
 })();

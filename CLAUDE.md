@@ -6,7 +6,7 @@ A single-page freelance portfolio that wins clients for Rolan Daniel, an AI auto
 ## Stack and file rules
 - Plain HTML, CSS, and JavaScript only. No frameworks, no build step.
 - Keep everything in three files: index.html, styles.css, script.js.
-- Images live in the images/ folder. The profile photo is profile.jpg in the project root.
+- Images live in the images/ folder. The profile photo is profile.png (transparent cutout) in the project root.
 - Workflow screenshots are images/<project-name>.png.
 
 ## Design rules
