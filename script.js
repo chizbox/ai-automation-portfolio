@@ -2,38 +2,60 @@
   const header = document.querySelector('.site-header');
   const navLinks = document.getElementById('nav-links');
 
-  // Highlight the nav link for the section in view: the last section whose top has
-  // passed the line just under the sticky header (header height + 24px, the same
-  // offset anchors land on), or the last one at page bottom.
-  const readingLine = () => header.offsetHeight + 24 + 2; // 2px slack for sub-pixel layout
   const links = [...navLinks.querySelectorAll('a[href^="#"]')];
   const sections = links
     .map((a) => document.querySelector(a.getAttribute('href')))
     .filter(Boolean);
-  // Soft shadow under the sticky nav once the page has scrolled more than 8px
-  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
-  onScroll();
-  window.addEventListener('scroll', onScroll, { passive: true });
-
-  let spyQueued = false;
-  const updateSpy = () => {
-    spyQueued = false;
-    const line = readingLine();
-    const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2;
-    let current = null;
-    sections.forEach((s) => { if (s.getBoundingClientRect().top <= line) current = s; });
-    if (atBottom) current = sections[sections.length - 1];
-    links.forEach((a) => {
-      if (current && a.getAttribute('href') === `#${current.id}`) a.setAttribute('aria-current', 'true');
-      else a.removeAttribute('aria-current');
-    });
+  // Phones and tablets: the links fold into a menu behind the toggle
+  const toggle = header.querySelector('.nav-toggle');
+  const menu = document.getElementById('nav-menu');
+  const setMenu = (open) => {
+    toggle.setAttribute('aria-expanded', String(open));
+    menu.classList.toggle('is-open', open);
   };
+  toggle.addEventListener('click', () => setMenu(toggle.getAttribute('aria-expanded') !== 'true'));
+  menu.addEventListener('click', (e) => { if (e.target.closest('a')) setMenu(false); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && toggle.getAttribute('aria-expanded') === 'true') { setMenu(false); toggle.focus(); }
+  });
+  window.matchMedia('(min-width: 900px)').addEventListener('change', () => setMenu(false));
 
-  window.addEventListener('scroll', () => {
-    if (!spyQueued) { spyQueued = true; requestAnimationFrame(updateSpy); }
-  }, { passive: true });
-  window.addEventListener('resize', updateSpy);
-  updateSpy();
+  // Floating booking button: shown once the hero has scrolled out of view, and
+  // tucked away again while the contact section (with its own button) is on screen
+  const floatCta = document.querySelector('.float-cta');
+  const hero = document.getElementById('hero');
+  const contact = document.getElementById('contact');
+  if (floatCta && hero && 'IntersectionObserver' in window) {
+    let heroVisible = true;
+    let contactVisible = false;
+    const update = () => {
+      const show = !heroVisible && !contactVisible;
+      floatCta.classList.toggle('is-shown', show);
+      floatCta.setAttribute('aria-hidden', String(!show));
+      if (show) floatCta.removeAttribute('tabindex');
+      else floatCta.setAttribute('tabindex', '-1');
+    };
+    new IntersectionObserver(([entry]) => { heroVisible = entry.isIntersecting; update(); }).observe(hero);
+    if (contact) new IntersectionObserver(([entry]) => { contactVisible = entry.isIntersecting; update(); }).observe(contact);
+  }
+
+  // Highlight a nav link only while its own section crosses a band 40-50% down the
+  // viewport. Sections without a link (Services, Contact) clear the highlight.
+  if ('IntersectionObserver' in window) {
+    const inBand = new Set();
+    const spy = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) inBand.add(entry.target);
+        else inBand.delete(entry.target);
+      });
+      const current = sections.find((s) => inBand.has(s));
+      links.forEach((a) => {
+        if (current && a.getAttribute('href') === `#${current.id}`) a.setAttribute('aria-current', 'true');
+        else a.removeAttribute('aria-current');
+      });
+    }, { rootMargin: '-40% 0px -50% 0px' });
+    sections.forEach((s) => spy.observe(s));
+  }
 
   // Back to top: scroll the window itself (a sticky header can't be a scroll target)
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -75,9 +97,9 @@
 
   if (motionOK) {
     // Scroll reveals, once each. Headings rise on their own; cards that enter view
-    // together rise in reading order, 80ms apart (the three strip pillars 100ms apart).
-    const heads = '.section-head, .services-intro, .experience-main, .contact-inner';
-    const cards = '.strip-item, .project, .service-list > li, .steps .step, .experience-card';
+    // together rise in reading order, 80ms apart.
+    const heads = '.section-head, .about-main, .contact-panel, .project-demo';
+    const cards = '.project, .service-list > li, .steps .step, .strengths';
     const revealer = new IntersectionObserver((entries) => {
       entries
         .filter((entry) => entry.isIntersecting)
@@ -85,12 +107,12 @@
         .forEach((entry, i) => {
           const el = entry.target;
           revealer.unobserve(el);
-          const gap = el.classList.contains('strip-item') ? 100 : 80;
+          const gap = 80;
           const delay = el.matches(cards) ? i * gap : 0;
           el.style.setProperty('--reveal-delay', `${delay}ms`);
           el.classList.add('is-visible');
           // Once settled, drop the reveal styles so hover lifts respond without the delay
-          const settle = el.classList.contains('strip-item') ? 900 : 550;
+          const settle = 550;
           setTimeout(() => {
             el.classList.remove('reveal', 'is-visible');
             el.style.removeProperty('--reveal-delay');
@@ -102,18 +124,8 @@
       revealer.observe(el);
     });
 
-    // How I work: the connecting line draws once, then the step numbers fade in
-    const steps = document.querySelector('.steps');
-    if (steps) {
-      const lineObserver = new IntersectionObserver((entries) => {
-        if (!entries[0].isIntersecting) return;
-        steps.classList.add('is-drawn');
-        lineObserver.disconnect();
-      }, { threshold: 0.15 });
-      lineObserver.observe(steps);
-    }
-
-    // Metric numbers count up once as their card comes into view. Only the digits
+    // Metric numbers count up once as their card comes into view. The HTML keeps the
+    // final values, so without JS (or for a crawler) nothing reads "0". Only the digits
     // change ("~", "sec", "Up to" stay put), the width is held so nothing shifts,
     // and the text ends exactly as written. "Seconds" has no digits and is left alone.
     const counter = new IntersectionObserver((entries) => {
@@ -132,32 +144,30 @@
         requestAnimationFrame(tick);
       });
     }, { threshold: 0.6 });
-    // Measure once the web fonts are in, so the held width is the real one
-    (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => document.querySelectorAll('.metric-num').forEach((el) => {
-      const text = el.textContent;
-      const match = text.match(/\d+(\.\d+)?/);
-      if (!match) return;
-      const before = text.slice(0, match.index);
-      const after = text.slice(match.index + match[0].length);
-      // Hold the final width, then start from zero (the cards are still hidden below the fold)
-      el.style.minWidth = `${el.getBoundingClientRect().width}px`;
-      el.textContent = `${before}0${after}`;
-      el.countUp = { el, text, before, after, target: parseFloat(match[0]) };
-      counter.observe(el);
-    }));
-
-    // Thumbnail workflow nodes: the 6s loop only runs while its card is on screen
-    const flows = new IntersectionObserver((entries) => {
+    // Zero a number only just before it scrolls into view (and once the web fonts are
+    // in, so the held width is the real one); everything further down keeps its value.
+    const armer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
-        const flow = entry.target.querySelector('.media-flow');
-        if (flow) flow.classList.toggle('is-live', entry.isIntersecting);
+        if (!entry.isIntersecting) return;
+        armer.unobserve(entry.target);
+        const el = entry.target;
+        const text = el.textContent;
+        const match = text.match(/\d+(\.\d+)?/);
+        if (!match) return;
+        const before = text.slice(0, match.index);
+        const after = text.slice(match.index + match[0].length);
+        el.style.minWidth = `${el.getBoundingClientRect().width}px`;
+        el.textContent = `${before}0${after}`;
+        el.countUp = { el, text, before, after, target: parseFloat(match[0]) };
+        counter.observe(el);
       });
-    });
-    document.querySelectorAll('.project').forEach((card) => flows.observe(card));
+    }, { rootMargin: '0px 0px 20% 0px' });
+    (document.fonts ? document.fonts.ready : Promise.resolve())
+      .then(() => document.querySelectorAll('.metric-num').forEach((el) => armer.observe(el)));
   }
 
   /* ------------------------------------------------------------------------
-     Automation in action, feature 2: "Watch it run" demo in Project 01.
+     "Watch it run" demo under the project cards.
      Plays once when it scrolls into view: the email slides in, the five nodes
      light up in turn, the new row lands in the sheet and the timer counts to
      ~30 sec. Replay runs it again. Without motion it shows the finished state.

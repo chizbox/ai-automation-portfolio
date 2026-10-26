@@ -6,7 +6,7 @@
   <title>Rolan Daniel | AI Automation Specialist</title>
   <meta name="description" content="I help small businesses save time and cut manual work with reliable n8n and LLM automations. Available for freelance projects.">
   <meta name="author" content="Rolan Daniel">
-  <meta name="theme-color" content="#FAF7F2">
+  <meta name="theme-color" content="#1B1C1A">
   <link rel="canonical" href="https://rolandanielaiautomation.vercel.app/">
 
   <meta property="og:title" content="Rolan Daniel | AI Automation Specialist">
@@ -49,75 +49,76 @@
           <span class="brand-role">AI Automation Specialist</span>
         </span>
       </a>
-      <ul class="nav-links" id="nav-links">
-        <li><a href="#projects">Projects</a></li>
-        <li><a href="#process">How I work</a></li>
-        <li><a href="#experience">Experience</a></li>
-      </ul>
-      <a class="btn btn-ink btn-sm nav-cta" href="#contact">Get in Touch</a>
+      <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-menu">
+        <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span class="visually-hidden">Menu</span>
+      </button>
+      <div class="nav-menu" id="nav-menu">
+        <ul class="nav-links" id="nav-links">
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#process">How I Work</a></li>
+          <li><a href="#about">About</a></li>
+        </ul>
+        <a class="btn btn-coral btn-sm nav-cta" href="https://calendly.com/rolancdaniel/30min" target="_blank" rel="noopener">Book a Free Workflow Audit<span class="visually-hidden"> (opens in a new tab)</span></a>
+      </div>
     </nav>
   </header>
 
   <main id="main">
 
     <!-- 1. HERO -->
-    <section class="hero" aria-labelledby="hero-title">
-      <div class="container hero-grid">
-        <div class="hero-text">
-          <p class="hero-eyebrow">Invoice review: 3-5 min → ~30 sec</p>
-          <h1 id="hero-title">Less manual work. More done.</h1>
-          <p class="hero-lead">I build practical automations that connect your tools, handle repetitive tasks, and keep work moving<span class="lead-more">—with thoughtful validation, error handling, and a real engineering mindset</span>.</p>
-          <div class="hero-actions">
-            <a class="btn btn-ink" href="https://calendly.com/rolancdaniel/30min" target="_blank" rel="noopener">Book a free workflow audit<span aria-hidden="true"> →</span></a>
-            <a class="btn btn-cream hero-secondary" href="#projects">View projects<span aria-hidden="true"> →</span></a>
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+      <div class="container">
+        <div class="hero-grid">
+          <div class="hero-text">
+            <h1 id="hero-title">Less manual work. More done.</h1>
+            <p class="hero-lead">I build AI-powered automations that connect your tools, reduce repetitive work, and keep business workflows running reliably—with validation and sensible error handling built in.</p>
+            <div class="hero-actions">
+              <a class="btn btn-coral" href="https://calendly.com/rolancdaniel/30min" target="_blank" rel="noopener">Book a Free Workflow Audit<span class="visually-hidden"> (opens in a new tab)</span></a>
+              <a class="btn btn-ghost" href="#projects">View Projects</a>
+            </div>
           </div>
+          <figure class="hero-photo">
+            <img class="hero-img" src="profile-800.jpg" width="800" height="800" fetchpriority="high" onerror="this.onerror=null;this.src='profile.jpg'" alt="Rolan Daniel, smiling, wearing glasses and a black t-shirt, in front of monitors showing code">
+          </figure>
         </div>
-        <figure class="hero-photo">
-          <img class="hero-img" src="profile-800.jpg" width="800" height="800" fetchpriority="high" onerror="this.onerror=null;this.src='profile.jpg'" alt="Rolan Daniel, smiling, wearing glasses and a black t-shirt, in front of monitors showing code">
+
+        <ul class="proof" aria-label="Results from my projects">
+          <li><span class="proof-num">~30 sec</span><span class="proof-label">per invoice, down from 3 to 5 minutes</span></li>
+          <li><span class="proof-num">~10 min</span><span class="proof-label">to screen a batch of 50 CVs</span></li>
+          <li><span class="proof-num">Seconds</span><span class="proof-label">to reply to customers, 24/7</span></li>
+        </ul>
+
+        <figure class="flow-card" aria-labelledby="flow-title">
+          <figcaption class="flow-head">
+            <span class="flow-title" id="flow-title">Invoice automation, step by step</span>
+            <span class="flow-note">Simulated example with sample data.</span>
+          </figcaption>
+          <ol class="flow-steps">
+            <li><span class="flow-num" aria-hidden="true">1</span>Email invoice PDF</li>
+            <li><span class="flow-arrow" aria-hidden="true">→</span><span class="flow-num" aria-hidden="true">2</span>Extract text from PDF</li>
+            <li><span class="flow-arrow" aria-hidden="true">→</span><span class="flow-num" aria-hidden="true">3</span>AI extraction (vendor, date, total)</li>
+            <li><span class="flow-arrow" aria-hidden="true">→</span><span class="flow-num" aria-hidden="true">4</span>Duplicate check by invoice number</li>
+            <li class="flow-done"><span class="flow-arrow" aria-hidden="true">→</span><span class="flow-num" aria-hidden="true">✓</span>Google Sheets row added</li>
+          </ol>
         </figure>
       </div>
     </section>
 
-    <!-- 2. STRENGTHS -->
-    <section class="strip" aria-label="Why work with me">
-      <ul class="container strip-grid">
-        <li class="strip-item">
-          <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/></svg>
-          <div>
-            <h2 class="strip-title">Engineering background</h2>
-            <p>15+ years in software engineering, with Java, Spring Boot and enterprise systems behind every workflow.</p>
-          </div>
-        </li>
-        <li class="strip-item">
-          <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M12 3 4.5 6v5.5c0 4.6 3.1 8.4 7.5 9.5 4.4-1.1 7.5-4.9 7.5-9.5V6z"/><path pathLength="1" d="m8.8 12.2 2.2 2.2 4.3-4.4"/></svg>
-          <div>
-            <h2 class="strip-title">Reliable by design</h2>
-            <p>Duplicate protection, validation and failure handling, so automations keep working.</p>
-          </div>
-        </li>
-        <li class="strip-item">
-          <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path pathLength="1" d="M9.5 14.5 14.5 9.5"/><path pathLength="1" d="M11 6.5 12.8 4.7a4 4 0 0 1 5.7 5.7L16.7 12.2"/><path pathLength="1" d="M13 17.5 11.2 19.3a4 4 0 0 1-5.7-5.7L7.3 11.8"/></svg>
-          <div>
-            <h2 class="strip-title">Seamless integrations</h2>
-            <p>Gmail, Sheets, Slack, Airtable and more, connected into one clean workflow.</p>
-          </div>
-        </li>
-      </ul>
-    </section>
-
-    <!-- 3. PROJECTS -->
+    <!-- 2. PROJECTS -->
     <section class="section projects" id="projects" aria-labelledby="projects-title">
       <div class="container">
         <header class="section-head">
+          <p class="eyebrow">Projects</p>
           <h2 id="projects-title">Real automations. Real time saved.</h2>
           <p class="section-sub">Four projects with measurable results, each with a video walkthrough.</p>
         </header>
         <div class="project-grid">
         <!-- Project 01 -->
-        <article class="project project-featured" id="project-invoices" aria-labelledby="p1-title">
+        <article class="project" id="project-invoices" aria-labelledby="p1-title">
           <div class="media-frame">
-            <div class="media-bar"><span class="media-dots" aria-hidden="true"><span></span><span></span><span></span></span><span class="media-flow" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
-                <a class="media-tag" href="#demo-title">Watch it run demo</a></div>
+            <div class="media-bar"><span class="media-dots" aria-hidden="true"><span></span><span></span><span></span></span><a class="media-tag" href="#demo-title">Watch it run demo</a></div>
             <div class="video" data-video-id="O24KxA6U8BE">
               <a class="video-poster" href="https://youtu.be/O24KxA6U8BE" target="_blank" rel="noopener" aria-label="Play video: Accounts Payable Invoice Processing">
                 <img src="images/invoice-processing.png" width="1360" height="676" loading="lazy" decoding="async" alt="">
@@ -129,43 +130,9 @@
           <p class="metric"><span class="metric-num">~30 sec</span> <span class="metric-label">per invoice</span></p>
           <p class="project-desc">Turns invoice emails into clean spreadsheet rows, with no manual data entry.</p>
           <div class="project-result">
-            <h4>Result</h4>
+            <h4><span class="ok" aria-hidden="true">✓</span> Result</h4>
             <p>Invoice details land in the tracker automatically, duplicates are blocked, and failed emails are labeled and logged for review.</p>
           </div>
-            <section class="project-demo" aria-labelledby="demo-title">
-              <div class="demo-head">
-                <h4 id="demo-title">Watch it run</h4>
-                <p class="demo-note">Simulated example with sample data</p>
-                <button class="demo-replay" type="button" hidden>Replay</button>
-              </div>
-              <p class="visually-hidden">An animation of the invoice workflow with sample data. An invoice email arrives, then Gmail, text extraction, AI extraction, the duplicate check and Google Sheets run one after another, and a new row for invoice INV-1042 from Acme Co is added to the sheet. The timer stops at about 30 seconds, compared with 3 to 5 minutes by hand.</p>
-              <div class="demo-stage" aria-hidden="true">
-                <div class="demo-email" data-demo="email">
-                  <svg width="20" height="20"><use href="#i-mail"/></svg>
-                  <div>
-                    <p class="demo-email-from">billing@acme.example</p>
-                    <p class="demo-email-subject">Invoice INV-1042</p>
-                    <p class="demo-email-meta">1 PDF attached</p>
-                  </div>
-                </div>
-                <ol class="demo-flow"><li class="demo-node" data-step="0"><span class="demo-node-box"><svg width="22" height="22"><use href="#i-gmail"/></svg><svg class="demo-tick" width="16" height="16"><use href="#i-check"/></svg></span><span class="demo-node-label">Gmail</span></li><li class="demo-node" data-step="1"><span class="demo-node-box"><svg width="22" height="22"><use href="#i-doc"/></svg><svg class="demo-tick" width="16" height="16"><use href="#i-check"/></svg></span><span class="demo-node-label">Extract text</span></li><li class="demo-node" data-step="2"><span class="demo-node-box"><svg width="22" height="22"><use href="#i-openrouter"/></svg><svg class="demo-tick" width="16" height="16"><use href="#i-check"/></svg></span><span class="demo-node-label">AI extraction</span></li><li class="demo-node" data-step="3"><span class="demo-node-box"><svg width="22" height="22"><use href="#i-dupe"/></svg><svg class="demo-tick" width="16" height="16"><use href="#i-check"/></svg></span><span class="demo-node-label">Duplicate check</span></li><li class="demo-node" data-step="4"><span class="demo-node-box"><svg width="22" height="22"><use href="#i-sheets"/></svg><svg class="demo-tick" width="16" height="16"><use href="#i-check"/></svg></span><span class="demo-node-label">Google Sheets</span></li></ol>
-                <div class="demo-sheet">
-                  <table>
-                    <thead><tr><th>Vendor</th><th>Invoice</th><th>Date</th><th>Total</th></tr></thead>
-                    <tbody>
-                      <tr><td>Northwind</td><td>INV-1038</td><td>01 Oct</td><td>$412.50</td></tr>
-                      <tr><td>Blue Ridge</td><td>INV-1041</td><td>02 Oct</td><td>$96.00</td></tr>
-                      <tr class="demo-row-new" data-demo="row"><td>Acme Co</td><td>INV-1042</td><td>03 Oct</td><td>$1,280.00</td></tr>
-                    </tbody>
-                  </table>
-                </div>
-                <div class="demo-timer">
-                  <p class="demo-time"><span class="demo-time-label">Automated</span> <span class="demo-time-value" data-demo="timer">~30 sec</span></p>
-                  <p class="demo-manual">Manual: 3 to 5 min</p>
-                </div>
-              </div>
-            </section>
-
           <div class="project-foot">
             <p class="project-name">Accounts Payable Invoice Processing</p>
             <a class="walkthrough-link" href="https://youtu.be/O24KxA6U8BE" target="_blank" rel="noopener">Watch the walkthrough<span aria-hidden="true"> →</span><span class="visually-hidden"> (opens YouTube in a new tab)</span></a>
@@ -201,7 +168,7 @@
         <!-- Project 02 -->
         <article class="project" id="project-hiring" aria-labelledby="p2-title">
           <div class="media-frame">
-            <div class="media-bar"><span class="media-dots" aria-hidden="true"><span></span><span></span><span></span></span><span class="media-flow" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></div>
+            <div class="media-bar"><span class="media-dots" aria-hidden="true"><span></span><span></span><span></span></span></div>
             <div class="video" data-video-id="ymf0FUe1AFc">
               <a class="video-poster" href="https://www.youtube.com/watch?v=ymf0FUe1AFc" target="_blank" rel="noopener" aria-label="Play video: HR Evaluation and Job Posting Assistant">
                 <img src="images/hr-evaluation.png" width="1986" height="665" loading="lazy" decoding="async" alt="">
@@ -213,7 +180,7 @@
           <p class="metric"><span class="metric-num">~10 min</span> <span class="metric-label">per batch of 50 CVs</span></p>
           <p class="project-desc">From application form to scheduled phone interview, with AI doing the screening.</p>
           <div class="project-result">
-            <h4>Result</h4>
+            <h4><span class="ok" aria-hidden="true">✓</span> Result</h4>
             <p>Every applicant is scored against the open role, and strong candidates move on to tailored questions, a personalized email, and a booked phone interview without manual coordination.</p>
           </div>
           <div class="project-foot">
@@ -253,7 +220,7 @@
         <!-- Project 03 -->
         <article class="project" id="project-jobs" aria-labelledby="p3-title">
           <div class="media-frame">
-            <div class="media-bar"><span class="media-dots" aria-hidden="true"><span></span><span></span><span></span></span><span class="media-flow" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></div>
+            <div class="media-bar"><span class="media-dots" aria-hidden="true"><span></span><span></span><span></span></span></div>
             <div class="video" data-video-id="-euc2zOeC6c">
               <a class="video-poster" href="https://youtu.be/-euc2zOeC6c" target="_blank" rel="noopener" aria-label="Play video: AI Job Scraper and Application Assistant">
                 <img src="images/job-scraper.png" width="1871" height="696" loading="lazy" decoding="async" alt="">
@@ -265,7 +232,7 @@
           <p class="metric"><span class="metric-num">Up to 5 hrs</span> <span class="metric-label">saved a week</span></p>
           <p class="project-desc">Type a job search in Slack and get tailored resumes, proposals, and email drafts back.</p>
           <div class="project-result">
-            <h4>Result</h4>
+            <h4><span class="ok" aria-hidden="true">✓</span> Result</h4>
             <p>One Slack message returns, for each recent remote listing, the job link, a tailored resume, and an email draft or Upwork proposal.</p>
           </div>
           <div class="project-foot">
@@ -307,7 +274,7 @@
         <!-- Project 04 -->
         <article class="project" id="project-support" aria-labelledby="p4-title">
           <div class="media-frame">
-            <div class="media-bar"><span class="media-dots" aria-hidden="true"><span></span><span></span><span></span></span><span class="media-flow" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span></div>
+            <div class="media-bar"><span class="media-dots" aria-hidden="true"><span></span><span></span><span></span></span></div>
             <div class="video" data-video-id="RsKEWiVI02A">
               <a class="video-poster" href="https://youtu.be/RsKEWiVI02A" target="_blank" rel="noopener" aria-label="Play video: Facebook Messenger AI Assistant">
                 <img src="images/toy-store-assistant.png" width="984" height="593" loading="lazy" decoding="async" alt="">
@@ -319,7 +286,7 @@
           <p class="metric"><span class="metric-num">Seconds</span> <span class="metric-label">to reply, 24/7</span></p>
           <p class="project-desc">An AI assistant that answers customer messages with live stock and price information, 24/7.</p>
           <div class="project-result">
-            <h4>Result</h4>
+            <h4><span class="ok" aria-hidden="true">✓</span> Result</h4>
             <p>Customers get instant answers from live inventory, and anything the bot can't answer goes to the owner instead of being guessed.</p>
           </div>
           <div class="project-foot">
@@ -356,111 +323,140 @@
           </details>
         </article>
         </div>
+        <section class="project-demo" aria-labelledby="demo-title">
+              <div class="demo-head">
+                <h3 id="demo-title">Watch it run: invoice processing</h3>
+                <p class="demo-note">Simulated example with sample data</p>
+                <button class="demo-replay" type="button" hidden>Replay</button>
+              </div>
+              <p class="visually-hidden">An animation of the invoice workflow with sample data. An invoice email arrives, then Gmail, text extraction, AI extraction, the duplicate check and Google Sheets run one after another, and a new row for invoice INV-1042 from Acme Co is added to the sheet. The timer stops at about 30 seconds, compared with 3 to 5 minutes by hand.</p>
+              <div class="demo-stage" aria-hidden="true">
+                <div class="demo-email" data-demo="email">
+                  <svg width="20" height="20"><use href="#i-mail"/></svg>
+                  <div>
+                    <p class="demo-email-from">billing@acme.example</p>
+                    <p class="demo-email-subject">Invoice INV-1042</p>
+                    <p class="demo-email-meta">1 PDF attached</p>
+                  </div>
+                </div>
+                <ol class="demo-flow"><li class="demo-node" data-step="0"><span class="demo-node-box"><svg width="22" height="22"><use href="#i-gmail"/></svg><svg class="demo-tick" width="16" height="16"><use href="#i-check"/></svg></span><span class="demo-node-label">Gmail</span></li><li class="demo-node" data-step="1"><span class="demo-node-box"><svg width="22" height="22"><use href="#i-doc"/></svg><svg class="demo-tick" width="16" height="16"><use href="#i-check"/></svg></span><span class="demo-node-label">Extract text</span></li><li class="demo-node" data-step="2"><span class="demo-node-box"><svg width="22" height="22"><use href="#i-openrouter"/></svg><svg class="demo-tick" width="16" height="16"><use href="#i-check"/></svg></span><span class="demo-node-label">AI extraction</span></li><li class="demo-node" data-step="3"><span class="demo-node-box"><svg width="22" height="22"><use href="#i-dupe"/></svg><svg class="demo-tick" width="16" height="16"><use href="#i-check"/></svg></span><span class="demo-node-label">Duplicate check</span></li><li class="demo-node" data-step="4"><span class="demo-node-box"><svg width="22" height="22"><use href="#i-sheets"/></svg><svg class="demo-tick" width="16" height="16"><use href="#i-check"/></svg></span><span class="demo-node-label">Google Sheets</span></li></ol>
+                <div class="demo-sheet">
+                  <table>
+                    <thead><tr><th>Vendor</th><th>Invoice</th><th>Date</th><th>Total</th></tr></thead>
+                    <tbody>
+                      <tr><td>Northwind</td><td>INV-1038</td><td>01 Oct</td><td>$412.50</td></tr>
+                      <tr><td>Blue Ridge</td><td>INV-1041</td><td>02 Oct</td><td>$96.00</td></tr>
+                      <tr class="demo-row-new" data-demo="row"><td>Acme Co</td><td>INV-1042</td><td>03 Oct</td><td>$1,280.00</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="demo-timer">
+                  <p class="demo-time"><span class="demo-time-label">Automated</span> <span class="demo-time-value" data-demo="timer">~30 sec</span></p>
+                  <p class="demo-manual">Manual: 3 to 5 min</p>
+                </div>
+              </div>
+            </section>
       </div>
     </section>
 
-    <div class="wave" aria-hidden="true">
-      <svg viewBox="0 0 1440 90" preserveAspectRatio="none" focusable="false"><path d="M0 36 C100 60 240 52 480 30 C800 0 1120 100 1440 40 V90 H0Z"/></svg>
-    </div>
-
-    <!-- 4. SERVICES -->
-    <section class="section services" aria-labelledby="services-title">
-      <div class="container services-grid">
-        <div class="services-intro">
-          <p class="eyebrow">What I can automate</p>
-          <h2 id="services-title">Turn processes into workflows</h2>
-          <p class="section-sub">I help businesses save time and reduce manual work with workflows built around how they already operate.</p>
-          <a class="btn btn-ink" href="https://calendly.com/rolancdaniel/30min" target="_blank" rel="noopener">Book a free workflow audit<span aria-hidden="true"> →</span></a>
-        </div>
+    <!-- 3. SERVICES -->
+    <section class="section services" id="services" aria-labelledby="services-title">
+      <div class="container">
+        <header class="section-head">
+          <h2 id="services-title">What I can automate</h2>
+          <p class="section-sub">Workflows built around the tools and processes you already use.</p>
+        </header>
         <ul class="service-list">
           <li><a class="service-card" href="#project-invoices">
-            <span class="service-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg></span>
-            <span class="service-title">Invoice and documents</span>
-            <span class="service-line">Turns invoice emails into spreadsheet rows, with no manual entry.</span>
-          </a></li>
-          <li><a class="service-card" href="#project-hiring">
-            <span class="service-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="m16 11 2 2 4-4"/></svg></span>
-            <span class="service-title">Hiring and resumes</span>
-            <span class="service-line">Screens applicants with AI and books their phone interviews.</span>
+            <span class="service-title">Invoice and Document Automation</span>
+            <span class="service-line">Invoices and documents arrive by email and someone types them into a spreadsheet. I automate the extraction, the checks and the logging.</span>
+            <span class="service-more">See the invoice project<span aria-hidden="true">→</span></span>
           </a></li>
           <li><a class="service-card" href="#project-support">
-            <span class="service-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20.5l1.4-4.6A8 8 0 1 1 21 12z"/><path d="M8.5 12h.01M12 12h.01M15.5 12h.01"/></svg></span>
-            <span class="service-title">Customer assistants</span>
-            <span class="service-line">Answers customer messages with live stock and prices, 24/7.</span>
+            <span class="service-title">Lead Capture and CRM Automation</span>
+            <span class="service-line">Enquiries come in through forms, email and chat, and get copied into a CRM by hand or answered late. I route them into the tools you already use.</span>
+            <span class="service-more">See a related project<span aria-hidden="true">→</span></span>
           </a></li>
-          <li><a class="service-card" href="#project-jobs">
-            <span class="service-icon"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"/><path d="m20.5 20.5-4.9-4.9"/></svg></span>
-            <span class="service-title">Job search automation</span>
-            <span class="service-line">Turns a Slack job search into tailored resumes, proposals, and email drafts.</span>
+          <li><a class="service-card" href="#project-hiring">
+            <span class="service-title">Hiring and Resume Workflow Support</span>
+            <span class="service-line">Reading CVs, writing follow-ups and arranging calls takes hours. I automate the screening and scheduling steps around your hiring process.</span>
+            <span class="service-more">See the hiring project<span aria-hidden="true">→</span></span>
           </a></li>
+          <li><div class="service-card">
+            <span class="service-title">Custom API Integrations</span>
+            <span class="service-line">When two systems don't talk to each other, someone copies data between them. I connect them through their APIs, with validation and error handling.</span>
+          </div></li>
         </ul>
       </div>
     </section>
 
-    <!-- 5. HOW I WORK -->
+    <!-- 4. HOW I WORK -->
     <section class="section process" id="process" aria-labelledby="process-title">
       <div class="container">
         <header class="section-head">
           <h2 id="process-title">How I work</h2>
-          <p class="section-sub">Four simple steps from first call to handover.</p>
+          <p class="section-sub">Four clear steps from first call to handover.</p>
         </header>
         <ol class="steps">
           <li class="step">
             <span class="step-num" aria-hidden="true">01</span>
-            <h3>Discovery</h3>
-            <p>A 30-minute call to understand your process and goals.</p>
+            <h3><a class="step-link" href="https://calendly.com/rolancdaniel/30min" target="_blank" rel="noopener">Discovery<span aria-hidden="true">→</span><span class="visually-hidden">: book the call (opens in a new tab)</span></a></h3>
+            <p>Understand the process, constraints, and desired outcome.</p>
           </li>
           <li class="step">
             <span class="step-num" aria-hidden="true">02</span>
             <h3>Design</h3>
-            <p>A clear scope and plan for what gets automated.</p>
+            <p>Define the scope, integrations, safeguards, and implementation plan.</p>
           </li>
           <li class="step">
             <span class="step-num" aria-hidden="true">03</span>
-            <h3>Build and test</h3>
-            <p>Build, test, and handle failures and edge cases.</p>
+            <h3>Build and Test</h3>
+            <p>Test normal cases, edge cases, and failure scenarios.</p>
           </li>
           <li class="step">
             <span class="step-num" aria-hidden="true">04</span>
             <h3>Handover</h3>
-            <p>Documentation and support after delivery.</p>
+            <p>Document the workflow and explain how to operate it.</p>
           </li>
         </ol>
-        <p class="steps-note">You get: documented workflows · failure handling · full handover · tools you already use</p>
       </div>
     </section>
 
-    <!-- 6. EXPERIENCE -->
-    <section class="section experience" id="experience" aria-labelledby="experience-title">
-      <div class="container experience-grid">
-        <div class="experience-main">
-          <h2 id="experience-title">Software engineer. Automation builder. Problem solver.</h2>
-          <p class="experience-summary">15+ years in software engineering, with a strong backend foundation in Java and Spring Boot, hands-on robotic process automation (Blue Prism, OpenSpan, UiPath), and enterprise systems experience. I now use that depth to build automation workflows that are reliable, maintainable, and built to scale.</p>
-          <ul class="skill-chips" aria-label="Skills">
-            <li>Java</li>
-            <li>Spring Boot</li>
-            <li>Node.js</li>
-            <li>n8n</li>
-            <li>RPA</li>
-            <li>AI (LLMs)</li>
-          </ul>
+    <!-- 5. ABOUT -->
+    <section class="section about" id="about" aria-labelledby="about-title">
+      <div class="container about-grid">
+        <div class="about-main">
+          <h2 id="about-title">Software engineer, now building automation.</h2>
+          <p class="about-copy">I come from software engineering, with 15+ years of experience and a background in backend development with Java and Spring Boot. I am bringing that discipline into practical AI automation. I focus on the parts that make automations last: API integrations, data validation, error handling, and documentation your team can maintain.</p>
+          <div class="about-exp">
+            <h3>Selected experience: Site Reliability Engineering</h3>
+            <p>Built and maintained Rundeck and Node.js automation scripts connecting ServiceNow with other business applications, so engineers handled fewer repetitive tasks by hand.</p>
+          </div>
         </div>
-        <aside class="experience-card" aria-labelledby="sre-title">
-          <p class="eyebrow">Selected experience</p>
-          <h3 id="sre-title">Site Reliability Engineering</h3>
-          <p>Built and maintained Rundeck and Node.js automation scripts connecting ServiceNow with other business applications, so engineers handled fewer repetitive tasks by hand.</p>
+        <aside class="strengths" aria-labelledby="strengths-title">
+          <h3 id="strengths-title">Strengths</h3>
+          <ul>
+            <li>Software engineering and backend development</li>
+            <li>Robotic process automation (Blue Prism, OpenSpan, UiPath)</li>
+            <li>Workflow automation with n8n</li>
+            <li>API integrations</li>
+            <li>Data validation and error handling</li>
+            <li>Reliable, maintainable solutions</li>
+          </ul>
         </aside>
       </div>
     </section>
 
-    <!-- 7. CONTACT -->
+    <!-- 6. CONTACT -->
     <section class="contact" id="contact" aria-labelledby="contact-title">
-      <div class="container contact-inner">
-        <h2 id="contact-title">Have a process that eats up too much time? <span class="contact-accent">Let's automate it.</span></h2>
-        <p class="contact-line">A free 30-minute workflow audit. We'll map what to automate first.</p>
-        <a class="btn btn-terra" href="https://calendly.com/rolancdaniel/30min" target="_blank" rel="noopener">Book a free workflow audit<span aria-hidden="true"> →</span></a>
-        <p class="contact-hint">30 minutes · No obligation · Clear next steps</p>
-        <p class="contact-alt">Prefer email? <a href="mailto:rolancdaniel@gmail.com">rolancdaniel@gmail.com</a> · <a href="https://www.linkedin.com/in/rolan-daniel-8a2ba964/" target="_blank" rel="noopener">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+      <div class="container">
+        <div class="contact-panel">
+          <h2 id="contact-title">Have a process that eats up too much time? Let's automate it.</h2>
+          <p class="contact-line">Tell me about the work you do by hand. I will map what can be automated first.</p>
+          <a class="btn btn-coral btn-lg" href="https://calendly.com/rolancdaniel/30min" target="_blank" rel="noopener">Book a Free Workflow Audit<span class="visually-hidden"> (opens in a new tab)</span></a>
+          <p class="contact-alt">or email <a href="mailto:rolancdaniel@gmail.com">rolancdaniel@gmail.com</a></p>
+          <p class="contact-social"><a href="https://www.linkedin.com/in/rolan-daniel-8a2ba964/" target="_blank" rel="noopener">LinkedIn<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+        </div>
       </div>
     </section>
   </main>
@@ -471,6 +467,8 @@
       <a href="#top">Back to top</a>
     </div>
   </footer>
+
+  <a class="float-cta" href="https://calendly.com/rolancdaniel/30min" target="_blank" rel="noopener" tabindex="-1" aria-hidden="true">Book a Free Workflow Audit</a>
 
 </body>
 </html>
