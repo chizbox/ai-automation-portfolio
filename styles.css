@@ -384,13 +384,17 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 /* The cutout ends in a flat edge at the shoulders: enlarge it and let that edge fall below the disc */
 .hero-img { position: absolute; left: -9%; bottom: -13%; width: 118%; height: auto; max-width: none; aspect-ratio: 1; }
 @media (prefers-reduced-motion: no-preference) {
-  /* The disc and ring fade in while easing down into place, top to bottom (the glow just fades) */
-  .js .photo-disc { animation: drop-in 2.4s cubic-bezier(.4, 0, .2, 1) 3.7s both; }
-  .js .photo-ring { animation: drop-in 2.4s cubic-bezier(.4, 0, .2, 1) 3.7s both, ring-spin 26s linear infinite; }
-  .js .photo-glow { animation: soft-in 2.4s ease-out 3.7s both, glow-drift 22s ease-in-out 3.7s infinite; }
-  .js .hero-photo { animation: float 12s ease-in-out 6.2s infinite; }
+  /* The disc, ring and glow grow out from the centre while fading in; the disc also opens as a circle */
+  .js .photo-disc { animation: bloom-disc 2s cubic-bezier(.3, 0, .2, 1) 2.85s both; }
+  .js .photo-ring { animation: bloom 2s cubic-bezier(.3, 0, .2, 1) 2.85s both, ring-spin 26s linear infinite; }
+  .js .photo-glow { animation: bloom 2.4s ease-out 2.85s both, glow-drift 22s ease-in-out 2.85s infinite; }
+  .js .hero-photo { animation: float 12s ease-in-out 4.9s infinite; }
 }
-@keyframes drop-in { from { opacity: 0; translate: 0 -32px; } to { opacity: 1; translate: 0 0; } }
+@keyframes bloom { from { opacity: 0; scale: .86; } to { opacity: 1; scale: 1; } }
+@keyframes bloom-disc {
+  from { opacity: 0; scale: .86; clip-path: circle(0% at 50% 50%); }
+  to   { opacity: 1; scale: 1; clip-path: circle(50% at 50% 50%); }
+}
 @keyframes soft-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes ring-spin { to { transform: rotate(360deg); } }
 @keyframes glow-drift {
@@ -765,17 +769,17 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 
 @media (prefers-reduced-motion: no-preference) {
   /* Hero text rises in once on load */
-  /* Text first (about 3.6s), then the photo (starts at 3.7s) */
-  .js .hero-lead, .js .hero-actions { animation: slide-in-right 1.1s var(--ease) both; }
-  .js .hero h1 .w { animation: word-in 1.1s var(--ease) both; }
-  .js .hero h1 .w:nth-of-type(1) { animation-delay: .2s; }
-  .js .hero h1 .w:nth-of-type(2) { animation-delay: .5s; }
-  .js .hero h1 .w:nth-of-type(3) { animation-delay: .8s; }
-  .js .hero h1 .w:nth-of-type(4) { animation-delay: 1.25s; }
-  .js .hero h1 .w:nth-of-type(5) { animation-delay: 1.55s; }
-  .js .cursor { animation: cursor-in .4s ease-out 2.7s both, cursor-blink 1.2s step-end 3.1s 3 forwards; }
-  .js .hero-lead { animation-delay: 2s; }
-  .js .hero-actions { animation-delay: 2.5s; }
+  /* Text first (about 2.7s), then the photo blooms outward from its centre (starts at 2.85s) */
+  .js .hero-lead, .js .hero-actions { animation: slide-in-right .85s var(--ease) both; }
+  .js .hero h1 .w { animation: word-in .85s var(--ease) both; }
+  .js .hero h1 .w:nth-of-type(1) { animation-delay: .15s; }
+  .js .hero h1 .w:nth-of-type(2) { animation-delay: .38s; }
+  .js .hero h1 .w:nth-of-type(3) { animation-delay: .6s; }
+  .js .hero h1 .w:nth-of-type(4) { animation-delay: .94s; }
+  .js .hero h1 .w:nth-of-type(5) { animation-delay: 1.16s; }
+  .js .cursor { animation: cursor-in .3s ease-out 2.05s both, cursor-blink .9s step-end 2.35s 3 forwards; }
+  .js .hero-lead { animation-delay: 1.5s; }
+  .js .hero-actions { animation-delay: 1.9s; }
 
   /* Scroll reveals (script.js adds .reveal, then .is-visible once) */
   .js .reveal {
