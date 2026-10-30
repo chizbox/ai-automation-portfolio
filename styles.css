@@ -413,15 +413,11 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 /* The cutout ends in a flat edge at the shoulders: enlarge it and let that edge fall below the disc */
 .hero-img { position: absolute; left: -9%; bottom: -13%; width: 118%; height: auto; max-width: none; aspect-ratio: 1; }
 @media (prefers-reduced-motion: no-preference) {
-  /* Mask reveal: the disc wipes in from the bottom up while it fades in */
-  .js .photo-disc { animation: photo-reveal 1.2s ease-out .1s both; }
+  /* The disc fades from invisible to visible, with no movement */
+  .js .photo-disc { animation: soft-in 1.2s ease-out .1s both; }
   .js .photo-ring { animation: soft-in 1.4s ease-out .3s both, ring-spin 14s linear infinite; }
   .js .photo-glow { animation: soft-in 1.4s ease-out .3s both, glow-drift 22s ease-in-out 1.7s infinite; }
   .js .hero-photo { animation: float 7s ease-in-out 1.4s infinite; }
-}
-@keyframes photo-reveal {
-  from { opacity: 0; clip-path: inset(100% 0 0 0); }
-  to   { opacity: 1; clip-path: inset(0 0 0 0); }
 }
 @keyframes soft-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes ring-spin { to { transform: rotate(360deg); } }
