@@ -797,7 +797,7 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 
 @media (prefers-reduced-motion: no-preference) {
   /* Hero text rises in once on load */
-  .js .hero-lead, .js .hero-actions { animation: fade-up .7s var(--ease) both; }
+  .js .hero-lead, .js .hero-actions { animation: slide-in-right .8s var(--ease) both; }
   .js .hero h1 .w { animation: word-in .8s var(--ease) both; }
   .js .hero h1 .w:nth-of-type(1) { animation-delay: .15s; }
   .js .hero h1 .w:nth-of-type(2) { animation-delay: .24s; }
@@ -820,7 +820,7 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   .js .reveal.is-visible { opacity: 1; translate: none; }
 }
 @keyframes word-in {
-  from { opacity: 0; transform: translateY(.42em); }
+  from { opacity: 0; transform: translateX(-.55em); }
   to   { opacity: 1; transform: none; }
 }
 @keyframes cursor-in { from { opacity: 0; } to { opacity: 1; } }
@@ -832,8 +832,8 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   70%  { opacity: 0; transform: translateY(12px); }
   100% { opacity: 0; transform: translateY(12px); }
 }
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(12px); }
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(-28px); }
   to   { opacity: 1; transform: none; }
 }
 
