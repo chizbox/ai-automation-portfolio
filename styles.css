@@ -289,8 +289,8 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
   position: relative;
   display: flex;
   align-items: center;
-  min-height: clamp(640px, 92svh, 800px);
-  padding: calc(var(--nav-h) + 56px) 0 112px;
+  min-height: clamp(600px, 82svh, 720px);
+  padding: calc(var(--nav-h) + 48px) 0 64px;
   overflow: hidden;
   isolation: isolate;
 }
@@ -350,35 +350,6 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
   opacity: 0;
 }
 
-/* Scroll cue: a small mouse whose dot slides down and fades, over and over */
-.scroll-cue {
-  position: absolute;
-  left: 50%; bottom: 14px;
-  z-index: 2;
-  display: grid;
-  place-items: center;
-  width: 44px; height: 56px;
-  translate: -50% 0;
-  opacity: .8;
-  transition: opacity var(--dur) var(--ease);
-}
-.scroll-cue:hover { opacity: 1; }
-.cue-mouse {
-  position: relative;
-  display: block;
-  width: 22px; height: 34px;
-  border: 1.5px solid rgba(245, 242, 236, .45);
-  border-radius: 12px;
-}
-.cue-dot {
-  position: absolute;
-  left: 50%; top: 6px;
-  width: 3px; height: 7px;
-  margin-left: -1.5px;
-  border-radius: 2px;
-  background: var(--coral-light);
-}
-
 /* Photo: a round portrait on a warm disc, ringed by a slowly turning gradient,
    floating a few pixels up and down, over one soft glow that drifts very slowly */
 .hero-photo {
@@ -414,10 +385,10 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 .hero-img { position: absolute; left: -9%; bottom: -13%; width: 118%; height: auto; max-width: none; aspect-ratio: 1; }
 @media (prefers-reduced-motion: no-preference) {
   /* The disc and ring fade in while easing down into place, top to bottom (the glow just fades) */
-  .js .photo-disc { animation: drop-in 2s cubic-bezier(.4, 0, .2, 1) .1s both; }
-  .js .photo-ring { animation: drop-in 2s cubic-bezier(.4, 0, .2, 1) .1s both, ring-spin 26s linear infinite; }
-  .js .photo-glow { animation: soft-in 2s ease-out .3s both, glow-drift 22s ease-in-out 1.7s infinite; }
-  .js .hero-photo { animation: float 12s ease-in-out 2.2s infinite; }
+  .js .photo-disc { animation: drop-in 2.4s cubic-bezier(.4, 0, .2, 1) 3.7s both; }
+  .js .photo-ring { animation: drop-in 2.4s cubic-bezier(.4, 0, .2, 1) 3.7s both, ring-spin 26s linear infinite; }
+  .js .photo-glow { animation: soft-in 2.4s ease-out 3.7s both, glow-drift 22s ease-in-out 3.7s infinite; }
+  .js .hero-photo { animation: float 12s ease-in-out 6.2s infinite; }
 }
 @keyframes drop-in { from { opacity: 0; translate: 0 -32px; } to { opacity: 1; translate: 0 0; } }
 @keyframes soft-in { from { opacity: 0; } to { opacity: 1; } }
@@ -794,18 +765,17 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 
 @media (prefers-reduced-motion: no-preference) {
   /* Hero text rises in once on load */
-  .js .hero-lead, .js .hero-actions { animation: slide-in-right .8s var(--ease) both; }
-  .js .hero h1 .w { animation: word-in .8s var(--ease) both; }
-  .js .hero h1 .w:nth-of-type(1) { animation-delay: .15s; }
-  .js .hero h1 .w:nth-of-type(2) { animation-delay: .24s; }
-  .js .hero h1 .w:nth-of-type(3) { animation-delay: .33s; }
-  .js .hero h1 .w:nth-of-type(4) { animation-delay: .46s; }
-  .js .hero h1 .w:nth-of-type(5) { animation-delay: .55s; }
-  .js .cursor { animation: cursor-in .25s ease-out 1.25s both, cursor-blink 1.05s step-end 1.5s 4 forwards; }
-  .js .hero-lead { animation-delay: .8s; }
-  .js .hero-actions { animation-delay: 1s; }
-  .js .scroll-cue { animation: cue-in .8s var(--ease) 1.7s both; }
-  .js .cue-dot { animation: cue-scroll 2.4s cubic-bezier(.45, 0, .25, 1) 2.3s infinite; }
+  /* Text first (about 3.6s), then the photo (starts at 3.7s) */
+  .js .hero-lead, .js .hero-actions { animation: slide-in-right 1.1s var(--ease) both; }
+  .js .hero h1 .w { animation: word-in 1.1s var(--ease) both; }
+  .js .hero h1 .w:nth-of-type(1) { animation-delay: .2s; }
+  .js .hero h1 .w:nth-of-type(2) { animation-delay: .5s; }
+  .js .hero h1 .w:nth-of-type(3) { animation-delay: .8s; }
+  .js .hero h1 .w:nth-of-type(4) { animation-delay: 1.25s; }
+  .js .hero h1 .w:nth-of-type(5) { animation-delay: 1.55s; }
+  .js .cursor { animation: cursor-in .4s ease-out 2.7s both, cursor-blink 1.2s step-end 3.1s 3 forwards; }
+  .js .hero-lead { animation-delay: 2s; }
+  .js .hero-actions { animation-delay: 2.5s; }
 
   /* Scroll reveals (script.js adds .reveal, then .is-visible once) */
   .js .reveal {
@@ -822,13 +792,6 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 }
 @keyframes cursor-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes cursor-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-@keyframes cue-in { from { opacity: 0; transform: translateY(8px); } to { opacity: .8; transform: none; } }
-@keyframes cue-scroll {
-  0%   { opacity: 0; transform: translateY(0); }
-  25%  { opacity: 1; }
-  70%  { opacity: 0; transform: translateY(12px); }
-  100% { opacity: 0; transform: translateY(12px); }
-}
 @keyframes slide-in-right {
   from { opacity: 0; transform: translateX(-28px); }
   to   { opacity: 1; transform: none; }
@@ -880,7 +843,6 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   .hero h1 { font-size: 40px; }
   .hero-lead { margin-top: 1rem; font-size: 17px; }
   .hero-actions { margin-top: 1.5rem; }
-  .scroll-cue { bottom: 6px; }
   .section h2, .contact h2 { font-size: 30px; }
   .section-head { margin-bottom: 32px; }
   .project-grid, .service-list, .steps, .about-grid { grid-template-columns: minmax(0, 1fr); }
