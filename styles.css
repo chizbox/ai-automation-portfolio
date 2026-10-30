@@ -384,11 +384,21 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 /* The cutout ends in a flat edge at the shoulders: enlarge it and let that edge fall below the disc */
 .hero-img { position: absolute; left: -9%; bottom: -13%; width: 118%; height: auto; max-width: none; aspect-ratio: 1; }
 @media (prefers-reduced-motion: no-preference) {
-  /* The photo is there from the start; only the ring turns, the glow drifts and the whole thing floats */
-  .js .photo-ring { animation: ring-spin 26s linear infinite; }
-  .js .photo-glow { animation: glow-drift 22s ease-in-out infinite; }
-  .js .hero-photo { animation: float 12s ease-in-out infinite; }
+  /* Photo entrance, overlapping the headline: the portrait resolves from a soft blur while
+     settling down from 1.05 to full size, then the ring eases in around it. The glow warms up
+     underneath. The float starts when the portrait lands and begins at rest, so there is no jump.
+     Only opacity, scale and a short-lived blur are animated. */
+  .js .photo-disc { animation: photo-in 1.8s cubic-bezier(.3, .55, .3, 1) .5s both; }
+  .js .photo-ring { animation: ring-in 1.4s cubic-bezier(.3, .55, .3, 1) 1.2s both, ring-spin 26s linear 1.2s infinite; }
+  .js .photo-glow { animation: glow-in 2.2s ease-out .3s both, glow-drift 22s ease-in-out 2.5s infinite; }
+  .js .hero-photo { animation: float 12s ease-in-out 2.2s infinite; }
 }
+@keyframes photo-in {
+  from { opacity: 0; scale: 1.05; filter: blur(var(--photo-blur, 14px)); }
+  to   { opacity: 1; scale: 1; filter: none; }
+}
+@keyframes ring-in { from { opacity: 0; scale: .96; } to { opacity: 1; scale: 1; } }
+@keyframes glow-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes ring-spin { to { transform: rotate(360deg); } }
 @keyframes glow-drift {
   0%, 100% { transform: translate(-5%, 3%) scale(1); }
@@ -833,7 +843,7 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 }
 
 @media (max-width: 767px) {
-  :root { --section-y: 72px; }
+  :root { --section-y: 72px; --photo-blur: 8px; }
   .hero { min-height: 0; padding: calc(var(--nav-h) + 32px) 0 var(--section-y); }
   .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
   .hero-photo { order: -1; justify-self: center; width: min(250px, 64vw); }
