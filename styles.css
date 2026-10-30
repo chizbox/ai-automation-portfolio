@@ -384,21 +384,21 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 /* The cutout ends in a flat edge at the shoulders: enlarge it and let that edge fall below the disc */
 .hero-img { position: absolute; left: -9%; bottom: -13%; width: 118%; height: auto; max-width: none; aspect-ratio: 1; }
 @media (prefers-reduced-motion: no-preference) {
-  /* Photo entrance, overlapping the headline: the portrait resolves from a soft blur while
-     settling down from 1.05 to full size, then the ring eases in around it. The glow warms up
-     underneath. The float starts when the portrait lands and begins at rest, so there is no jump.
-     Only opacity, scale and a short-lived blur are animated. */
-  .js .photo-disc { animation: photo-in 1.8s cubic-bezier(.3, .55, .3, 1) .5s both; }
-  .js .photo-ring { animation: ring-in 1.4s cubic-bezier(.3, .55, .3, 1) 1.2s both, ring-spin 26s linear 1.2s infinite; }
-  .js .photo-glow { animation: glow-in 2.2s ease-out .3s both, glow-drift 22s ease-in-out 2.5s infinite; }
-  .js .hero-photo { animation: float 12s ease-in-out 2.2s infinite; }
+  /* Photo entrance, overlapping the headline: the portrait comes into focus from a heavy blur,
+     dark and low-contrast at first, while settling from 1.12 to full size. The glow blooms
+     underneath, then the ring eases in around it. The float starts when the portrait lands and
+     begins at rest, so there is no jump. Only opacity, scale and a short-lived filter animate. */
+  .js .photo-disc { animation: photo-in 3s cubic-bezier(.3, .5, .25, 1) .6s both; }
+  .js .photo-ring { animation: ring-in 2.2s cubic-bezier(.3, .5, .25, 1) 2s both, ring-spin 26s linear 2s infinite; }
+  .js .photo-glow { animation: glow-in 3.4s cubic-bezier(.3, .5, .25, 1) .8s both, glow-drift 22s ease-in-out 4.2s infinite; }
+  .js .hero-photo { animation: float 12s ease-in-out 3.6s infinite; }
 }
 @keyframes photo-in {
-  from { opacity: 0; scale: 1.05; filter: blur(var(--photo-blur, 14px)); }
+  from { opacity: 0; scale: 1.12; filter: blur(var(--photo-blur, 30px)) brightness(.4) contrast(.8); }
   to   { opacity: 1; scale: 1; filter: none; }
 }
-@keyframes ring-in { from { opacity: 0; scale: .96; } to { opacity: 1; scale: 1; } }
-@keyframes glow-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes ring-in { from { opacity: 0; scale: .88; } to { opacity: 1; scale: 1; } }
+@keyframes glow-in { from { opacity: 0; scale: .6; } to { opacity: 1; scale: 1; } }
 @keyframes ring-spin { to { transform: rotate(360deg); } }
 @keyframes glow-drift {
   0%, 100% { transform: translate(-5%, 3%) scale(1); }
@@ -843,7 +843,7 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 }
 
 @media (max-width: 767px) {
-  :root { --section-y: 72px; --photo-blur: 8px; }
+  :root { --section-y: 72px; --photo-blur: 14px; }
   .hero { min-height: 0; padding: calc(var(--nav-h) + 32px) 0 var(--section-y); }
   .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
   .hero-photo { order: -1; justify-self: center; width: min(250px, 64vw); }
