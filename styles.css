@@ -384,18 +384,11 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 /* The cutout ends in a flat edge at the shoulders: enlarge it and let that edge fall below the disc */
 .hero-img { position: absolute; left: -9%; bottom: -13%; width: 118%; height: auto; max-width: none; aspect-ratio: 1; }
 @media (prefers-reduced-motion: no-preference) {
-  /* The disc, ring and glow grow out from the centre while fading in; the disc also opens as a circle */
-  .js .photo-disc { animation: bloom-disc 2s cubic-bezier(.3, 0, .2, 1) 2.85s both; }
-  .js .photo-ring { animation: bloom 2s cubic-bezier(.3, 0, .2, 1) 2.85s both, ring-spin 26s linear infinite; }
-  .js .photo-glow { animation: bloom 2.4s ease-out 2.85s both, glow-drift 22s ease-in-out 2.85s infinite; }
-  .js .hero-photo { animation: float 12s ease-in-out 4.9s infinite; }
+  /* The photo is there from the start; only the ring turns, the glow drifts and the whole thing floats */
+  .js .photo-ring { animation: ring-spin 26s linear infinite; }
+  .js .photo-glow { animation: glow-drift 22s ease-in-out infinite; }
+  .js .hero-photo { animation: float 12s ease-in-out infinite; }
 }
-@keyframes bloom { from { opacity: 0; scale: .86; } to { opacity: 1; scale: 1; } }
-@keyframes bloom-disc {
-  from { opacity: 0; scale: .86; clip-path: circle(0% at 50% 50%); }
-  to   { opacity: 1; scale: 1; clip-path: circle(50% at 50% 50%); }
-}
-@keyframes soft-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes ring-spin { to { transform: rotate(360deg); } }
 @keyframes glow-drift {
   0%, 100% { transform: translate(-5%, 3%) scale(1); }
@@ -769,7 +762,7 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 
 @media (prefers-reduced-motion: no-preference) {
   /* Hero text rises in once on load */
-  /* Text first (about 2.7s), then the photo blooms outward from its centre (starts at 2.85s) */
+  /* Text first (about 2.7s), the photo is already in place */
   .js .hero-lead, .js .hero-actions { animation: slide-in-right .85s var(--ease) both; }
   .js .hero h1 .w { animation: word-in .85s var(--ease) both; }
   .js .hero h1 .w:nth-of-type(1) { animation-delay: .15s; }
