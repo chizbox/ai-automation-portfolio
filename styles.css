@@ -33,6 +33,8 @@
   --dur: .3s;
   --coral-top: #E07C5C;
   --coral-bottom: #C25C3E;
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, .28), 0 10px 24px -10px rgba(0, 0, 0, .42), 0 28px 56px -28px rgba(0, 0, 0, .5);
+  --shadow-band: inset 0 1px 0 rgba(255, 255, 255, .035), inset 0 36px 48px -44px rgba(0, 0, 0, .55), inset 0 -36px 48px -44px rgba(0, 0, 0, .55);
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -52,6 +54,19 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Quiet paper grain: one small inline SVG noise tile, fixed behind the header and
+   above the page at ~4% so it never competes with text. No image file, no repaint on scroll. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  opacity: .045;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.6 -.3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
 }
 
 img { display: block; max-width: 100%; height: auto; }
@@ -192,20 +207,18 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
   gap: 1rem;
   height: calc(var(--nav-h) - 1px); /* plus the 1px border: 68px in all */
 }
-/* The logo's grey lettering needs a light ground, so it sits on a soft cream plate */
 .brand {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   margin-right: auto;
-  padding: 4px 12px;
-  border-radius: 12px;
-  background: linear-gradient(180deg, #FBF8F3, #EFEAE1);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .5), 0 4px 14px -6px rgba(0, 0, 0, .55);
-  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+  font: 700 1.375rem/1 var(--display);
+  letter-spacing: -0.045em;
+  color: var(--text);
+  text-decoration: none;
+  transition: color var(--dur) var(--ease);
 }
-.brand:hover { transform: translateY(-1px); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .5), 0 8px 20px -8px rgba(210, 105, 74, .55); }
-.brand-logo { display: block; width: auto; height: 36px; }
+.brand:hover { color: var(--coral-light); }
 
 .nav-menu { display: flex; flex: 1 1 auto; align-items: center; }
 .nav-links { display: flex; gap: 0.25rem; margin-inline: auto; }
@@ -269,7 +282,7 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 .section-head { margin-bottom: 48px; }
 
 /* --------------------------------------------------------------------------
-   Hero: a warm glow, a fading dot grid and a faint n8n-style workflow sit
+   Hero: a warm gradient, a fading dot grid and one soft glow behind the photo sit
    behind the headline and the photo. Everything is decoration (aria-hidden).
    -------------------------------------------------------------------------- */
 .hero {
@@ -288,44 +301,19 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 52% 62% at 78% 46%, rgba(210, 105, 74, .24), transparent 70%),
-    radial-gradient(ellipse 42% 50% at 8% 100%, rgba(228, 138, 104, .10), transparent 70%),
-    linear-gradient(180deg, #211f1c 0%, var(--bg) 100%);
+    radial-gradient(ellipse 80% 70% at 50% 42%, #2a221d 0%, transparent 75%),
+    linear-gradient(180deg, #221e1a 0%, var(--bg) 100%);
 }
-/* Dot grid, strongest at the right and fading out toward the text and the edges */
+/* Faint dot grid, centred on the hero and fading out toward every edge */
 .hero-bg::before {
   content: "";
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(245, 242, 236, .22) 1.2px, transparent 1.4px);
+  background-image: radial-gradient(rgba(245, 242, 236, .18) 1.2px, transparent 1.4px);
   background-size: 28px 28px;
-  -webkit-mask-image: radial-gradient(ellipse 70% 80% at 72% 45%, #000 0%, transparent 72%);
-  mask-image: radial-gradient(ellipse 70% 80% at 72% 45%, #000 0%, transparent 72%);
+  -webkit-mask-image: radial-gradient(ellipse 62% 72% at 50% 46%, #000 0%, transparent 100%);
+  mask-image: radial-gradient(ellipse 62% 72% at 50% 46%, #000 0%, transparent 100%);
 }
-.hero-flow {
-  position: absolute;
-  inset: 0;
-  width: 100%; height: 100%;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, transparent 46%, #000 74%);
-  mask-image: linear-gradient(90deg, transparent 0%, transparent 46%, #000 74%);
-}
-.flow-line, .flow-branch { fill: none; stroke-linecap: round; }
-.flow-line { stroke: url(#flow-line); stroke-width: 1.6; }
-.flow-branch { stroke: rgba(228, 138, 104, .28); stroke-width: 1.2; stroke-dasharray: 3 7; }
-.flow-nodes rect { fill: rgba(44, 45, 42, .85); stroke: rgba(228, 138, 104, .5); stroke-width: 1.2; }
-.flow-nodes circle { fill: var(--coral-light); opacity: .85; }
-.flow-nodes .node-small rect { stroke: rgba(228, 138, 104, .32); }
-/* A small glowing dot rides the main line on a loop (browsers without offset-path just don't show it) */
-.flow-pulse { display: none; }
-@supports (offset-path: path("M0 0")) {
-  .flow-pulse {
-    display: block;
-    offset-path: path("M40 520 C 160 520, 180 380, 300 380 S 440 520, 560 520 S 700 330, 820 330 S 960 220, 1060 220 S 1140 110, 1190 100");
-    offset-rotate: 0deg;
-  }
-}
-.pulse-halo { fill: rgba(228, 138, 104, .35); filter: blur(5px); }
-.pulse-core { fill: #FFD9C7; }
 
 .hero-grid {
   display: grid;
@@ -350,7 +338,7 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 2.25rem; }
 
 /* Photo: a round portrait on a warm disc, ringed by a slowly turning gradient,
-   floating a few pixels up and down, with the badge drifting on its own beat */
+   floating a few pixels up and down, over one soft glow that drifts very slowly */
 .hero-photo {
   position: relative;
   justify-self: center;
@@ -359,10 +347,10 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 }
 .photo-glow {
   position: absolute;
-  inset: -16%;
+  inset: -34%;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(210, 105, 74, .45) 0%, rgba(210, 105, 74, .12) 48%, transparent 70%);
-  filter: blur(12px);
+  background: radial-gradient(circle, rgba(210, 105, 74, .34) 0%, rgba(210, 105, 74, .1) 42%, transparent 68%);
+  filter: blur(18px);
 }
 .photo-ring {
   position: absolute;
@@ -382,39 +370,12 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 }
 /* The cutout ends in a flat edge at the shoulders: enlarge it and let that edge fall below the disc */
 .hero-img { position: absolute; left: -9%; bottom: -13%; width: 118%; height: auto; max-width: none; aspect-ratio: 1; }
-.hero-badge {
-  position: absolute;
-  left: -6%;
-  bottom: 12%;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.55rem;
-  padding: 10px 16px 10px 14px;
-  border: 1px solid rgba(255, 255, 255, .14);
-  border-radius: 999px;
-  background: rgba(37, 38, 35, .72);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  box-shadow: 0 14px 30px -12px rgba(0, 0, 0, .7);
-  font: 600 0.9375rem/1 var(--display);
-  color: var(--text);
-  white-space: nowrap;
-}
-.badge-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--coral-light); box-shadow: 0 0 0 4px rgba(228, 138, 104, .22); }
-
 @media (prefers-reduced-motion: no-preference) {
   /* Mask reveal: the disc wipes in from the bottom up while it fades in */
   .js .photo-disc { animation: photo-reveal 1.2s ease-out .1s both; }
   .js .photo-ring { animation: soft-in 1.4s ease-out .3s both, ring-spin 14s linear infinite; }
-  .js .photo-glow { animation: soft-in 1.4s ease-out .3s both, glow-breathe 7s ease-in-out 1.7s infinite; }
+  .js .photo-glow { animation: soft-in 1.4s ease-out .3s both, glow-drift 22s ease-in-out 1.7s infinite; }
   .js .hero-photo { animation: float 7s ease-in-out 1.4s infinite; }
-  .js .hero-badge { animation: badge-in .7s var(--ease) 1.1s both, float-alt 6s ease-in-out 1.8s infinite; }
-  .flow-pulse { animation: travel 9s cubic-bezier(.45, .05, .5, .95) infinite; }
-  .flow-nodes rect { animation: node-glow 9s ease-in-out infinite; }
-  .flow-nodes g:nth-child(2) rect { animation-delay: 1.6s; }
-  .flow-nodes g:nth-child(3) rect { animation-delay: 3.2s; }
-  .flow-nodes g:nth-child(4) rect { animation-delay: 4.8s; }
-  .flow-nodes g:nth-child(5) rect { animation-delay: 6.4s; }
 }
 @keyframes photo-reveal {
   from { opacity: 0; clip-path: inset(100% 0 0 0); }
@@ -422,25 +383,18 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 }
 @keyframes soft-in { from { opacity: 0; } to { opacity: 1; } }
 @keyframes ring-spin { to { transform: rotate(360deg); } }
-@keyframes glow-breathe { 50% { opacity: .65; transform: scale(1.05); } }
+@keyframes glow-drift {
+  0%, 100% { transform: translate(-5%, 3%) scale(1); }
+  33% { transform: translate(6%, -4%) scale(1.06); }
+  66% { transform: translate(2%, 6%) scale(.97); }
+}
 @keyframes float { 50% { transform: translateY(-10px); } }
-@keyframes float-alt { 50% { transform: translateY(8px); } }
-@keyframes badge-in { from { opacity: 0; translate: -12px 8px; } to { opacity: 1; translate: 0 0; } }
-@keyframes travel {
-  0%   { offset-distance: 0%; opacity: 0; }
-  6%   { opacity: 1; }
-  94%  { opacity: 1; }
-  100% { offset-distance: 100%; opacity: 0; }
-}
-@keyframes node-glow {
-  0%, 18%, 100% { stroke: rgba(228, 138, 104, .5); filter: none; }
-  8% { stroke: #FFD9C7; filter: drop-shadow(0 0 6px rgba(228, 138, 104, .9)); }
-}
+
 
 /* --------------------------------------------------------------------------
    Projects: 2x2 cards
    -------------------------------------------------------------------------- */
-.projects { background: var(--bg-2); }
+.projects { background: var(--bg-2); box-shadow: var(--shadow-band); }
 .project-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -455,6 +409,7 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--card);
+  box-shadow: var(--shadow-card);
   transition: transform var(--dur) var(--ease), border-color var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
 }
 /* Card, top to bottom: video, category label, one metric, one sentence, then the link pinned to the bottom */
@@ -674,7 +629,7 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 /* --------------------------------------------------------------------------
    Why automation: heading left, three reasons as ruled rows in one panel
    -------------------------------------------------------------------------- */
-.why { background: var(--bg-2); }
+.why { background: var(--bg-2); box-shadow: var(--shadow-band); }
 .why-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
@@ -687,6 +642,7 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--card);
+  box-shadow: var(--shadow-card);
 }
 .why-item {
   display: grid;
@@ -712,7 +668,7 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 /* --------------------------------------------------------------------------
    About: text left, strengths card right
    -------------------------------------------------------------------------- */
-.about { background: var(--bg-2); }
+.about { background: var(--bg-2); box-shadow: var(--shadow-band); }
 .about-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
@@ -728,6 +684,7 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   border: 1px solid var(--border);
   border-radius: var(--radius);
   background: var(--card);
+  box-shadow: var(--shadow-card);
 }
 .strengths h3 { font-size: 21px; }
 .strengths ul { margin-top: 1rem; }
@@ -860,9 +817,6 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   .hero { min-height: 0; padding: calc(var(--nav-h) + 32px) 0 var(--section-y); }
   .hero-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
   .hero-photo { order: -1; justify-self: center; width: min(250px, 64vw); }
-  .hero-badge { left: auto; right: -14%; bottom: 8%; padding: 8px 14px 8px 12px; font-size: 0.875rem; }
-  .brand-logo { height: 32px; }
-  .hero-flow { opacity: .6; }
   .hero h1 { font-size: 40px; }
   .hero-lead { margin-top: 1rem; font-size: 17px; }
   .hero-actions { margin-top: 1.5rem; }
@@ -891,6 +845,5 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   .btn:hover > span, .video-poster:hover .video-play,
   .video-poster:focus-visible .video-play { transform: none !important; }
   .video-poster:hover img { transform: none; }
-  .flow-pulse { display: none !important; }
   .btn-coral::before { display: none; }
 }
