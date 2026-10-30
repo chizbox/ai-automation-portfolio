@@ -169,11 +169,9 @@
         if (!entry.isIntersecting) return;
         counter.unobserve(entry.target);
         const { el, text, before, after, target } = entry.target.countUp;
-        // Hero stats wait for their place in the intro (about 1.3s after load)
-        const wait = el.classList.contains('stat-num') ? Math.max(0, 1300 - performance.now()) : 0;
-        const start = performance.now() + wait;
+        const start = performance.now();
         const tick = (now) => {
-          const t = Math.min(Math.max((now - start) / 900, 0), 1);
+          const t = Math.min((now - start) / 900, 1);
           const eased = 1 - Math.pow(1 - t, 3);
           el.textContent = t < 1 ? before + Math.round(target * eased) + after : text;
           if (t < 1) requestAnimationFrame(tick);
@@ -201,7 +199,7 @@
       });
     }, { rootMargin: '0px 0px 20% 0px' });
     (document.fonts ? document.fonts.ready : Promise.resolve())
-      .then(() => document.querySelectorAll('.metric-num, .stat-num').forEach((el) => armer.observe(el)));
+      .then(() => document.querySelectorAll('.metric-num').forEach((el) => armer.observe(el)));
   }
 
   // Hero parallax (mouse, desktop only): the photo and the glow behind it ease a few
