@@ -20,6 +20,11 @@
   });
   window.matchMedia('(min-width: 900px)').addEventListener('change', () => setMenu(false));
 
+  // A shadow under the frosted header once the page has scrolled
+  const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 8);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
   // Highlight a nav link only while its own section crosses a band 40-50% down the
   // viewport. Sections without a link (Why automation, Contact) clear the highlight.
   if ('IntersectionObserver' in window) {
