@@ -169,9 +169,11 @@
         if (!entry.isIntersecting) return;
         counter.unobserve(entry.target);
         const { el, text, before, after, target } = entry.target.countUp;
-        const start = performance.now();
+        // Hero stats wait for their place in the intro (about 1.3s after load)
+        const wait = el.classList.contains('stat-num') ? Math.max(0, 1300 - performance.now()) : 0;
+        const start = performance.now() + wait;
         const tick = (now) => {
-          const t = Math.min((now - start) / 900, 1);
+          const t = Math.min(Math.max((now - start) / 900, 0), 1);
           const eased = 1 - Math.pow(1 - t, 3);
           el.textContent = t < 1 ? before + Math.round(target * eased) + after : text;
           if (t < 1) requestAnimationFrame(tick);
@@ -199,7 +201,33 @@
       });
     }, { rootMargin: '0px 0px 20% 0px' });
     (document.fonts ? document.fonts.ready : Promise.resolve())
-      .then(() => document.querySelectorAll('.metric-num').forEach((el) => armer.observe(el)));
+      .then(() => document.querySelectorAll('.metric-num, .stat-num').forEach((el) => armer.observe(el)));
+  }
+
+  // Hero parallax (mouse, desktop only): the photo and the glow behind it ease a few
+  // pixels toward the cursor. Uses the independent `translate` property, so the
+  // photo's float animation is untouched, and stops when it has settled.
+  const hero = document.getElementById('hero');
+  const photo = hero && hero.querySelector('.hero-photo');
+  const glow = hero && hero.querySelector('.photo-glow');
+  const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
+  if (photo && glow && finePointer.matches && !reduceMotion.matches) {
+    let tx = 0, ty = 0, x = 0, y = 0, frame = 0;
+    const render = () => {
+      x += (tx - x) * 0.06;
+      y += (ty - y) * 0.06;
+      photo.style.translate = `${(x * 8).toFixed(2)}px ${(y * 6).toFixed(2)}px`;
+      glow.style.translate = `${(x * 22).toFixed(2)}px ${(y * 16).toFixed(2)}px`;
+      frame = (Math.abs(tx - x) > 0.002 || Math.abs(ty - y) > 0.002) ? requestAnimationFrame(render) : 0;
+    };
+    const kick = () => { if (!frame) frame = requestAnimationFrame(render); };
+    hero.addEventListener('pointermove', (e) => {
+      const r = hero.getBoundingClientRect();
+      tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+      ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
+      kick();
+    }, { passive: true });
+    hero.addEventListener('pointerleave', () => { tx = 0; ty = 0; kick(); });
   }
 
 })();

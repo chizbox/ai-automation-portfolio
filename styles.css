@@ -290,7 +290,7 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
   display: flex;
   align-items: center;
   min-height: clamp(640px, 92svh, 800px);
-  padding: calc(var(--nav-h) + 56px) 0 88px;
+  padding: calc(var(--nav-h) + 56px) 0 112px;
   overflow: hidden;
   isolation: isolate;
 }
@@ -317,8 +317,8 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
 
 .hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 58fr) minmax(0, 42fr);
-  gap: 32px;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 48px;
   align-items: center;
 }
 .hero-text { align-self: center; }
@@ -336,6 +336,70 @@ section[id], article[id], [id$="-title"] { scroll-margin-top: calc(var(--nav-h) 
   color: var(--muted);
 }
 .hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 2.25rem; }
+
+/* Headline words rise in one after another (set up below); a thin cursor follows the last word */
+.hero h1 .w { display: inline-block; }
+.cursor {
+  display: inline-block;
+  width: 3px;
+  height: .8em;
+  margin-left: .1em;
+  vertical-align: -0.04em;
+  border-radius: 1px;
+  background: var(--coral);
+  opacity: 0;
+}
+
+/* Stats: three plain figures from the page itself, counted up (script.js) */
+.hero-stats {
+  position: relative;
+  display: flex;
+  gap: 0;
+  margin: 2.5rem 0 0;
+  padding-top: 1.5rem;
+}
+.hero-stats::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--border);
+  transform-origin: left;
+}
+.stat { display: flex; flex-direction: column-reverse; gap: 4px; padding-inline: clamp(16px, 2.6vw, 32px); }
+.stat:first-child { padding-left: 0; }
+.stat + .stat { border-left: 1px solid var(--border); }
+.stat dt { max-width: 14ch; font-size: 13.5px; line-height: 1.35; color: var(--muted); }
+.stat-num { margin: 0; font: 700 28px/1.1 var(--display); letter-spacing: -0.025em; font-variant-numeric: tabular-nums; color: var(--text); }
+
+/* Scroll cue: a small mouse whose dot slides down and fades, over and over */
+.scroll-cue {
+  position: absolute;
+  left: 50%; bottom: 14px;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 44px; height: 56px;
+  translate: -50% 0;
+  opacity: .8;
+  transition: opacity var(--dur) var(--ease);
+}
+.scroll-cue:hover { opacity: 1; }
+.cue-mouse {
+  position: relative;
+  display: block;
+  width: 22px; height: 34px;
+  border: 1.5px solid rgba(245, 242, 236, .45);
+  border-radius: 12px;
+}
+.cue-dot {
+  position: absolute;
+  left: 50%; top: 6px;
+  width: 3px; height: 7px;
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: var(--coral-light);
+}
 
 /* Photo: a round portrait on a warm disc, ringed by a slowly turning gradient,
    floating a few pixels up and down, over one soft glow that drifts very slowly */
@@ -755,10 +819,22 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 
 @media (prefers-reduced-motion: no-preference) {
   /* Hero text rises in once on load */
-  .js .hero h1, .js .hero-lead, .js .hero-actions { animation: fade-up .8s var(--ease) both; }
-  .js .hero h1 { animation-delay: .1s; }
-  .js .hero-lead { animation-delay: .28s; }
-  .js .hero-actions { animation-delay: .46s; }
+  .js .hero-lead, .js .hero-actions, .js .stat, .js .scroll-cue { animation: fade-up .7s var(--ease) both; }
+  .js .hero h1 .w { animation: word-in .8s var(--ease) both; }
+  .js .hero h1 .w:nth-of-type(1) { animation-delay: .15s; }
+  .js .hero h1 .w:nth-of-type(2) { animation-delay: .24s; }
+  .js .hero h1 .w:nth-of-type(3) { animation-delay: .33s; }
+  .js .hero h1 .w:nth-of-type(4) { animation-delay: .46s; }
+  .js .hero h1 .w:nth-of-type(5) { animation-delay: .55s; }
+  .js .cursor { animation: cursor-in .25s ease-out 1.25s both, cursor-blink 1.05s step-end 1.5s 4 forwards; }
+  .js .hero-lead { animation-delay: .8s; }
+  .js .hero-actions { animation-delay: 1s; }
+  .js .stat:nth-child(1) { animation-delay: 1.2s; }
+  .js .stat:nth-child(2) { animation-delay: 1.3s; }
+  .js .stat:nth-child(3) { animation-delay: 1.4s; }
+  .js .hero-stats::before { animation: rule-in .9s var(--ease) 1.1s both; }
+  .js .scroll-cue { animation: cue-in .8s var(--ease) 2.1s both; }
+  .js .cue-dot { animation: cue-scroll 2.4s cubic-bezier(.45, 0, .25, 1) 2.6s infinite; }
 
   /* Scroll reveals (script.js adds .reveal, then .is-visible once) */
   .js .reveal {
@@ -768,6 +844,20 @@ html:has(.project-dialog[open]) { overflow: hidden; }
     transition-delay: var(--reveal-delay, 0s), var(--reveal-delay, 0s), 0s, 0s, 0s;
   }
   .js .reveal.is-visible { opacity: 1; translate: none; }
+}
+@keyframes word-in {
+  from { opacity: 0; transform: translateY(.42em); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes rule-in { from { transform: scaleX(0); } to { transform: none; } }
+@keyframes cursor-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cursor-blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes cue-in { from { opacity: 0; transform: translateY(8px); } to { opacity: .8; transform: none; } }
+@keyframes cue-scroll {
+  0%   { opacity: 0; transform: translateY(0); }
+  25%  { opacity: 1; }
+  70%  { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 0; transform: translateY(12px); }
 }
 @keyframes fade-up {
   from { opacity: 0; transform: translateY(12px); }
@@ -820,6 +910,10 @@ html:has(.project-dialog[open]) { overflow: hidden; }
   .hero h1 { font-size: 40px; }
   .hero-lead { margin-top: 1rem; font-size: 17px; }
   .hero-actions { margin-top: 1.5rem; }
+  .hero-stats { margin-top: 2rem; padding-top: 1.25rem; }
+  .stat { padding-inline: 14px; }
+  .stat-num { font-size: 24px; }
+  .scroll-cue { bottom: 6px; }
   .section h2, .contact h2 { font-size: 30px; }
   .section-head { margin-bottom: 32px; }
   .project-grid, .service-list, .steps, .about-grid { grid-template-columns: minmax(0, 1fr); }
@@ -834,6 +928,8 @@ html:has(.project-dialog[open]) { overflow: hidden; }
 
 @media (max-width: 479px) {
   .hero-actions .btn { flex: 1 1 100%; }
+  .stat { padding-inline: 10px; }
+  .stat dt { font-size: 12.5px; }
   .nav-cta { align-self: stretch; }
   .footer-inner { flex-direction: column; align-items: flex-start; }
 }
